@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Star Health Allied Insurance — Secure Payment</title>
+  <style>
+    /* ─── TOKENS ─────────────────────────────── */
+    :root {
+      --brand:        #173172;
+      --brand-dark:   #0f2258;
+      --brand-mid:    #1e3d8a;
+      --brand-tint:   #EEF2FF;
+      --brand-glow:   rgba(23,49,114,.14);
+
+      --bg:           #F4F6FB;
+      --surface:      #FFFFFF;
+      --surface-2:    #F8FAFD;
+      --surface-3:    #EFF2F8;
+
+      --border:       #E4E8F1;
+      --border-2:     #D0D6E8;
+
+      --text-1:       #0E1526;
+      --text-2:       #3D4A62;
+      --text-3:       #8592A8;
+
+      --green:        #059669;
+      --amber:        #D97706;
+
+      --shadow-xs:    0 1px 3px rgba(14,21,38,.07);
+      --shadow-sm:    0 2px 8px rgba(14,21,38,.08);
+      --shadow-md:    0 4px 20px rgba(14,21,38,.09);
+
+      --r-sm: 8px;
+      --r-md: 12px;
+      --r-lg: 16px;
+    }
+    [data-theme="dark"] {
+      --brand:        #4A7AE8;
+      --brand-dark:   #3560c8;
+      --brand-mid:    #5a88f0;
+      --brand-tint:   rgba(74,122,232,.12);
+      --brand-glow:   rgba(74,122,232,.18);
+
+      --bg:           #08091A;
+      --surface:      #0F1120;
+      --surface-2:    #151828;
+      --surface-3:    #1C2038;
+
+      --border:       rgba(255,255,255,.07);
+      --border-2:     rgba(255,255,255,.13);
+
+      --text-1:       #EBF0FF;
+      --text-2:       #7E8DA8;
+      --text-3:       #4A5570;
+
+      --shadow-xs:    0 1px 3px rgba(0,0,0,.3);
+      --shadow-sm:    0 2px 8px rgba(0,0,0,.35);
+      --shadow-md:    0 4px 20px rgba(0,0,0,.45);
+    }
+
+    /* ─── BASE ───────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { -webkit-font-smoothing: antialiased; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text-1);
+      min-height: 100vh;
+      padding-top: 120px;
+      padding-bottom: 56px;
+      transition: background .3s, color .3s;
+    }
+    a { text-decoration: none; color: inherit; }
+    button { cursor: pointer; font-family: inherit; }
+    select, input { font-family: inherit; }
+
+    /* ─── HEADER ─────────────────────────────── */
+    .header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+    .header-inner {
+      max-width: 1120px; margin: 0 auto;
+      padding: 0 28px; height: 60px;
+      display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .brand-mark {
+      width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
+      background: linear-gradient(145deg, #173172 0%, #1e3d8a 100%);
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 3px 10px rgba(23,49,114,.30);
+    }
+    [data-theme="dark"] .brand-mark { background: linear-gradient(145deg, #2a52b0 0%, #4A7AE8 100%); }
+    .brand-mark svg { width: 22px; height: 22px; }
+    .brand-words { display: flex; flex-direction: column; line-height: 1.15; }
+    .brand-name {
+      font-size: 15px; font-weight: 800; letter-spacing: .6px;
+      color: #173172; text-transform: uppercase;
+    }
+    [data-theme="dark"] .brand-name { color: var(--brand); }
+    .brand-sub { font-size: 9.5px; font-weight: 500; color: var(--text-3); letter-spacing: .2px; }
+
+    .h-right { display: flex; align-items: center; gap: 10px; }
+    .secure-pill {
+      display: flex; align-items: center; gap: 5px;
+      border: 1px solid var(--border); border-radius: 20px;
+      padding: 5px 12px; font-size: 11.5px; font-weight: 600;
+      color: var(--text-2); background: var(--surface-2);
+    }
+    .secure-pill svg { width: 13px; height: 13px; color: var(--green); }
+    .theme-btn {
+      width: 34px; height: 34px; border-radius: 8px;
+      border: 1px solid var(--border); background: var(--surface-2);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-2); transition: background .18s;
+    }
+    .theme-btn:hover { background: var(--surface-3); }
+    .theme-btn svg { width: 16px; height: 16px; }
+
+    /* ─── ORDER STRIP ────────────────────────── */
+    .order-strip {
+      background: linear-gradient(110deg, #0f2258 0%, #173172 50%, #1e4096 100%);
+      position: fixed; top: 60px; left: 0; right: 0; z-index: 199;
+    }
+    [data-theme="dark"] .order-strip {
+      background: linear-gradient(110deg, #0a1640 0%, #173172 50%, #1a3480 100%);
+    }
+    .order-inner {
+      max-width: 1120px; margin: 0 auto;
+      padding: 0 28px; height: 60px;
+      display: flex; align-items: center; gap: 0; flex-wrap: nowrap;
+    }
+    .o-field {
+      display: flex; flex-direction: column; gap: 3px;
+      padding-right: 28px; margin-right: 0;
+      border-right: 1px solid rgba(255,255,255,.15);
+      margin-right: 28px;
+    }
+    .o-field:last-of-type { border-right: none; }
+    .o-label {
+      font-size: 9px; font-weight: 700; letter-spacing: 1.1px;
+      text-transform: uppercase; color: rgba(255,255,255,.55);
+    }
+    .o-value { font-size: 13px; font-weight: 600; color: #fff; }
+    .o-amount { font-size: 22px; font-weight: 800; color: #fff; letter-spacing: -.5px; }
+    .timer-group { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .timer-label { font-size: 10px; font-weight: 500; color: rgba(255,255,255,.6); text-align: right; line-height: 1.4; }
+    .timer-box {
+      background: rgba(0,0,0,.25); border: 1.5px solid rgba(255,255,255,.22);
+      border-radius: 9px; padding: 7px 16px;
+      font-size: 22px; font-weight: 800; color: #fff;
+      font-variant-numeric: tabular-nums; letter-spacing: 2px;
+      min-width: 90px; text-align: center;
+      transition: background .4s, border-color .4s;
+    }
+    .timer-box.warn {
+      background: rgba(220,38,38,.3); border-color: rgba(248,113,113,.5);
+      animation: pulse-timer .9s ease-in-out infinite;
+    }
+    .timer-sep { animation: blink-sep 1s step-end infinite; }
+    @keyframes blink-sep { 0%,100%{opacity:1} 50%{opacity:0} }
+    @keyframes pulse-timer { 0%,100%{opacity:1} 50%{opacity:.78} }
+
+    /* ─── LAYOUT ─────────────────────────────── */
+    .layout {
+      max-width: 1120px; margin: 0 auto;
+      padding: 24px 28px 32px;
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 16px;
+      align-items: start;
+    }
+
+    /* ─── SIDEBAR ────────────────────────────── */
+    .sidebar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      position: sticky; top: 132px;
+    }
+    .sidebar-head {
+      padding: 12px 16px 10px;
+      font-size: 9.5px; font-weight: 700; letter-spacing: 1.1px;
+      text-transform: uppercase; color: var(--text-3);
+      border-bottom: 1px solid var(--border);
+    }
+    .method-list { list-style: none; }
+    .m-item {
+      display: flex; align-items: center; gap: 11px;
+      padding: 12px 15px; cursor: pointer;
+      border-left: 2.5px solid transparent;
+      border-bottom: 1px solid var(--border);
+      transition: background .15s, border-color .15s;
+    }
+    .m-item:last-child { border-bottom: none; }
+    .m-item:hover { background: var(--surface-2); }
+    .m-item.active {
+      background: var(--brand-tint);
+      border-left-color: var(--brand);
+    }
+    .m-icon {
+      width: 32px; height: 32px; border-radius: 7px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--surface-2); color: var(--text-2);
+      transition: all .15s;
+    }
+    .m-icon svg { width: 17px; height: 17px; }
+    .m-item.active .m-icon { background: var(--brand); color: #fff; }
+    .m-text { flex: 1; min-width: 0; }
+    .m-name {
+      font-size: 12.5px; font-weight: 600; color: var(--text-1);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .m-item.active .m-name { color: var(--brand); }
+    .m-desc { font-size: 10.5px; color: var(--text-3); margin-top: 1px; }
+    .m-badge {
+      font-size: 9px; font-weight: 700; letter-spacing: .3px;
+      padding: 2px 6px; border-radius: 4px; white-space: nowrap;
+    }
+    .badge-green { background: #D1FAE5; color: #065F46; }
+    .badge-amber { background: #FEF3C7; color: #92400E; }
+    [data-theme="dark"] .badge-green { background: rgba(5,150,105,.2); color: #34D399; }
+    [data-theme="dark"] .badge-amber { background: rgba(217,119,6,.2); color: #FCD34D; }
+
+    /* ─── PANELS ─────────────────────────────── */
+    .panel-area { display: flex; flex-direction: column; }
+    .panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-lg);
+      box-shadow: var(--shadow-sm);
+      display: none;
+      animation: slide-up .22s ease;
+    }
+    .panel.active { display: block; }
+    @keyframes slide-up {
+      from { opacity: 0; transform: translateY(14px); filter: blur(2px); }
+      to   { opacity: 1; transform: translateY(0);   filter: blur(0); }
+    }
+
+    /* Panel header */
+    .p-head {
+      padding: 18px 22px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .p-head-icon {
+      width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
+      background: var(--brand-tint); color: var(--brand);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .p-head-icon svg { width: 20px; height: 20px; }
+    .p-title { font-size: 15.5px; font-weight: 700; color: var(--text-1); }
+    .p-sub { font-size: 11.5px; color: var(--text-3); margin-top: 2px; }
+    .p-body { padding: 22px; }
+
+    /* ─── FORMS ──────────────────────────────── */
+    .f-group { margin-bottom: 14px; }
+    .f-label {
+      display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .7px;
+      text-transform: uppercase; color: var(--text-2); margin-bottom: 6px;
+    }
+    .f-input {
+      width: 100%; height: 44px; padding: 0 14px;
+      background: var(--surface-2); border: 1.5px solid var(--border-2);
+      border-radius: var(--r-sm); color: var(--text-1);
+      font-size: 14px; font-weight: 500; outline: none;
+      transition: border-color .18s, box-shadow .18s, background .18s;
+    }
+    .f-input:focus {
+      border-color: var(--brand); background: var(--surface);
+      box-shadow: 0 0 0 3px var(--brand-glow);
+    }
+    .f-input::placeholder { color: var(--text-3); font-weight: 400; }
+    .f-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .f-select {
+      width: 100%; height: 44px; padding: 0 38px 0 14px;
+      background: var(--surface-2); border: 1.5px solid var(--border-2);
+      border-radius: var(--r-sm); color: var(--text-1);
+      font-size: 14px; font-weight: 500; outline: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%238592A8' stroke-width='1.5'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 12px center;
+      background-size: 18px; transition: all .18s;
+    }
+    .f-select:focus { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+
+    /* ─── UPI ────────────────────────────────── */
+    .upi-row { position: relative; }
+    .upi-row .f-input { padding-right: 90px; }
+    .verify-btn {
+      position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+      background: var(--brand); color: #fff; border: none;
+      border-radius: 6px; padding: 7px 14px;
+      font-size: 12px; font-weight: 700; letter-spacing: .2px;
+      transition: background .18s;
+    }
+    .verify-btn:hover { background: var(--brand-dark); }
+
+    .or-divider {
+      display: flex; align-items: center; gap: 14px; margin: 18px 0;
+    }
+    .or-line { flex: 1; height: 1px; background: var(--border); }
+    .or-text { font-size: 10.5px; font-weight: 700; letter-spacing: 1px;
+               text-transform: uppercase; color: var(--text-3); white-space: nowrap; }
+
+    /* QR */
+    .qr-wrap { display: flex; gap: 20px; align-items: flex-start; }
+    .qr-box {
+      width: 120px; height: 120px; flex-shrink: 0;
+      border: 1.5px solid var(--border-2); border-radius: 12px;
+      background: var(--surface-2);
+      display: flex; align-items: center; justify-content: center; padding: 8px;
+    }
+    .qr-box svg { color: var(--text-1); }
+    .qr-caption { font-size: 10px; font-weight: 600; color: var(--text-3); text-align: center; margin-top: 6px; }
+    .qr-info-title { font-size: 13.5px; font-weight: 700; color: var(--text-1); margin-bottom: 5px; }
+    .qr-info-body { font-size: 12px; color: var(--text-2); line-height: 1.6; margin-bottom: 10px; }
+    .qr-expiry {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      font-size: 11px; font-weight: 600; color: var(--text-2);
+    }
+    .qr-expiry svg { width: 13px; height: 13px; color: var(--amber); }
+
+    /* UPI Apps */
+    .apps-label { font-size: 10px; font-weight: 700; letter-spacing: .9px;
+                  text-transform: uppercase; color: var(--text-3); margin: 20px 0 10px; }
+    .apps-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    .app-tile {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 13px 6px; border: 1.5px solid var(--border);
+      border-radius: var(--r-sm); background: var(--surface-2);
+      cursor: pointer; transition: all .18s;
+    }
+    .app-tile:hover { border-color: var(--brand); background: var(--brand-tint); transform: translateY(-2px); }
+    .app-logo {
+      width: 38px; height: 38px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 800; color: #fff; letter-spacing: -.3px;
+    }
+    .app-name { font-size: 10.5px; font-weight: 600; color: var(--text-2); text-align: center; }
+
+    /* ─── CARD PANEL ─────────────────────────── */
+    .card-wrap { max-width: 380px; margin-bottom: 20px; }
+    .card-visual {
+      border-radius: 16px;
+      aspect-ratio: 85.6 / 53.98;
+      background: linear-gradient(135deg, #141428 0%, #1a1a40 55%, #0E2352 100%);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 18px 20px 16px;
+      transition: background .5s ease;
+      box-shadow: 0 20px 60px rgba(0,0,0,.45), 0 8px 20px rgba(0,0,0,.25);
+    }
+    .card-visual::before {
+      content: ''; position: absolute;
+      width: 200px; height: 200px; border-radius: 50%;
+      background: rgba(255,255,255,.05); top: -80px; right: -50px;
+    }
+    .card-visual::after {
+      content: ''; position: absolute;
+      width: 140px; height: 140px; border-radius: 50%;
+      background: rgba(23,49,114,.35); bottom: -60px; left: -20px;
+    }
+    /* network-specific card gradients */
+    .card-visual.net-visa       { background: linear-gradient(135deg,#1a1f71 0%,#2533a0 55%,#162086 100%); }
+    .card-visual.net-mastercard { background: linear-gradient(135deg,#1c1c2e 0%,#2d1f1f 55%,#1a0a0a 100%); }
+    .card-visual.net-rupay      { background: linear-gradient(135deg,#083050 0%,#0f4c75 55%,#041e38 100%); }
+    .card-visual.net-amex       { background: linear-gradient(135deg,#1d3a28 0%,#2d5a3d 55%,#122419 100%); }
+    .card-visual.net-diners     { background: linear-gradient(135deg,#2a2a2a 0%,#3d3d3d 55%,#1a1a1a 100%); }
+    .card-chip {
+      width: 34px; height: 26px; border-radius: 5px;
+      background: linear-gradient(135deg, #C8A84B, #F0D060);
+      position: relative; z-index: 1; flex-shrink: 0;
+    }
+    .card-chip::after {
+      content: ''; position: absolute; inset: 4px;
+      border: 1px solid rgba(0,0,0,.15); border-radius: 2px;
+      background: linear-gradient(135deg, #E2C060, #B09030);
+    }
+    .card-number {
+      font-size: 16px; font-weight: 700; color: rgba(255,255,255,.88);
+      letter-spacing: 3.5px; font-family: 'Courier New', monospace;
+      position: relative; z-index: 1;
+    }
+    .card-footer {
+      display: flex; justify-content: space-between;
+      align-items: flex-end; position: relative; z-index: 1;
+    }
+    .cf-label { font-size: 7.5px; color: rgba(255,255,255,.45); text-transform: uppercase; letter-spacing: .7px; }
+    .cf-value { font-size: 11.5px; font-weight: 700; color: rgba(255,255,255,.9); text-transform: uppercase; margin-top: 2px; letter-spacing: .3px; }
+    .card-network { position: absolute; top: 14px; right: 16px; z-index: 2; display: flex; }
+    .card-networks-row {
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-top: 6px;
+    }
+    .network-tag {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 5px; padding: 3px 9px;
+      font-size: 10.5px; font-weight: 700; color: var(--text-2); letter-spacing: .2px;
+    }
+    .network-label { font-size: 11px; color: var(--text-3); font-weight: 500; }
+
+    /* Card 2-col grid */
+    #panel-cards { overflow: hidden; }
+    .p-body-card { padding: 16px 22px; }
+    .card-grid {
+      display: grid; grid-template-columns: 256px 1fr;
+      gap: 22px; align-items: start;
+    }
+    .card-grid .card-wrap { max-width: none; margin-bottom: 10px; }
+    .card-grid .card-visual {
+      padding: 13px 15px 12px; border-radius: 12px;
+      animation: card-float 4.5s ease-in-out infinite;
+    }
+    .card-grid .card-chip { width: 27px; height: 21px; }
+    .card-grid .card-number { font-size: 13.5px; letter-spacing: 2.8px; }
+    .card-grid .cf-label { font-size: 7px; }
+    .card-grid .cf-value { font-size: 10.5px; }
+    .card-grid .card-network { top: 13px; right: 15px; }
+    @keyframes card-float {
+      0%, 100% { transform: translateY(0)   rotate(0deg);  }
+      50%       { transform: translateY(-5px) rotate(.5deg); }
+    }
+    .card-network {
+      transition: opacity .18s ease, transform .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    .card-network.net-changing { opacity: 0; transform: scale(.5); }
+
+    .card-form-col { display: flex; flex-direction: column; gap: 10px; }
+    .card-form-col > * { animation: fade-in-up .35s ease both; }
+    .card-form-col > *:nth-child(1) { animation-delay: .06s; }
+    .card-form-col > *:nth-child(2) { animation-delay: .12s; }
+    .card-form-col > *:nth-child(3) { animation-delay: .18s; }
+    .card-form-col > *:nth-child(4) { animation-delay: .24s; }
+    .card-form-col > *:nth-child(5) { animation-delay: .30s; }
+    .card-form-col .f-label { font-size: 11px; margin-bottom: 5px; }
+    .card-form-col .f-input { height: 40px; font-size: 13.5px; padding: 0 13px; }
+    .card-form-col .f-group { margin-bottom: 0; }
+    .card-form-col .f-row { gap: 10px; }
+    .card-form-col .cta-btn { margin-top: 2px; height: 46px; font-size: 14px; }
+    .card-form-col .cta-note { margin-top: 6px; }
+
+    /* ─── NET BANKING ────────────────────────── */
+    .sec-heading {
+      font-size: 10px; font-weight: 700; letter-spacing: .9px;
+      text-transform: uppercase; color: var(--text-3); margin-bottom: 10px;
+    }
+    .banks-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px;
+    }
+    .bank-tile {
+      display: flex; flex-direction: column; align-items: center; gap: 7px;
+      padding: 14px 8px; border: 1.5px solid var(--border);
+      border-radius: var(--r-sm); background: var(--surface-2);
+      cursor: pointer; transition: all .18s;
+    }
+    .bank-tile:hover { border-color: var(--brand); background: var(--brand-tint); transform: translateY(-2px); }
+    .bank-logo {
+      width: 40px; height: 40px; border-radius: 9px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9.5px; font-weight: 800; color: #fff; letter-spacing: .2px;
+    }
+    .bank-label { font-size: 10.5px; font-weight: 600; color: var(--text-2); text-align: center; line-height: 1.3; }
+
+    /* ─── NET BANKING REDESIGN ──────────────── */
+    #panel-netbanking { overflow: hidden; }
+    .p-body-nb { padding: 18px 22px 16px; }
+    .nb-section-head {
+      font-size: 10px; font-weight: 700; letter-spacing: 1px;
+      text-transform: uppercase; color: var(--text-3);
+      display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+    }
+    .nb-section-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .nb-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+    }
+    .nb-tile {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 11px; border-radius: var(--r-sm);
+      border: 1.5px solid var(--border); background: var(--surface-2);
+      cursor: pointer; position: relative;
+      transition: border-color .2s, background .2s, transform .2s cubic-bezier(.34,1.56,.64,1), box-shadow .2s;
+      animation: fade-in-up .3s ease both;
+    }
+    .nb-tile:nth-child(1){animation-delay:.04s} .nb-tile:nth-child(2){animation-delay:.08s}
+    .nb-tile:nth-child(3){animation-delay:.12s} .nb-tile:nth-child(4){animation-delay:.16s}
+    .nb-tile:nth-child(5){animation-delay:.20s} .nb-tile:nth-child(6){animation-delay:.24s}
+    .nb-tile:nth-child(7){animation-delay:.28s} .nb-tile:nth-child(8){animation-delay:.32s}
+    .nb-tile:hover {
+      border-color: var(--brand); background: var(--brand-tint);
+      transform: translateY(-2px); box-shadow: 0 6px 18px var(--brand-glow);
+    }
+    .nb-tile.sel {
+      border-color: var(--brand); background: var(--brand-tint);
+      box-shadow: 0 0 0 3px var(--brand-glow);
+      animation: btn-pop .3s cubic-bezier(.34,1.56,.64,1);
+    }
+    .nb-icon-sq {
+      width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8.5px; font-weight: 900; color: #fff; letter-spacing: .3px;
+      box-shadow: 0 3px 8px rgba(0,0,0,.25);
+    }
+    .nb-info { flex: 1; min-width: 0; }
+    .nb-code { font-size: 11.5px; font-weight: 800; color: var(--text-1); line-height: 1.2; }
+    .nb-full { font-size: 9px; color: var(--text-3); margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .nb-dot {
+      width: 15px; height: 15px; border-radius: 50%; flex-shrink: 0;
+      border: 1.5px solid var(--border-2);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, border-color .2s, box-shadow .2s;
+    }
+    .nb-tile.sel .nb-dot { background: var(--brand); border-color: var(--brand); box-shadow: 0 0 0 2px var(--brand-glow); }
+    .nb-tile.sel .nb-dot::after { content:''; width:5px; height:5px; border-radius:50%; background:#fff; }
+    .nb-or {
+      display: flex; align-items: center; gap: 10px; margin: 14px 0 12px;
+    }
+    .nb-or span { font-size: 10px; font-weight: 600; color: var(--text-3); white-space: nowrap; letter-spacing: .4px; text-transform: uppercase; }
+    .nb-or::before, .nb-or::after { content:''; flex:1; height:1px; background: var(--border); }
+    .nb-select-wrap { position: relative; }
+    .nb-select-wrap .nb-sel-icon {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      width: 15px; height: 15px; color: var(--text-3); pointer-events: none; z-index: 1;
+    }
+    .nb-select-wrap .f-select { padding-left: 38px; padding-right: 36px; height: 42px; }
+    .nb-select-wrap .nb-arrow {
+      position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+      width: 14px; height: 14px; color: var(--text-3); pointer-events: none;
+    }
+
+    /* ─── EMI ────────────────────────────────── */
+    .tenure-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px;
+    }
+    .tenure-card {
+      border: 1.5px solid var(--border); border-radius: var(--r-sm);
+      padding: 13px 8px; cursor: pointer; text-align: center;
+      background: var(--surface-2); transition: all .18s;
+    }
+    .tenure-card:hover { border-color: var(--brand); background: var(--brand-tint); }
+    .tenure-card.sel { border-color: var(--brand); background: var(--brand-tint); }
+    .t-months { font-size: 20px; font-weight: 900; color: var(--text-1); }
+    .t-unit { font-size: 9.5px; font-weight: 700; letter-spacing: .4px;
+              text-transform: uppercase; color: var(--text-3); }
+    .t-emi { font-size: 12px; font-weight: 800; color: var(--brand); margin-top: 5px; }
+    .t-rate { font-size: 9.5px; color: var(--text-3); margin-top: 1px; }
+
+    .emi-summary-row {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 14px 16px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
+      margin-bottom: 16px; text-align: center;
+    }
+    .es-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase;
+                letter-spacing: .6px; color: var(--text-3); margin-bottom: 4px; }
+    .es-value { font-size: 15px; font-weight: 800; color: var(--text-1); }
+
+    /* ─── PROVIDERS / BNPL ───────────────────── */
+    .providers-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .provider-card {
+      display: flex; align-items: center; gap: 12px; padding: 13px 14px;
+      border: 1.5px solid var(--border); border-radius: var(--r-sm);
+      background: var(--surface-2); cursor: pointer; transition: all .18s;
+    }
+    .provider-card:hover { border-color: var(--brand); background: var(--brand-tint); transform: translateY(-2px); }
+    .prov-mark {
+      width: 40px; height: 40px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 800; color: #fff; letter-spacing: .1px;
+    }
+    .prov-name { font-size: 12.5px; font-weight: 700; color: var(--text-1); }
+    .prov-limit { font-size: 10.5px; color: var(--text-3); margin-top: 2px; }
+    .prov-rate { font-size: 10.5px; font-weight: 600; color: var(--green); margin-top: 2px; }
+
+    /* ─── BNPL ───────────────────────────────── */
+    .bnpl-list { display: flex; flex-direction: column; gap: 8px; }
+    .bnpl-row {
+      display: flex; align-items: center; gap: 14px; padding: 13px 15px;
+      border: 1.5px solid var(--border); border-radius: var(--r-sm);
+      background: var(--surface-2); cursor: pointer; transition: all .18s;
+    }
+    .bnpl-row:hover { border-color: var(--brand); background: var(--brand-tint); }
+    .bnpl-mark {
+      width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 800; color: #fff;
+    }
+    .bnpl-name { font-size: 13px; font-weight: 700; color: var(--text-1); }
+    .bnpl-desc { font-size: 11px; color: var(--text-3); margin-top: 2px; }
+    .bnpl-right { margin-left: auto; text-align: right; }
+    .bnpl-amt { font-size: 14px; font-weight: 800; color: var(--text-1); }
+    .bnpl-lbl { font-size: 9.5px; color: var(--text-3); margin-top: 1px; }
+
+    /* ─── WALLETS ────────────────────────────── */
+    .wallets-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .wallet-row {
+      display: flex; align-items: center; gap: 11px; padding: 12px 13px;
+      border: 1.5px solid var(--border); border-radius: var(--r-sm);
+      background: var(--surface-2); cursor: pointer; transition: all .18s;
+    }
+    .wallet-row:hover { border-color: var(--brand); background: var(--brand-tint); transform: translateY(-2px); }
+    .wallet-mark {
+      width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 800; color: #fff;
+    }
+    .wallet-name { font-size: 12.5px; font-weight: 700; color: var(--text-1); }
+    .wallet-bal { font-size: 10.5px; color: var(--text-3); margin-top: 1px; }
+
+    /* ─── CTA BUTTON ─────────────────────────── */
+    .cta-btn {
+      width: 100%; height: 48px; margin-top: 20px;
+      background: linear-gradient(110deg, #173172 0%, #1e4096 100%);
+      border: none; border-radius: 10px;
+      color: #fff; font-size: 15px; font-weight: 700; letter-spacing: .1px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all .2s; box-shadow: 0 4px 16px rgba(23,49,114,.30);
+    }
+    [data-theme="dark"] .cta-btn {
+      background: linear-gradient(110deg, #2a52b0 0%, #4A7AE8 100%);
+      box-shadow: 0 4px 16px rgba(74,122,232,.30);
+    }
+    .cta-btn:hover { transform: translateY(-1px); box-shadow: 0 6px 22px rgba(23,49,114,.40); }
+    .cta-btn:active { transform: none; }
+    .cta-btn svg { width: 17px; height: 17px; }
+
+    .cta-note {
+      display: flex; align-items: center; justify-content: center; gap: 5px;
+      margin-top: 10px; font-size: 11px; color: var(--text-3);
+    }
+    .cta-note svg { width: 13px; height: 13px; }
+
+    /* ─── FOOTER (FIXED) ─────────────────────── */
+    .footer {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 300;
+      background: var(--surface); border-top: 1px solid var(--border);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+    .footer-inner {
+      max-width: 1120px; margin: 0 auto; padding: 0 28px;
+      height: 52px; display: flex; align-items: center;
+      justify-content: space-between; gap: 16px; flex-wrap: wrap;
+    }
+    .juspay-lockup { display: flex; align-items: center; gap: 7px; }
+    .powered-by { font-size: 10.5px; color: var(--text-3); font-weight: 500; }
+    .juspay-logo {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 13.5px; font-weight: 900; color: var(--text-1); letter-spacing: -.3px;
+    }
+    .juspay-j {
+      width: 20px; height: 20px; border-radius: 5px;
+      background: linear-gradient(135deg, #5B4EFF, #9B59FF);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 900; color: #fff;
+    }
+    .trust-badges { display: flex; align-items: center; gap: 8px; }
+    .t-badge {
+      display: flex; align-items: center; gap: 5px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 4px 10px;
+      font-size: 10.5px; font-weight: 700; color: var(--text-2);
+    }
+    .pci-chip {
+      background: linear-gradient(135deg, #1a4a70, #1e6091);
+      border-radius: 3px; padding: 2px 5px;
+      font-size: 8px; font-weight: 900; color: #fff; letter-spacing: .2px;
+    }
+    .t-badge svg { width: 13px; height: 13px; }
+    .f-links { display: flex; gap: 16px; }
+    .f-link { font-size: 11px; color: var(--text-3); transition: color .15s; }
+    .f-link:hover { color: var(--brand); }
+
+    /* ─── RESPONSIVE ─────────────────────────── */
+    /* ─── GLOBAL ANIMATIONS ─────────────────── */
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pop-in {
+      from { opacity: 0; transform: scale(.82); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes btn-pop {
+      0%   { transform: scale(.88); }
+      60%  { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    @keyframes shimmer-move {
+      0%   { background-position: 200% center; }
+      100% { background-position: -200% center; }
+    }
+    @keyframes pulse-soft {
+      0%, 100% { opacity: .7; }
+      50%       { opacity: 1; }
+    }
+    @keyframes qr-scan {
+      0%        { top: 10px;             opacity: 0; }
+      6%        { top: 10px;             opacity: 1; }
+      50%       { top: calc(100% - 12px); opacity: 1; }
+      94%       { top: calc(100% - 12px); opacity: 1; }
+      100%      { top: 10px;             opacity: 0; }
+    }
+    @keyframes ring-pulse {
+      0%        { opacity: .5; transform: scale(1); }
+      50%       { opacity: 0; transform: scale(1.06); }
+      100%      { opacity: .5; transform: scale(1); }
+    }
+    @keyframes corner-blink {
+      0%, 100% { opacity: .5; }
+      50%       { opacity: 1; }
+    }
+    @keyframes otm-reveal {
+      from { opacity: 0; transform: translateY(-6px) scale(.97); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+    @keyframes qr-exit {
+      to { opacity: 0; transform: scale(.88) rotateY(15deg); }
+    }
+    @keyframes qr-enter {
+      from { opacity: 0; transform: scale(.88) rotateY(-15deg); }
+      to   { opacity: 1; transform: scale(1)  rotateY(0deg); }
+    }
+    @keyframes digit-flash {
+      0%   { color: var(--brand); }
+      100% { color: rgba(255,255,255,.88); }
+    }
+    @keyframes pill-appear {
+      from { opacity: 0; transform: translateX(-6px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes countdown-warn {
+      0%, 100% { background: rgba(220,38,38,.08); }
+      50%       { background: rgba(220,38,38,.18); }
+    }
+
+    /* ─── UPI PANEL LAYOUT ───────────────────── */
+    #panel-upi { overflow: hidden; }
+    .p-body-upi { padding: 18px 22px 16px; }
+    .upi-grid {
+      display: grid; grid-template-columns: 170px 1fr;
+      gap: 22px; align-items: center;
+    }
+    .upi-qr-col { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+    /* QR box (overrides .qr-box-lg from old section) */
+    .upi-grid .qr-box-lg {
+      width: 170px; height: 170px;
+      border: 2px solid var(--border-2); border-radius: 14px;
+      background: #fff; padding: 10px;
+      position: relative; overflow: hidden;
+      box-shadow: 0 8px 28px rgba(23,49,114,.16);
+      transition: border-color .35s, box-shadow .35s;
+    }
+    .upi-grid .qr-box-lg.otm-mode {
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px var(--brand-glow), 0 8px 28px rgba(23,49,114,.20);
+    }
+    .upi-grid .qr-box-lg svg { width: 100%; height: 100%; display: block; }
+
+    /* Animated scan line */
+    .qr-scan-line {
+      position: absolute; left: 10px; right: 10px;
+      height: 2px; border-radius: 1px; z-index: 10; pointer-events: none;
+      background: linear-gradient(90deg, transparent 0%, #173172 35%, #4A7AE8 65%, transparent 100%);
+      animation: qr-scan 2.8s ease-in-out infinite;
+    }
+    /* Pulsing ring outside QR */
+    .qr-ring {
+      position: absolute; inset: -6px; border-radius: 20px;
+      border: 1.5px solid var(--brand); pointer-events: none;
+      animation: ring-pulse 2.8s ease-in-out infinite;
+    }
+    /* Corner accent marks */
+    .qr-corner { position: absolute; width: 16px; height: 16px; z-index: 11; pointer-events: none; }
+    .qr-corner span {
+      display: block; background: var(--brand); border-radius: 2px;
+      position: absolute;
+      animation: corner-blink 2.8s ease-in-out infinite;
+    }
+    .qr-corner span:first-child  { width: 16px; height: 3px; }
+    .qr-corner span:last-child   { width: 3px; height: 16px; }
+    .qr-corner.tl { top: 7px; left: 7px; }
+    .qr-corner.tl span:first-child { top: 0; left: 0; }
+    .qr-corner.tl span:last-child  { top: 0; left: 0; }
+    .qr-corner.tr { top: 7px; right: 7px; }
+    .qr-corner.tr span:first-child { top: 0; right: 0; left: auto; }
+    .qr-corner.tr span:last-child  { top: 0; right: 0; left: auto; }
+    .qr-corner.bl { bottom: 7px; left: 7px; }
+    .qr-corner.bl span:first-child { bottom: 0; top: auto; left: 0; }
+    .qr-corner.bl span:last-child  { bottom: 0; top: auto; left: 0; }
+    .qr-corner.br { bottom: 7px; right: 7px; }
+    .qr-corner.br span:first-child { bottom: 0; top: auto; right: 0; left: auto; }
+    .qr-corner.br span:last-child  { bottom: 0; top: auto; right: 0; left: auto; }
+    .qr-corner.tr span:first-child, .qr-corner.br span:first-child { animation-delay: .4s; }
+    .qr-corner.bl span, .qr-corner.br span:last-child { animation-delay: .7s; }
+
+    /* QR switch animation classes */
+    .qr-box-lg.qr-exit   { animation: qr-exit  .22s ease forwards; }
+    .qr-box-lg.qr-enter  { animation: qr-enter .22s ease; }
+
+    /* UPI info column */
+    .upi-info-col { display: flex; flex-direction: column; gap: 7px; }
+    .upi-info-col > * {
+      animation: fade-in-up .4s ease both;
+    }
+    .upi-info-col > *:nth-child(1) { animation-delay: .05s; }
+    .upi-info-col > *:nth-child(2) { animation-delay: .12s; }
+    .upi-info-col > *:nth-child(3) { animation-delay: .18s; }
+    .upi-info-col > *:nth-child(4) { animation-delay: .24s; }
+    .upi-info-col > *:nth-child(5) { animation-delay: .30s; }
+
+    .upi-amount {
+      font-size: 30px; font-weight: 900; color: var(--text-1);
+      letter-spacing: -1.5px; line-height: 1;
+      animation: pop-in .5s cubic-bezier(.34,1.56,.64,1) .05s both;
+    }
+    .upi-scan-title { font-size: 13px; font-weight: 700; color: var(--text-1); }
+    .upi-scan-desc { font-size: 11.5px; color: var(--text-2); line-height: 1.6; }
+
+    /* Shimmer badge */
+    .qr-badge-sm {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 4px 11px; border-radius: 20px;
+      font-size: 10px; font-weight: 700; letter-spacing: .3px;
+      border: 1px solid rgba(23,49,114,.22); color: var(--brand);
+      background: linear-gradient(90deg, var(--brand-tint), rgba(23,49,114,.14), var(--brand-tint));
+      background-size: 200% 100%;
+      animation: shimmer-move 3s linear infinite;
+      transition: all .3s;
+    }
+    [data-theme="dark"] .qr-badge-sm {
+      border-color: rgba(74,122,232,.3);
+      background: linear-gradient(90deg, rgba(74,122,232,.1), rgba(74,122,232,.22), rgba(74,122,232,.1));
+      background-size: 200% 100%;
+    }
+    .qr-badge-sm.otm { background: linear-gradient(90deg,#D1FAE5,rgba(5,150,105,.15),#D1FAE5); border-color: rgba(5,150,105,.3); color:#059669; background-size:200% 100%; }
+    [data-theme="dark"] .qr-badge-sm.otm { background: linear-gradient(90deg,rgba(5,150,105,.15),rgba(5,150,105,.25),rgba(5,150,105,.15)); border-color:rgba(5,150,105,.4); color:#34D399; background-size:200% 100%; }
+
+    /* Expiry row */
+    .upi-expiry {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 7px; padding: 5px 12px;
+      font-size: 11.5px; font-weight: 600; color: var(--text-2);
+      transition: background .5s, border-color .5s;
+    }
+    .upi-expiry svg { width: 13px; height: 13px; color: var(--amber); flex-shrink: 0; }
+    .upi-expiry.expiring {
+      border-color: rgba(220,38,38,.35);
+      animation: countdown-warn 1s ease-in-out infinite;
+    }
+
+    /* OTM active pill */
+    .otm-active-pill {
+      display: none; align-items: center; gap: 6px;
+      background: rgba(5,150,105,.1); border: 1px solid rgba(5,150,105,.3);
+      border-radius: 7px; padding: 5px 12px;
+      font-size: 11px; font-weight: 700; color: #059669;
+    }
+    [data-theme="dark"] .otm-active-pill { background: rgba(5,150,105,.15); color: #34D399; }
+    .otm-active-pill.show { display: inline-flex; animation: pill-appear .35s ease; }
+    .otm-active-pill svg { width: 14px; height: 14px; }
+
+    /* ─── ASBA OTM COMPACT ───────────────────── */
+    .otm-compact {
+      display: flex; align-items: center; gap: 13px;
+      background: var(--surface-2); border: 1.5px solid var(--border-2);
+      border-radius: var(--r-md); padding: 13px 15px;
+      transition: border-color .3s, background .3s, box-shadow .3s;
+      animation: otm-reveal .4s ease .35s both;
+    }
+    .otm-compact.active {
+      border-color: var(--brand); background: var(--brand-tint);
+      box-shadow: 0 0 0 3px var(--brand-glow);
+    }
+    .otm-chk { width: 17px; height: 17px; flex-shrink: 0; accent-color: var(--brand); cursor: pointer; }
+    .otm-compact-content { flex: 1; min-width: 0; }
+    .otm-compact-header { display: flex; align-items: center; gap: 6px; margin-bottom: 3px; }
+    .otm-compact-heading { font-size: 12px; font-weight: 700; color: var(--text-1); }
+    .otm-compact-desc { font-size: 10.5px; color: var(--text-3); line-height: 1.5; }
+    .otm-side-btn {
+      flex-shrink: 0; white-space: nowrap;
+      height: 34px; padding: 0 14px; border-radius: 7px;
+      border: 1.5px solid var(--border-2); background: var(--surface-3);
+      color: var(--text-3); font-size: 11.5px; font-weight: 700;
+      cursor: not-allowed; transition: all .25s; font-family: inherit;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .otm-side-btn svg { width: 13px; height: 13px; }
+    .otm-side-btn.enabled {
+      background: var(--brand); border-color: var(--brand); color: #fff;
+      cursor: pointer; box-shadow: 0 4px 14px var(--brand-glow);
+      animation: btn-pop .4s cubic-bezier(.34,1.56,.64,1);
+    }
+    .otm-side-btn.enabled:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--brand-glow); }
+
+    /* ─── QR CENTERED ────────────────────────── */
+    .qr-centered { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+    .qr-box-lg {
+      width: 200px; height: 200px;
+      border: 2px solid var(--border-2); border-radius: 16px;
+      background: #fff; padding: 12px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-md);
+      transition: opacity .3s;
+    }
+    .qr-box-lg.otm-mode { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow), var(--shadow-md); }
+    .qr-box-lg svg { width: 100%; height: 100%; }
+    .qr-meta { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+    .qr-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--brand-tint); border: 1px solid var(--brand);
+      border-radius: 20px; padding: 3px 12px;
+      font-size: 10.5px; font-weight: 700; color: var(--brand); letter-spacing: .3px;
+    }
+    .qr-instructions { font-size: 13px; color: var(--text-2); text-align: center; line-height: 1.5; max-width: 320px; }
+    .qr-expiry-row {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: 6px; padding: 5px 12px;
+      font-size: 11.5px; font-weight: 600; color: var(--text-2);
+    }
+    .qr-expiry-row svg { width: 13px; height: 13px; color: var(--amber); }
+    /* ─── ASBA OTM ────────────────────────────── */
+    .otm-section { margin-top: 22px; }
+    .otm-box {
+      background: var(--surface-2); border: 1.5px solid var(--border-2);
+      border-radius: var(--r-md); padding: 16px 18px;
+    }
+    .otm-box.active { border-color: var(--brand); background: var(--brand-tint); }
+    .otm-consent-row { display: flex; align-items: flex-start; gap: 11px; }
+    .otm-chk {
+      width: 18px; height: 18px; border-radius: 4px; flex-shrink: 0;
+      border: 2px solid var(--border-2); margin-top: 1px; cursor: pointer;
+      accent-color: var(--brand);
+    }
+    .otm-label { font-size: 11.5px; line-height: 1.6; color: var(--text-2); cursor: pointer; }
+    .otm-label strong { color: var(--text-1); }
+    .otm-tag {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(23,49,114,.1); border: 1px solid rgba(23,49,114,.2);
+      border-radius: 4px; padding: 1px 6px;
+      font-size: 9.5px; font-weight: 800; color: var(--brand); letter-spacing: .4px;
+      vertical-align: middle; margin-right: 2px;
+    }
+    [data-theme="dark"] .otm-tag { background: rgba(74,122,232,.15); border-color: rgba(74,122,232,.3); }
+    .otm-sub {
+      font-size: 10.5px; color: var(--text-3); margin-top: 8px; line-height: 1.5;
+      padding-left: 29px;
+    }
+    .otm-btn {
+      width: 100%; height: 44px; margin-top: 14px;
+      background: var(--surface-3); border: 1.5px solid var(--border-2);
+      border-radius: 9px; color: var(--text-3);
+      font-size: 13.5px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all .2s; cursor: not-allowed; font-family: inherit;
+    }
+    .otm-btn.enabled {
+      background: var(--brand); border-color: var(--brand); color: #fff; cursor: pointer;
+      box-shadow: 0 4px 14px var(--brand-glow);
+    }
+    .otm-btn.enabled:hover { transform: translateY(-1px); box-shadow: 0 6px 20px var(--brand-glow); }
+    .otm-btn svg { width: 16px; height: 16px; }
+
+    @media (max-width: 720px) {
+      .layout { grid-template-columns: 1fr; padding: 14px 16px 24px; }
+      .sidebar { position: static; }
+      .method-list { display: flex; overflow-x: auto; scrollbar-width: none; }
+      .method-list::-webkit-scrollbar { display: none; }
+      .m-item { flex-direction: column; gap: 4px; padding: 10px 12px;
+                border-left: none; border-bottom: 2.5px solid transparent;
+                border-top: none; text-align: center; min-width: 68px; }
+      .m-item.active { border-bottom-color: var(--brand); border-left-color: transparent; }
+      .m-text { display: none; }
+      .m-badge { display: none; }
+      .f-row { grid-template-columns: 1fr; }
+      .apps-grid { grid-template-columns: repeat(2, 1fr); }
+      .banks-grid { grid-template-columns: repeat(2, 1fr); }
+      .tenure-grid { grid-template-columns: repeat(2, 1fr); }
+      .providers-grid { grid-template-columns: 1fr; }
+      .wallets-grid { grid-template-columns: 1fr; }
+      .order-inner { height: auto; padding: 10px 16px; flex-wrap: wrap; gap: 6px; }
+      .o-field { padding-right: 12px; margin-right: 12px; }
+      .timer-group { margin-left: 0; }
+      .trust-badges { display: none; }
+      .f-links { display: none; }
+      .qr-box-lg { width: 170px; height: 170px; }
+      .card-wrap { max-width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="#" class="brand">
+        <div class="brand-mark">
+          <svg viewBox="0 0 395 522" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M264.851 0L176.804 173.432L0 195.647L115.196 327.664L87.337 520.294L249.2 437.11L380.366 521.253L394.881 507.554L248.81 395.73L125.984 459.68L157.995 318.579L69.948 217.898L199.091 200.367L263.822 75.129L338.49 219.815L352.579 205.619L264.851 0Z"/>
+          </svg>
+        </div>
+        <div class="brand-words">
+          <span class="brand-name">Star Health</span>
+          <span class="brand-sub">Allied Insurance Co. Ltd</span>
+        </div>
+      </a>
+      <div class="h-right">
+        <div class="secure-pill">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+          </svg>
+          256-bit SSL Encrypted
+        </div>
+        <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">
+          <svg id="icon-moon" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z"/>
+          </svg>
+          <svg id="icon-sun" style="display:none" fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── ORDER STRIP ── -->
+  <div class="order-strip">
+    <div class="order-inner">
+      <div class="o-field">
+        <span class="o-label">Order ID</span>
+        <span class="o-value">STR-INS-2024-88471</span>
+      </div>
+      <div class="o-field">
+        <span class="o-label">Mobile</span>
+        <span class="o-value">+91 98765 43210</span>
+      </div>
+      <div class="o-field">
+        <span class="o-label">Policy</span>
+        <span class="o-value">Family Floater Plan</span>
+      </div>
+      <div class="o-field" style="border-right:none;">
+        <span class="o-label">Amount Payable</span>
+        <span class="o-amount">₹18,499</span>
+      </div>
+      <div class="timer-group">
+        <div class="timer-label">Session<br>expires in</div>
+        <div class="timer-box" id="timer-box">
+          <span id="t-m">15</span><span class="timer-sep">:</span><span id="t-s">00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── MAIN ── -->
+  <main class="layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-head">Pay With</div>
+      <ul class="method-list">
+
+        <li class="m-item active" onclick="switchMethod('upi',this)">
+          <div class="m-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+            </svg>
+          </div>
+          <div class="m-text">
+            <div class="m-name">UPI</div>
+            <div class="m-desc">Instant transfer</div>
+          </div>
+        </li>
+
+        <li class="m-item" onclick="switchMethod('cards',this)">
+          <div class="m-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/>
+            </svg>
+          </div>
+          <div class="m-text">
+            <div class="m-name">Cards</div>
+            <div class="m-desc">Credit &amp; Debit</div>
+          </div>
+        </li>
+
+        <li class="m-item" onclick="switchMethod('netbanking',this)">
+          <div class="m-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"/>
+            </svg>
+          </div>
+          <div class="m-text">
+            <div class="m-name">Net Banking</div>
+            <div class="m-desc">All major banks</div>
+          </div>
+        </li>
+
+        <li class="m-item" onclick="switchMethod('card-emi',this)">
+          <div class="m-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
+            </svg>
+          </div>
+          <div class="m-text">
+            <div class="m-name">Card EMI</div>
+            <div class="m-desc">Easy installments</div>
+          </div>
+          <span class="m-badge badge-green">0% Off</span>
+        </li>
+
+        <li class="m-item" onclick="switchMethod('cardless-emi',this)">
+          <div class="m-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+            </svg>
+          </div>
+          <div class="m-text">
+            <div class="m-name">Cardless EMI</div>
+            <div class="m-desc">No card needed</div>
+          </div>
+        </li>
+
+        <li class="m-item" onclick="switchMethod('bnpl',this)">
+          <div class="m-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div class="m-text">
+            <div class="m-name">Loan Offers</div>
+            <div class="m-desc">Buy Now Pay Later</div>
+          </div>
+          <span class="m-badge badge-amber">New</span>
+        </li>
+
+        <li class="m-item" onclick="switchMethod('wallets',this)">
+          <div class="m-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"/>
+            </svg>
+          </div>
+          <div class="m-text">
+            <div class="m-name">Wallets</div>
+            <div class="m-desc">Digital wallets</div>
+          </div>
+        </li>
+
+      </ul>
+    </aside>
+
+    <!-- PANELS -->
+    <div class="panel-area">
+
+      <!-- ── UPI ── -->
+      <div class="panel active" id="panel-upi">
+        <div class="p-head">
+          <div class="p-head-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="p-title">Pay via UPI</div>
+            <div class="p-sub">Instant · Zero fees · Works with all UPI apps</div>
+          </div>
+        </div>
+        <div class="p-body p-body-upi">
+          <!-- 2-col grid: QR left, info right -->
+          <div class="upi-grid">
+
+            <!-- LEFT: QR box -->
+            <div class="upi-qr-col">
+              <div class="qr-box-lg" id="qr-main-box">
+                <div class="qr-ring"></div>
+                <div class="qr-scan-line"></div>
+                <div class="qr-corner tl"><span></span><span></span></div>
+                <div class="qr-corner tr"><span></span><span></span></div>
+                <div class="qr-corner bl"><span></span><span></span></div>
+                <div class="qr-corner br"><span></span><span></span></div>
+                <svg viewBox="0 0 108 108" fill="#0E1526" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="4" y="4" width="32" height="32" rx="3" fill="none" stroke="#0E1526" stroke-width="4"/>
+                  <rect x="11" y="11" width="18" height="18" rx="1"/>
+                  <rect x="72" y="4" width="32" height="32" rx="3" fill="none" stroke="#0E1526" stroke-width="4"/>
+                  <rect x="79" y="11" width="18" height="18" rx="1"/>
+                  <rect x="4" y="72" width="32" height="32" rx="3" fill="none" stroke="#0E1526" stroke-width="4"/>
+                  <rect x="11" y="79" width="18" height="18" rx="1"/>
+                  <rect x="44" y="4" width="5" height="5"/><rect x="52" y="4" width="5" height="5"/><rect x="60" y="4" width="5" height="5"/>
+                  <rect x="44" y="12" width="5" height="5"/><rect x="60" y="12" width="5" height="5"/>
+                  <rect x="44" y="20" width="5" height="5"/><rect x="52" y="20" width="5" height="5"/>
+                  <rect x="44" y="28" width="5" height="5"/>
+                  <rect x="4" y="44" width="5" height="5"/><rect x="12" y="44" width="5" height="5"/><rect x="20" y="44" width="5" height="5"/>
+                  <rect x="36" y="44" width="5" height="5"/><rect x="52" y="44" width="5" height="5"/><rect x="68" y="44" width="5" height="5"/>
+                  <rect x="84" y="44" width="5" height="5"/><rect x="92" y="44" width="5" height="5"/><rect x="100" y="44" width="5" height="5"/>
+                  <rect x="4" y="52" width="5" height="5"/><rect x="20" y="52" width="5" height="5"/><rect x="44" y="52" width="5" height="5"/>
+                  <rect x="60" y="52" width="5" height="5"/><rect x="76" y="52" width="5" height="5"/><rect x="92" y="52" width="5" height="5"/>
+                  <rect x="4" y="60" width="5" height="5"/><rect x="12" y="60" width="5" height="5"/><rect x="28" y="60" width="5" height="5"/>
+                  <rect x="44" y="60" width="5" height="5"/><rect x="52" y="60" width="5" height="5"/><rect x="68" y="60" width="5" height="5"/>
+                  <rect x="84" y="60" width="5" height="5"/><rect x="100" y="60" width="5" height="5"/>
+                  <rect x="44" y="72" width="5" height="5"/><rect x="60" y="72" width="5" height="5"/><rect x="76" y="72" width="5" height="5"/>
+                  <rect x="92" y="72" width="5" height="5"/><rect x="100" y="72" width="5" height="5"/>
+                  <rect x="44" y="80" width="5" height="5"/><rect x="52" y="80" width="5" height="5"/><rect x="68" y="80" width="5" height="5"/>
+                  <rect x="84" y="80" width="5" height="5"/>
+                  <rect x="44" y="88" width="5" height="5"/><rect x="60" y="88" width="5" height="5"/><rect x="76" y="88" width="5" height="5"/>
+                  <rect x="44" y="96" width="5" height="5"/><rect x="52" y="96" width="5" height="5"/><rect x="68" y="96" width="5" height="5"/>
+                  <rect x="84" y="96" width="5" height="5"/><rect x="100" y="96" width="5" height="5"/>
+                </svg>
+              </div>
+              <div class="qr-badge-sm" id="qr-type-badge">
+                <svg width="9" height="9" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/>
+                </svg>
+                UPI Collect QR
+              </div>
+            </div>
+
+            <!-- RIGHT: Info column -->
+            <div class="upi-info-col">
+              <div class="upi-amount">₹18,499</div>
+              <div class="upi-scan-title">Scan to pay instantly</div>
+              <p class="upi-scan-desc" id="qr-instructions">Open Google Pay, PhonePe, Paytm or BHIM — tap <strong>Scan QR</strong> and point your camera at this code.</p>
+              <div class="upi-expiry" id="qr-expiry-row">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                QR expires in <strong id="qr-time">10:00</strong>
+              </div>
+              <div class="otm-active-pill" id="otm-active-pill">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                OTM mandate authorised
+              </div>
+            </div>
+          </div>
+
+          <!-- ASBA OTM compact row -->
+          <div class="or-divider" style="margin:16px 0 12px">
+            <div class="or-line"></div>
+            <span class="or-text">or authorise mandate</span>
+            <div class="or-line"></div>
+          </div>
+          <div class="otm-compact" id="otm-box">
+            <input type="checkbox" class="otm-chk" id="otm-chk" onchange="toggleOTM(this)">
+            <div class="otm-compact-content">
+              <div class="otm-compact-header">
+                <span class="otm-tag">ASBA OTM</span>
+                <span class="otm-compact-heading">One Time Mandate</span>
+              </div>
+              <p class="otm-compact-desc">Authorise ₹18,499 to Star Health — amount blocked until policy issuance confirmation.</p>
+            </div>
+            <button class="otm-side-btn" id="otm-btn" disabled onclick="generateOTM()">
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5z"/>
+              </svg>
+              Generate QR
+            </button>
+          </div>
+
+          <div class="cta-note" style="margin-top:14px">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+            </svg>
+            Powered by NPCI · Secured by Juspay
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CARDS ── -->
+      <div class="panel" id="panel-cards">
+        <div class="p-head">
+          <div class="p-head-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="p-title">Credit / Debit Card</div>
+            <div class="p-sub">All major card networks accepted</div>
+          </div>
+        </div>
+        <div class="p-body p-body-card">
+          <div class="card-grid">
+
+            <!-- LEFT: card visual + accepted networks -->
+            <div class="card-col">
+              <div class="card-wrap">
+                <div class="card-visual" id="card-visual">
+                  <div class="card-network" id="card-network-logo">
+                    <svg width="50" height="31" viewBox="0 0 50 31" fill="none">
+                      <circle cx="19" cy="15.5" r="12" fill="#EB001B" opacity=".55"/>
+                      <circle cx="31" cy="15.5" r="12" fill="#F79E1B" opacity=".55"/>
+                      <path d="M25 5.9a12 12 0 0 1 0 19.2A12 12 0 0 1 25 5.9z" fill="#FF5F00" opacity=".55"/>
+                    </svg>
+                  </div>
+                  <div class="card-chip"></div>
+                  <div class="card-number" id="disp-number">•••• &nbsp;•••• &nbsp;•••• &nbsp;••••</div>
+                  <div class="card-footer">
+                    <div>
+                      <div class="cf-label">Card Holder</div>
+                      <div class="cf-value" id="disp-name">Your Name</div>
+                    </div>
+                    <div style="text-align:right">
+                      <div class="cf-label">Expires</div>
+                      <div class="cf-value" id="disp-expiry">MM / YY</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-networks-row">
+                <span class="network-label">Accepted:</span>
+                <span class="network-tag">VISA</span>
+                <span class="network-tag">Mastercard</span>
+                <span class="network-tag">RuPay</span>
+                <span class="network-tag">Amex</span>
+                <span class="network-tag">Diners</span>
+              </div>
+            </div>
+
+            <!-- RIGHT: form fields -->
+            <div class="card-form-col">
+              <div class="f-group">
+                <label class="f-label">Card Number</label>
+                <input class="f-input" id="inp-num" type="text" placeholder="0000  0000  0000  0000" maxlength="19" oninput="updateCard(this)" autocomplete="cc-number">
+              </div>
+              <div class="f-group">
+                <label class="f-label">Name on Card</label>
+                <input class="f-input" id="inp-name" type="text" placeholder="As printed on card" oninput="updateCard()" autocomplete="cc-name">
+              </div>
+              <div class="f-row">
+                <div class="f-group">
+                  <label class="f-label">Expiry Date</label>
+                  <input class="f-input" id="inp-exp" type="text" placeholder="MM / YY" maxlength="7" oninput="updateCard()" autocomplete="cc-exp">
+                </div>
+                <div class="f-group">
+                  <label class="f-label">CVV / CVC</label>
+                  <input class="f-input" type="password" placeholder="•••" maxlength="4" autocomplete="cc-csc">
+                </div>
+              </div>
+              <button class="cta-btn">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+                </svg>
+                Pay ₹18,499 Securely
+              </button>
+              <div class="cta-note">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>
+                </svg>
+                PCI DSS compliant · Card data never stored
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- ── NET BANKING ── -->
+      <div class="panel" id="panel-netbanking">
+        <div class="p-head">
+          <div class="p-head-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="p-title">Net Banking</div>
+            <div class="p-sub">Pay directly from your bank account</div>
+          </div>
+        </div>
+        <div class="p-body p-body-nb">
+          <div class="nb-section-head">Popular Banks</div>
+
+          <!-- 4 × 2 bank grid -->
+          <div class="nb-grid">
+            <div class="nb-tile" onclick="selectBank(this)">
+              <div class="nb-icon-sq" style="background:linear-gradient(135deg,#003166,#0052A5)">SBI</div>
+              <div class="nb-info"><div class="nb-code">SBI</div><div class="nb-full">State Bank of India</div></div>
+              <div class="nb-dot"></div>
+            </div>
+            <div class="nb-tile" onclick="selectBank(this)">
+              <div class="nb-icon-sq" style="background:linear-gradient(135deg,#00387A,#005CB8)">HDFC</div>
+              <div class="nb-info"><div class="nb-code">HDFC</div><div class="nb-full">HDFC Bank</div></div>
+              <div class="nb-dot"></div>
+            </div>
+            <div class="nb-tile" onclick="selectBank(this)">
+              <div class="nb-icon-sq" style="background:linear-gradient(135deg,#9B0000,#CC0000)">ICICI</div>
+              <div class="nb-info"><div class="nb-code">ICICI</div><div class="nb-full">ICICI Bank</div></div>
+              <div class="nb-dot"></div>
+            </div>
+            <div class="nb-tile" onclick="selectBank(this)">
+              <div class="nb-icon-sq" style="background:linear-gradient(135deg,#5C1010,#8B1A1A)">AXIS</div>
+              <div class="nb-info"><div class="nb-code">Axis</div><div class="nb-full">Axis Bank</div></div>
+              <div class="nb-dot"></div>
+            </div>
+            <div class="nb-tile" onclick="selectBank(this)">
+              <div class="nb-icon-sq" style="background:linear-gradient(135deg,#0D47A1,#1565C0)">PNB</div>
+              <div class="nb-info"><div class="nb-code">PNB</div><div class="nb-full">Punjab National</div></div>
+              <div class="nb-dot"></div>
+            </div>
+            <div class="nb-tile" onclick="selectBank(this)">
+              <div class="nb-icon-sq" style="background:linear-gradient(135deg,#4A235A,#76448A)">KTK</div>
+              <div class="nb-info"><div class="nb-code">Kotak</div><div class="nb-full">Kotak Mahindra</div></div>
+              <div class="nb-dot"></div>
+            </div>
+            <div class="nb-tile" onclick="selectBank(this)">
+              <div class="nb-icon-sq" style="background:linear-gradient(135deg,#B34700,#E06010)">BOB</div>
+              <div class="nb-info"><div class="nb-code">BoB</div><div class="nb-full">Bank of Baroda</div></div>
+              <div class="nb-dot"></div>
+            </div>
+            <div class="nb-tile" onclick="selectBank(this)">
+              <div class="nb-icon-sq" style="background:linear-gradient(135deg,#006070,#009BB0)">IDFC</div>
+              <div class="nb-info"><div class="nb-code">IDFC</div><div class="nb-full">IDFC First Bank</div></div>
+              <div class="nb-dot"></div>
+            </div>
+          </div>
+
+          <!-- Other bank select -->
+          <div class="nb-or"><span>or choose another bank</span></div>
+          <div class="nb-select-wrap">
+            <svg class="nb-sel-icon" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-8.25M15.75 21v-8.25M8.25 21v-8.25M3 9l9-6 9 6m-1.5 12V10.332A48.36 48.36 0 0012 9.75c-2.551 0-5.056.2-7.5.582V21M3 21h18M12 6.75h.008v.008H12V6.75z"/>
+            </svg>
+            <select class="f-select" id="nb-select" onchange="selectBankDropdown(this)">
+              <option value="">— Select from all banks —</option>
+              <optgroup label="Popular">
+                <option>State Bank of India</option><option>HDFC Bank</option>
+                <option>ICICI Bank</option><option>Axis Bank</option>
+                <option>Kotak Mahindra Bank</option><option>Punjab National Bank</option>
+                <option>Bank of Baroda</option><option>IDFC First Bank</option>
+              </optgroup>
+              <optgroup label="Other Banks">
+                <option>Canara Bank</option><option>Union Bank of India</option>
+                <option>Yes Bank</option><option>Federal Bank</option>
+                <option>IndusInd Bank</option><option>Bandhan Bank</option>
+                <option>Indian Bank</option><option>Bank of India</option>
+                <option>South Indian Bank</option><option>UCO Bank</option>
+                <option>Central Bank of India</option><option>Indian Overseas Bank</option>
+              </optgroup>
+            </select>
+            <svg class="nb-arrow" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+            </svg>
+          </div>
+
+          <button class="cta-btn" style="margin-top:14px">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+            Proceed to Net Banking
+          </button>
+          <div class="cta-note" style="margin-top:10px">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+            </svg>
+            You'll be redirected to your bank's secure portal
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CARD EMI ── -->
+      <div class="panel" id="panel-card-emi">
+        <div class="p-head">
+          <div class="p-head-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="p-title">Card EMI</div>
+            <div class="p-sub">Convert to easy monthly installments</div>
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="f-group">
+            <label class="f-label">Credit Card Number</label>
+            <input class="f-input" type="text" placeholder="0000  0000  0000  0000" maxlength="19">
+          </div>
+          <div class="f-row">
+            <div class="f-group">
+              <label class="f-label">Expiry</label>
+              <input class="f-input" type="text" placeholder="MM / YY" maxlength="7">
+            </div>
+            <div class="f-group">
+              <label class="f-label">CVV</label>
+              <input class="f-input" type="password" placeholder="•••" maxlength="4">
+            </div>
+          </div>
+          <div class="sec-heading" style="margin-top:6px">Select EMI Tenure</div>
+          <div class="tenure-grid">
+            <div class="tenure-card sel" onclick="pickTenure(this,'₹6,166','₹0')">
+              <div class="t-months">3</div><div class="t-unit">Months</div>
+              <div class="t-emi">₹6,166/mo</div><div class="t-rate">0% Interest</div>
+            </div>
+            <div class="tenure-card" onclick="pickTenure(this,'₹3,110','₹76')">
+              <div class="t-months">6</div><div class="t-unit">Months</div>
+              <div class="t-emi">₹3,110/mo</div><div class="t-rate">1.5% p.a.</div>
+            </div>
+            <div class="tenure-card" onclick="pickTenure(this,'₹2,092','₹329')">
+              <div class="t-months">9</div><div class="t-unit">Months</div>
+              <div class="t-emi">₹2,092/mo</div><div class="t-rate">1.99% p.a.</div>
+            </div>
+            <div class="tenure-card" onclick="pickTenure(this,'₹1,589','₹569')">
+              <div class="t-months">12</div><div class="t-unit">Months</div>
+              <div class="t-emi">₹1,589/mo</div><div class="t-rate">2.5% p.a.</div>
+            </div>
+            <div class="tenure-card" onclick="pickTenure(this,'₹1,078','₹905')">
+              <div class="t-months">18</div><div class="t-unit">Months</div>
+              <div class="t-emi">₹1,078/mo</div><div class="t-rate">3% p.a.</div>
+            </div>
+            <div class="tenure-card" onclick="pickTenure(this,'₹824','₹1,277')">
+              <div class="t-months">24</div><div class="t-unit">Months</div>
+              <div class="t-emi">₹824/mo</div><div class="t-rate">3.5% p.a.</div>
+            </div>
+          </div>
+          <div class="emi-summary-row">
+            <div><div class="es-label">Principal</div><div class="es-value">₹18,499</div></div>
+            <div><div class="es-label">Interest</div><div class="es-value" id="emi-interest" style="color:var(--green)">₹0</div></div>
+            <div><div class="es-label">Monthly EMI</div><div class="es-value" id="emi-monthly" style="color:var(--brand)">₹6,166</div></div>
+          </div>
+          <button class="cta-btn" id="emi-cta">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Set up EMI — ₹6,166/month × 3
+          </button>
+          <div class="cta-note">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+            EMI subject to issuing bank's approval &amp; T&amp;C
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CARDLESS EMI ── -->
+      <div class="panel" id="panel-cardless-emi">
+        <div class="p-head">
+          <div class="p-head-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="p-title">Cardless EMI</div>
+            <div class="p-sub">Instant EMI approval — no credit card required</div>
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="sec-heading">Choose your EMI provider</div>
+          <div class="providers-grid">
+            <div class="provider-card">
+              <div class="prov-mark" style="background:linear-gradient(135deg,#0078D4,#00ADEF)">BF</div>
+              <div><div class="prov-name">Bajaj Finserv</div><div class="prov-limit">Up to ₹5 Lakh</div><div class="prov-rate">0% · 3–24 months</div></div>
+            </div>
+            <div class="provider-card">
+              <div class="prov-mark" style="background:linear-gradient(135deg,#E84000,#FF6B35)">ZM</div>
+              <div><div class="prov-name">ZestMoney</div><div class="prov-limit">Up to ₹2 Lakh</div><div class="prov-rate">Low EMI · 3–18 mo</div></div>
+            </div>
+            <div class="provider-card">
+              <div class="prov-mark" style="background:linear-gradient(135deg,#5E35B1,#9575CD)">ES</div>
+              <div><div class="prov-name">EarlySalary</div><div class="prov-limit">Up to ₹1 Lakh</div><div class="prov-rate">1.5% p.m. · 3–12 mo</div></div>
+            </div>
+            <div class="provider-card">
+              <div class="prov-mark" style="background:linear-gradient(135deg,#00796B,#26A69A)">KB</div>
+              <div><div class="prov-name">KreditBee</div><div class="prov-limit">Up to ₹2 Lakh</div><div class="prov-rate">Instant · 3–24 mo</div></div>
+            </div>
+            <div class="provider-card">
+              <div class="prov-mark" style="background:linear-gradient(135deg,#BF360C,#E64A19)">CF</div>
+              <div><div class="prov-name">Capital Float</div><div class="prov-limit">Up to ₹3 Lakh</div><div class="prov-rate">Flexible · 6–24 mo</div></div>
+            </div>
+            <div class="provider-card">
+              <div class="prov-mark" style="background:linear-gradient(135deg,#0277BD,#039BE5)">HC</div>
+              <div><div class="prov-name">Home Credit</div><div class="prov-limit">Up to ₹1.5 Lakh</div><div class="prov-rate">Instant · 6–18 mo</div></div>
+            </div>
+          </div>
+          <button class="cta-btn" style="margin-top:20px">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+            Continue with Cardless EMI
+          </button>
+          <div class="cta-note">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+            Approval subject to lender verification &amp; credit check
+          </div>
+        </div>
+      </div>
+
+      <!-- ── BNPL ── -->
+      <div class="panel" id="panel-bnpl">
+        <div class="p-head">
+          <div class="p-head-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+          </div>
+          <div>
+            <div class="p-title">Loan Offers &amp; BNPL</div>
+            <div class="p-sub">Buy now, pay later — flexible credit lines</div>
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="bnpl-list">
+            <div class="bnpl-row">
+              <div class="bnpl-mark" style="background:linear-gradient(135deg,#5E35B1,#9575CD)">Si</div>
+              <div><div class="bnpl-name">Simpl</div><div class="bnpl-desc">Pay in 3 interest-free parts</div></div>
+              <div class="bnpl-right"><div class="bnpl-amt">₹25,000</div><div class="bnpl-lbl">Credit Limit</div></div>
+            </div>
+            <div class="bnpl-row">
+              <div class="bnpl-mark" style="background:linear-gradient(135deg,#00796B,#26A69A)">La</div>
+              <div><div class="bnpl-name">LazyPay</div><div class="bnpl-desc">Pay later in 15 days or EMI</div></div>
+              <div class="bnpl-right"><div class="bnpl-amt">₹10,000</div><div class="bnpl-lbl">Credit Limit</div></div>
+            </div>
+            <div class="bnpl-row">
+              <div class="bnpl-mark" style="background:linear-gradient(135deg,#0277BD,#039BE5)">IC</div>
+              <div><div class="bnpl-name">ICICI PayLater</div><div class="bnpl-desc">30-day pay later facility</div></div>
+              <div class="bnpl-right"><div class="bnpl-amt">₹30,000</div><div class="bnpl-lbl">Credit Limit</div></div>
+            </div>
+            <div class="bnpl-row">
+              <div class="bnpl-mark" style="background:linear-gradient(135deg,#AD1457,#E91E63)">OM</div>
+              <div><div class="bnpl-name">OlaMoney Postpaid</div><div class="bnpl-desc">Flexible monthly credit</div></div>
+              <div class="bnpl-right"><div class="bnpl-amt">₹20,000</div><div class="bnpl-lbl">Credit Limit</div></div>
+            </div>
+            <div class="bnpl-row">
+              <div class="bnpl-mark" style="background:linear-gradient(135deg,#E65100,#FF8F00)">ZP</div>
+              <div><div class="bnpl-name">ZestMoney BNPL</div><div class="bnpl-desc">EMI from ₹0 down payment</div></div>
+              <div class="bnpl-right"><div class="bnpl-amt">₹15,000</div><div class="bnpl-lbl">Credit Limit</div></div>
+            </div>
+          </div>
+          <button class="cta-btn" style="margin-top:20px">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+            Proceed with BNPL
+          </button>
+          <div class="cta-note">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+            </svg>
+            Subject to lender eligibility &amp; approval
+          </div>
+        </div>
+      </div>
+
+      <!-- ── WALLETS ── -->
+      <div class="panel" id="panel-wallets">
+        <div class="p-head">
+          <div class="p-head-icon">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3"/>
+            </svg>
+          </div>
+          <div>
+            <div class="p-title">Digital Wallets</div>
+            <div class="p-sub">Pay instantly with your preferred wallet</div>
+          </div>
+        </div>
+        <div class="p-body">
+          <div class="wallets-grid">
+            <div class="wallet-row">
+              <div class="wallet-mark" style="background:linear-gradient(135deg,#0060CC,#00ADEF)">Pt</div>
+              <div><div class="wallet-name">Paytm Wallet</div><div class="wallet-bal">Balance: ₹1,250</div></div>
+            </div>
+            <div class="wallet-row">
+              <div class="wallet-mark" style="background:linear-gradient(135deg,#5A2FC2,#8B5CF6)">PP</div>
+              <div><div class="wallet-name">PhonePe Wallet</div><div class="wallet-bal">Balance: ₹500</div></div>
+            </div>
+            <div class="wallet-row">
+              <div class="wallet-mark" style="background:linear-gradient(135deg,#CC7700,#FF9900)">Az</div>
+              <div><div class="wallet-name">Amazon Pay</div><div class="wallet-bal">Balance: ₹250</div></div>
+            </div>
+            <div class="wallet-row">
+              <div class="wallet-mark" style="background:linear-gradient(135deg,#1A73E8,#4285F4)">G</div>
+              <div><div class="wallet-name">Google Pay</div><div class="wallet-bal">Balance: ₹750</div></div>
+            </div>
+            <div class="wallet-row">
+              <div class="wallet-mark" style="background:linear-gradient(135deg,#D32F2F,#EF5350)">FC</div>
+              <div><div class="wallet-name">Freecharge</div><div class="wallet-bal">Balance: ₹100</div></div>
+            </div>
+            <div class="wallet-row">
+              <div class="wallet-mark" style="background:linear-gradient(135deg,#1565C0,#1976D2)">Jio</div>
+              <div><div class="wallet-name">JioMoney</div><div class="wallet-bal">Balance: ₹0</div></div>
+            </div>
+            <div class="wallet-row">
+              <div class="wallet-mark" style="background:linear-gradient(135deg,#5E35B1,#7E57C2)">MBK</div>
+              <div><div class="wallet-name">MobiKwik</div><div class="wallet-bal">Balance: ₹180</div></div>
+            </div>
+            <div class="wallet-row">
+              <div class="wallet-mark" style="background:linear-gradient(135deg,#00695C,#00897B)">Air</div>
+              <div><div class="wallet-name">Airtel Money</div><div class="wallet-bal">Balance: ₹320</div></div>
+            </div>
+          </div>
+          <button class="cta-btn" style="margin-top:20px">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
+            </svg>
+            Pay ₹18,499 via Wallet
+          </button>
+          <div class="cta-note">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+            </svg>
+            Wallet payments are encrypted &amp; instant
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /panel-area -->
+  </main>
+
+  <!-- ── FOOTER (FIXED) ── -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="juspay-lockup">
+        <span class="powered-by">Checkout powered by</span>
+        <div class="juspay-logo">
+          <div class="juspay-j">J</div>
+          <span>Juspay</span>
+        </div>
+      </div>
+      <div class="trust-badges">
+        <div class="t-badge"><div class="pci-chip">PCI</div>PCI DSS v4.0</div>
+        <div class="t-badge">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
+          </svg>
+          256-bit SSL
+        </div>
+        <div class="t-badge">RBI Compliant</div>
+        <div class="t-badge">IRDAI Licensed</div>
+      </div>
+      <div class="f-links">
+        <a href="#" class="f-link">Privacy Policy</a>
+        <a href="#" class="f-link">Refund Policy</a>
+        <a href="#" class="f-link">Support</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ── THEME ── */
+    function toggleTheme() {
+      const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      document.documentElement.setAttribute('data-theme', dark ? 'light' : 'dark');
+      document.getElementById('icon-moon').style.display = dark ? '' : 'none';
+      document.getElementById('icon-sun').style.display  = dark ? 'none' : '';
+    }
+
+    /* ── METHOD SWITCH ── */
+    function switchMethod(id, el) {
+      document.querySelectorAll('.m-item').forEach(i => i.classList.remove('active'));
+      el.classList.add('active');
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      const panel = document.getElementById('panel-' + id);
+      panel.classList.add('active');
+      /* re-trigger child animations */
+      panel.querySelectorAll('.upi-info-col > *, .otm-compact, .card-form-col > *').forEach(c => {
+        c.style.animation = 'none';
+        void c.offsetWidth;
+        c.style.animation = '';
+      });
+    }
+
+    /* ── 15-MIN SESSION TIMER ── */
+    let secs = 15 * 60;
+    const box = document.getElementById('timer-box');
+    const tm  = document.getElementById('t-m');
+    const ts  = document.getElementById('t-s');
+    function tick() {
+      if (secs <= 0) { tm.textContent = '00'; ts.textContent = '00'; return; }
+      tm.textContent = String(Math.floor(secs / 60)).padStart(2,'0');
+      ts.textContent = String(secs % 60).padStart(2,'0');
+      if (secs <= 300) box.classList.add('warn'); else box.classList.remove('warn');
+      secs--;
+    }
+    tick(); setInterval(tick, 1000);
+
+    /* ── QR 10-MIN TIMER ── */
+    let qrSecs = 10 * 60;
+    const qrEl  = document.getElementById('qr-time');
+    const qrRow = document.getElementById('qr-expiry-row');
+    function qrTick() {
+      if (qrSecs <= 0) { if (qrEl) qrEl.textContent = 'Expired'; return; }
+      if (qrEl) qrEl.textContent = String(Math.floor(qrSecs/60)).padStart(2,'0') + ':' + String(qrSecs%60).padStart(2,'0');
+      if (qrRow) {
+        if (qrSecs <= 120) qrRow.classList.add('expiring');
+        else qrRow.classList.remove('expiring');
+      }
+      qrSecs--;
+    }
+    qrTick(); setInterval(qrTick, 1000);
+
+    /* ── ASBA OTM ── */
+    function toggleOTM(chk) {
+      const btn = document.getElementById('otm-btn');
+      const box = document.getElementById('otm-box');
+      if (chk.checked) {
+        btn.classList.add('enabled'); btn.disabled = false;
+        box.classList.add('active');
+      } else {
+        btn.classList.remove('enabled'); btn.disabled = true;
+        box.classList.remove('active');
+        resetQR();
+      }
+    }
+
+    function swapQR(fn) {
+      const qrBox = document.getElementById('qr-main-box');
+      qrBox.classList.add('qr-exit');
+      setTimeout(() => {
+        fn();
+        qrBox.classList.remove('qr-exit');
+        qrBox.classList.add('qr-enter');
+        qrBox.addEventListener('animationend', () => qrBox.classList.remove('qr-enter'), {once:true});
+      }, 220);
+    }
+
+    function generateOTM() {
+      swapQR(() => {
+        document.getElementById('qr-main-box').classList.add('otm-mode');
+        document.getElementById('qr-type-badge').className = 'qr-badge-sm otm';
+        document.getElementById('qr-type-badge').innerHTML = '<svg width="9" height="9" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> ASBA OTM QR';
+        document.getElementById('qr-instructions').innerHTML = 'Scan this <strong>ASBA OTM QR</strong> with your UPI app to authorise a One Time Mandate of <strong>₹18,499</strong>.';
+        document.getElementById('otm-active-pill').classList.add('show');
+      });
+    }
+
+    function resetQR() {
+      swapQR(() => {
+        document.getElementById('qr-main-box').classList.remove('otm-mode');
+        document.getElementById('qr-type-badge').className = 'qr-badge-sm';
+        document.getElementById('qr-type-badge').innerHTML = '<svg width="9" height="9" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg> UPI Collect QR';
+        document.getElementById('qr-instructions').innerHTML = 'Open Google Pay, PhonePe, Paytm or BHIM — tap <strong>Scan QR</strong> and point your camera at this code.';
+        document.getElementById('otm-active-pill').classList.remove('show');
+      });
+    }
+
+    /* ── NET BANKING SELECTION ── */
+    function selectBank(tile) {
+      document.querySelectorAll('.nb-tile').forEach(t => t.classList.remove('sel'));
+      tile.classList.add('sel');
+      const sel = document.getElementById('nb-select');
+      if (sel) sel.value = '';
+    }
+    function selectBankDropdown(sel) {
+      if (sel.value) {
+        document.querySelectorAll('.nb-tile').forEach(t => t.classList.remove('sel'));
+      }
+    }
+
+    /* ── CARD LIVE UPDATE ── */
+    const networkLogos = {
+      visa: `<svg width="60" height="22" viewBox="0 0 60 22" xmlns="http://www.w3.org/2000/svg"><text x="0" y="20" font-family="Arial Black,Arial,sans-serif" font-size="22" font-weight="900" font-style="italic" fill="white" letter-spacing="-1">VISA</text></svg>`,
+      mastercard: `<svg width="50" height="31" viewBox="0 0 50 31" fill="none"><circle cx="19" cy="15.5" r="12" fill="#EB001B" opacity=".9"/><circle cx="31" cy="15.5" r="12" fill="#F79E1B" opacity=".9"/><path d="M25 5.9a12 12 0 0 1 0 19.2A12 12 0 0 1 25 5.9z" fill="#FF5F00" opacity=".9"/></svg>`,
+      rupay: `<svg width="66" height="26" viewBox="0 0 66 26" xmlns="http://www.w3.org/2000/svg"><rect width="66" height="26" rx="4" fill="rgba(255,255,255,0.18)"/><text x="6" y="19" font-family="Arial,sans-serif" font-size="14" font-weight="900" fill="white">Ru</text><text x="28" y="19" font-family="Arial,sans-serif" font-size="14" font-weight="900" fill="#FF6B00">Pay</text></svg>`,
+      amex: `<svg width="62" height="26" viewBox="0 0 62 26" xmlns="http://www.w3.org/2000/svg"><rect width="62" height="26" rx="4" fill="rgba(255,255,255,0.2)"/><text x="6" y="18" font-family="Arial,sans-serif" font-size="11" font-weight="900" fill="white" letter-spacing="1.5">AMEX</text></svg>`,
+      diners: `<svg width="70" height="26" viewBox="0 0 70 26" xmlns="http://www.w3.org/2000/svg"><text x="0" y="18" font-family="Arial,sans-serif" font-size="10" font-weight="700" fill="rgba(255,255,255,0.8)">DINERS CLUB</text></svg>`,
+      unknown: `<svg width="50" height="31" viewBox="0 0 50 31" fill="none"><circle cx="19" cy="15.5" r="12" fill="#EB001B" opacity=".55"/><circle cx="31" cy="15.5" r="12" fill="#F79E1B" opacity=".55"/><path d="M25 5.9a12 12 0 0 1 0 19.2A12 12 0 0 1 25 5.9z" fill="#FF5F00" opacity=".55"/></svg>`
+    };
+    const networkClasses = ['net-visa','net-mastercard','net-rupay','net-amex','net-diners'];
+
+    function detectNetwork(raw) {
+      if (/^4/.test(raw)) return 'visa';
+      if (/^5[1-5]/.test(raw) || /^2[2-7]\d{2}/.test(raw)) return 'mastercard';
+      if (/^(60|65|81|82|508|353|356)/.test(raw)) return 'rupay';
+      if (/^3[47]/.test(raw)) return 'amex';
+      if (/^3(0[0-5]|6|8)/.test(raw)) return 'diners';
+      return 'unknown';
+    }
+
+    let _lastNet = 'unknown';
+
+    function updateCard(numInput) {
+      /* ─ Number ─ */
+      const numEl = document.getElementById('inp-num');
+      let raw = numEl.value.replace(/\D/g, '');
+      const net = detectNetwork(raw);
+
+      /* Format input with spaces every 4 digits */
+      const amex = net === 'amex';
+      const maxLen = amex ? 15 : 16;
+      raw = raw.substring(0, maxLen);
+      if (amex) {
+        numEl.value = raw.replace(/^(\d{4})(\d{0,6})(\d{0,5})/, (_,a,b,c)=>[a,b,c].filter(Boolean).join(' '));
+      } else {
+        numEl.value = raw.replace(/(.{4})/g,'$1 ').trim();
+      }
+
+      /* Build display (entered digits visible, remaining dots) */
+      let display = '';
+      if (amex) {
+        const groups = [4,6,5];
+        let pos = 0;
+        groups.forEach((len, gi) => {
+          if (gi > 0) display += '  ';
+          for (let i = 0; i < len; i++) { display += raw[pos] || '•'; pos++; }
+        });
+      } else {
+        for (let i = 0; i < 16; i++) {
+          if (i > 0 && i % 4 === 0) display += '  ';
+          display += raw[i] || '•';
+        }
+      }
+      document.getElementById('disp-number').textContent = display;
+
+      /* ─ Network logo & card color (animated on change) ─ */
+      const card    = document.getElementById('card-visual');
+      const logoEl  = document.getElementById('card-network-logo');
+      networkClasses.forEach(c => card.classList.remove(c));
+      if (net !== 'unknown') card.classList.add('net-' + net);
+
+      if (net !== _lastNet) {
+        _lastNet = net;
+        logoEl.classList.add('net-changing');
+        setTimeout(() => {
+          logoEl.innerHTML = networkLogos[net];
+          logoEl.classList.remove('net-changing');
+        }, 180);
+      }
+
+      /* ─ Name ─ */
+      const nameVal = document.getElementById('inp-name').value.toUpperCase() || 'YOUR NAME';
+      document.getElementById('disp-name').textContent = nameVal.substring(0,22);
+
+      /* ─ Expiry ─ */
+      const expVal = document.getElementById('inp-exp').value || 'MM / YY';
+      document.getElementById('disp-expiry').textContent = expVal;
+    }
+
+    /* Auto-format expiry MM/YY */
+    document.getElementById('inp-exp').addEventListener('input', function() {
+      let v = this.value.replace(/\D/g,'').substring(0,4);
+      if (v.length >= 3) v = v.substring(0,2) + ' / ' + v.substring(2);
+      this.value = v;
+    });
+
+    /* ── EMI TENURE ── */
+    function pickTenure(el, mo, interest) {
+      document.querySelectorAll('.tenure-card').forEach(c => c.classList.remove('sel'));
+      el.classList.add('sel');
+      const months = el.querySelector('.t-months').textContent;
+      document.getElementById('emi-interest').textContent = interest;
+      document.getElementById('emi-monthly').textContent  = mo;
+      document.getElementById('emi-cta').innerHTML = `<svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" style="width:17px;height:17px"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Set up EMI — ${mo}/month × ${months}`;
+    }
+  </script>
+</body>
+</html>
