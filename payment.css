@@ -1250,13 +1250,13 @@ select, input { font-family: inherit; }
   height: 52px; display: flex; align-items: center;
   justify-content: space-between; gap: 16px; flex-wrap: wrap;
 }
-.juspay-lockup { display: flex; align-items: center; gap: 7px; }
+.partner-lockup { display: flex; align-items: center; gap: 7px; }
 .powered-by { font-size: 10.5px; color: var(--text-3); font-weight: 500; }
-.juspay-logo {
+.partner-logo {
   display: flex; align-items: center; gap: 5px;
   font-size: 13.5px; font-weight: 900; color: var(--text-1); letter-spacing: -.3px;
 }
-.juspay-j {
+.partner-mark {
   width: 20px; height: 20px; border-radius: 5px;
   background: linear-gradient(135deg, #5B4EFF, #9B59FF);
   display: flex; align-items: center; justify-content: center;
