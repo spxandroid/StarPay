@@ -1,4 +1,5 @@
-/* Star Health checkout — behavior for payment.html.
+/* Insurance checkout UI concept — behavior for payment.html.
+   Designed by @spxandroid (www.spxandroid.com).
    Each payment method (UPI, Cards, Net Banking, Card EMI, Cardless EMI,
    Loan Offers, Wallets) is a self-contained block of functions below,
    in the same order as the panels in the HTML. All amounts derive from
@@ -1272,8 +1273,7 @@ function downloadPaymentReceipt() {
       .note { margin-top: 26px; color: #8592A8; font-size: 11.5px; max-width: 500px; line-height: 1.6; border-top: 1px solid #E4E8F1; padding-top: 16px; }
     </style></head><body>
     <div class="brand">
-      <div class="brand-mark"><svg viewBox="0 0 395 522" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M264.851 0L176.804 173.432L0 195.647L115.196 327.664L87.337 520.294L249.2 437.11L380.366 521.253L394.881 507.554L248.81 395.73L125.984 459.68L157.995 318.579L69.948 217.898L199.091 200.367L263.822 75.129L338.49 219.815L352.579 205.619L264.851 0Z"/></svg></div>
-      <span class="brand-name">STAR HEALTH</span>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M18.6 6.62c-1.44 0-2.8.56-3.77 1.53L12 10.66l-1.52 1.34.01-.01L7.8 14.39c-.64.64-1.49.99-2.4.99-1.87 0-3.39-1.51-3.39-3.38S3.53 8.62 5.4 8.62c.91 0 1.76.35 2.44 1.03l1.13 1 1.51-1.34-1.26-1.11C8.2 7.18 6.84 6.62 5.4 6.62 2.42 6.62 0 9.04 0 12s2.42 5.38 5.4 5.38c1.44 0 2.8-.56 3.77-1.53l2.83-2.51.01.01L13.52 12h-.01l2.69-2.39c.64-.64 1.49-.99 2.4-.99 1.87 0 3.39 1.51 3.39 3.38s-1.52 3.38-3.39 3.38c-.9 0-1.76-.35-2.44-1.03l-1.14-1.01-1.51 1.34 1.27 1.12c1.03 1.01 2.39 1.57 3.83 1.57 2.98 0 5.4-2.41 5.4-5.38s-2.42-5.37-5.4-5.37z"/></svg></div>
     </div>
     <div class="badge">Payment Received</div>
     <h1>Payment Receipt</h1>
@@ -1331,12 +1331,11 @@ function downloadFailureReceipt() {
       .note { margin-top: 26px; color: #8592A8; font-size: 11.5px; max-width: 500px; line-height: 1.6; border-top: 1px solid #E4E8F1; padding-top: 16px; }
     </style></head><body>
     <div class="brand">
-      <div class="brand-mark"><svg viewBox="0 0 395 522" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M264.851 0L176.804 173.432L0 195.647L115.196 327.664L87.337 520.294L249.2 437.11L380.366 521.253L394.881 507.554L248.81 395.73L125.984 459.68L157.995 318.579L69.948 217.898L199.091 200.367L263.822 75.129L338.49 219.815L352.579 205.619L264.851 0Z"/></svg></div>
-      <span class="brand-name">STAR HEALTH</span>
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M18.6 6.62c-1.44 0-2.8.56-3.77 1.53L12 10.66l-1.52 1.34.01-.01L7.8 14.39c-.64.64-1.49.99-2.4.99-1.87 0-3.39-1.51-3.39-3.38S3.53 8.62 5.4 8.62c.91 0 1.76.35 2.44 1.03l1.13 1 1.51-1.34-1.26-1.11C8.2 7.18 6.84 6.62 5.4 6.62 2.42 6.62 0 9.04 0 12s2.42 5.38 5.4 5.38c1.44 0 2.8-.56 3.77-1.53l2.83-2.51.01.01L13.52 12h-.01l2.69-2.39c.64-.64 1.49-.99 2.4-.99 1.87 0 3.39 1.51 3.39 3.38s-1.52 3.38-3.39 3.38c-.9 0-1.76-.35-2.44-1.03l-1.14-1.01-1.51 1.34 1.27 1.12c1.03 1.01 2.39 1.57 3.83 1.57 2.98 0 5.4-2.41 5.4-5.38s-2.42-5.37-5.4-5.37z"/></svg></div>
     </div>
     <div class="badge">Payment Attempt Failed</div>
     <h1>Payment Attempt Receipt</h1>
-    <p class="sub">Attach this with your email to support@starhealth.in if the debited amount isn't auto-refunded within 7 working days.</p>
+    <p class="sub">Attach this with your email to support@example.com if the debited amount isn't auto-refunded within 7 working days.</p>
     <table>
       <tr><td class="label">Reference ID</td><td class="value">${ref}</td></tr>
       <tr><td class="label">Attempted Amount</td><td class="value">${amount}</td></tr>

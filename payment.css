@@ -1,4 +1,5 @@
-/* Star Health checkout — styles for payment.html.
+/* Insurance checkout UI concept — styles for payment.html.
+   Designed by @spxandroid (www.spxandroid.com).
    Sections, top to bottom: design tokens (:root) > base > header/order strip
    > sidebar > panels (shared) > per-method panels (UPI, Cards, Net Banking,
    Card EMI, Loan Offers, Wallets) > result screens > footer > responsive. */
