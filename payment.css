@@ -1136,6 +1136,7 @@ select, input { font-family: inherit; }
    is either linked (shows balance) or redirect-based (shows a fee
    you can expand for the exact breakup), never a static balance grid */
 .wallet-note { font-size: 11.5px; color: var(--text-3); line-height: 1.6; margin: -6px 0 12px; }
+.wallet-scroll { max-height: 268px; overflow-y: auto; padding-right: 4px; }
 .wallet-list { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
 .wallet-card {
   border: 1.5px solid var(--border); border-radius: var(--r-md);

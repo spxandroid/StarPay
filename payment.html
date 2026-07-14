@@ -1008,13 +1008,15 @@
           </div>
         </div>
         <div class="p-body">
-          <div class="sec-heading">Linked Wallets</div>
-          <p class="wallet-note">Signed in and ready — pick one to pay instantly, no redirect.</p>
-          <div class="wallet-list" id="wallet-linked-list"></div>
+          <div class="wallet-scroll">
+            <div class="sec-heading">Linked Wallets</div>
+            <p class="wallet-note">Signed in and ready — pick one to pay instantly, no redirect.</p>
+            <div class="wallet-list" id="wallet-linked-list"></div>
 
-          <div class="sec-heading" style="margin-top:18px">Other Wallets</div>
-          <p class="wallet-note">Not linked yet. You'll be redirected to authorise payment, and a small non-refundable convenience fee applies.</p>
-          <div class="wallet-list" id="wallet-other-list"></div>
+            <div class="sec-heading" style="margin-top:18px">Other Wallets</div>
+            <p class="wallet-note">Not linked yet. You'll be redirected to authorise payment, and a small non-refundable convenience fee applies.</p>
+            <div class="wallet-list" id="wallet-other-list"></div>
+          </div>
 
           <button class="cta-btn" id="wallet-cta" disabled style="margin-top:20px" onclick="walletProceed()">
             Select a wallet to continue
