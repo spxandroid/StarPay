@@ -707,11 +707,18 @@ select, input { font-family: inherit; }
 
 .loan-intro { text-align: center; padding: 4px 6px 22px; }
 .loan-intro-icon {
+  position: relative;
   width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 15px;
   background: var(--brand-tint); color: var(--brand);
   display: flex; align-items: center; justify-content: center;
 }
-.loan-intro-icon svg { width: 30px; height: 30px; }
+.loan-intro-icon::after {
+  content: ''; position: absolute; inset: -8px; border-radius: 20px;
+  background: radial-gradient(circle, var(--brand-glow) 0%, transparent 70%);
+  animation: result-pulse 2.4s ease-in-out infinite;
+  pointer-events: none;
+}
+.loan-intro-icon svg { position: relative; width: 30px; height: 30px; }
 .loan-intro-title { font-size: 18px; font-weight: 800; color: var(--text-1); margin-bottom: 12px; }
 .loan-intro-bullet {
   display: flex; align-items: flex-start; gap: 8px; text-align: left;
@@ -773,8 +780,15 @@ select, input { font-family: inherit; }
 .loan-edit-btn svg { width: 12px; height: 12px; }
 .loan-edit-btn:hover { text-decoration: underline; }
 .loan-preview-grid { display: grid; grid-template-columns: 1fr 1fr; }
-.loan-preview-item { padding: 11px 15px; border-top: 1px solid var(--border); }
+.loan-preview-item { padding: 11px 15px; border-top: 1px solid var(--border); animation: fade-in-up .3s ease both; }
 .loan-preview-item:nth-child(-n+2) { border-top: none; }
+.loan-preview-item:nth-child(1) { animation-delay: .03s; }
+.loan-preview-item:nth-child(2) { animation-delay: .06s; }
+.loan-preview-item:nth-child(3) { animation-delay: .09s; }
+.loan-preview-item:nth-child(4) { animation-delay: .12s; }
+.loan-preview-item:nth-child(5) { animation-delay: .15s; }
+.loan-preview-item:nth-child(6) { animation-delay: .18s; }
+.loan-preview-item:nth-child(7) { animation-delay: .21s; }
 .loan-pi-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-3); margin-bottom: 3px; }
 .loan-pi-value { font-size: 12.5px; font-weight: 600; color: var(--text-1); word-break: break-word; }
 
@@ -801,7 +815,7 @@ select, input { font-family: inherit; }
   transition: border-color .18s, background .18s, box-shadow .18s;
   animation: fade-in-up .3s ease both;
 }
-.lender-card.sel { border-color: var(--brand); background: var(--brand-tint); box-shadow: 0 0 0 3px var(--brand-glow); }
+.lender-card.sel { border-color: var(--brand); background: var(--brand-tint); box-shadow: 0 0 0 3px var(--brand-glow); animation: btn-pop .3s cubic-bezier(.34,1.56,.64,1); }
 .lender-card.rank-first { box-shadow: var(--shadow-sm); }
 .lender-card.rank-first.sel { box-shadow: 0 0 0 3px var(--brand-glow), var(--shadow-md); }
 .lender-accent { width: 4px; flex-shrink: 0; }
@@ -1037,13 +1051,36 @@ select, input { font-family: inherit; }
 /* confirmation — instant, transparent about what happens next,
    no blind full-page "reserving" wait */
 .loan-confirm { text-align: center; padding: 16px 10px 4px; }
+.loan-confirm-check-wrap { position: relative; width: 58px; margin: 0 auto 16px; }
 .loan-confirm-check {
-  width: 58px; height: 58px; border-radius: 50%; margin: 0 auto 16px;
+  width: 58px; height: 58px; border-radius: 50%;
   background: linear-gradient(135deg, var(--green), #34D399); color: #fff;
   display: flex; align-items: center; justify-content: center;
   animation: pop-in .4s cubic-bezier(.34,1.56,.64,1);
 }
 .loan-confirm-check svg { width: 26px; height: 26px; }
+
+/* one-shot confetti burst — celebrates the reservation without a heavy
+   canvas/JS library; each piece is a positioned span carrying its own
+   travel distance and rotation via custom properties */
+.confetti-piece {
+  position: absolute; top: 50%; left: 50%; width: 6px; height: 6px; border-radius: 1px;
+  opacity: 0; pointer-events: none;
+  animation: confetti-burst .7s cubic-bezier(.2,.8,.2,1) forwards;
+}
+.confetti-piece.c1 { background: var(--brand);     --tx: -46px; --ty: -34px; --rot: -40deg; animation-delay: .35s; }
+.confetti-piece.c2 { background: var(--green);     --tx: 40px;  --ty: -38px; --rot: 30deg;  animation-delay: .38s; }
+.confetti-piece.c3 { background: var(--amber);     --tx: -54px; --ty: 6px;   --rot: 70deg;  animation-delay: .4s; }
+.confetti-piece.c4 { background: var(--brand-mid); --tx: 52px;  --ty: 4px;   --rot: -60deg; animation-delay: .42s; }
+.confetti-piece.c5 { background: var(--green);     --tx: -30px; --ty: -50px; --rot: 20deg;  animation-delay: .45s; }
+.confetti-piece.c6 { background: var(--brand);     --tx: 30px;  --ty: -52px; --rot: -25deg; animation-delay: .47s; }
+.confetti-piece.c7 { background: var(--amber);     --tx: -20px; --ty: 40px;  --rot: 50deg;  animation-delay: .5s; }
+.confetti-piece.c8 { background: var(--brand-mid); --tx: 20px;  --ty: 42px;  --rot: -50deg; animation-delay: .52s; }
+@keyframes confetti-burst {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(.4) rotate(0deg); }
+  15%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1) rotate(var(--rot)); }
+}
 .loan-confirm-title { font-size: 18px; font-weight: 800; color: var(--text-1); margin-bottom: 6px; }
 .loan-confirm-sub { font-size: 12.5px; color: var(--text-3); }
 
