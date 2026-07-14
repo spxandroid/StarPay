@@ -536,32 +536,544 @@
       width: 14px; height: 14px; color: var(--text-3); pointer-events: none;
     }
 
-    /* ─── EMI ────────────────────────────────── */
-    .tenure-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px;
-    }
-    .tenure-card {
-      border: 1.5px solid var(--border); border-radius: var(--r-sm);
-      padding: 13px 8px; cursor: pointer; text-align: center;
-      background: var(--surface-2); transition: all .18s;
-    }
-    .tenure-card:hover { border-color: var(--brand); background: var(--brand-tint); }
-    .tenure-card.sel { border-color: var(--brand); background: var(--brand-tint); }
-    .t-months { font-size: 20px; font-weight: 900; color: var(--text-1); }
-    .t-unit { font-size: 9.5px; font-weight: 700; letter-spacing: .4px;
-              text-transform: uppercase; color: var(--text-3); }
-    .t-emi { font-size: 12px; font-weight: 800; color: var(--brand); margin-top: 5px; }
-    .t-rate { font-size: 9.5px; color: var(--text-3); margin-top: 1px; }
-
+    /* ─── EMI SUMMARY ────────────────────────── */
     .emi-summary-row {
       background: var(--surface-2); border: 1px solid var(--border);
       border-radius: var(--r-sm); padding: 14px 16px;
       display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;
       margin-bottom: 16px; text-align: center;
+      animation: fade-in-up .3s ease both;
     }
     .es-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase;
                 letter-spacing: .6px; color: var(--text-3); margin-bottom: 4px; }
     .es-value { font-size: 15px; font-weight: 800; color: var(--text-1); }
+
+    /* ─── CARD EMI (BANK SELECT + PLANS) ─────── */
+    .p-body-emi { padding: 18px 22px 20px; }
+    .emi-step { animation: fade-in-up .25s ease both; }
+
+    .emi-tabs {
+      display: flex; gap: 4px; background: var(--surface-2);
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 4px; margin-bottom: 14px;
+    }
+    .emi-tab {
+      flex: 1; border: none; background: transparent; color: var(--text-2);
+      font-size: 12.5px; font-weight: 700; padding: 9px 10px; border-radius: 7px;
+      transition: all .18s; font-family: inherit;
+    }
+    .emi-tab.active { background: var(--surface); color: var(--brand); box-shadow: var(--shadow-xs); }
+    .emi-tab:hover:not(.active) { color: var(--text-1); }
+
+    .emi-search-wrap { position: relative; margin-bottom: 14px; }
+    .emi-search-icon {
+      position: absolute; left: 13px; top: 50%; transform: translateY(-50%);
+      width: 16px; height: 16px; color: var(--text-3); pointer-events: none;
+    }
+    .emi-search-input { padding-left: 38px; }
+
+    .emi-bank-list {
+      display: flex; flex-direction: column; gap: 6px;
+      max-height: 360px; overflow-y: auto; padding-right: 2px;
+    }
+    .emi-bank-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 11px 13px; border: 1.5px solid var(--border); border-radius: var(--r-sm);
+      background: var(--surface-2); cursor: pointer;
+      transition: border-color .18s, background .18s, transform .18s;
+      animation: fade-in-up .3s ease both;
+    }
+    .emi-bank-row:hover { border-color: var(--brand); background: var(--brand-tint); transform: translateX(2px); }
+    .emi-bank-icon {
+      width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 8.5px; font-weight: 900; color: #fff; letter-spacing: .2px;
+      box-shadow: 0 3px 8px rgba(0,0,0,.2);
+    }
+    .emi-bank-name { flex: 1; min-width: 0; font-size: 12.5px; font-weight: 700; color: var(--text-1); }
+    .emi-bank-rate { font-size: 10.5px; color: var(--text-3); margin-top: 1px; }
+    .emi-bank-chevron { width: 16px; height: 16px; color: var(--text-3); flex-shrink: 0; transition: transform .18s, color .18s; }
+    .emi-bank-row:hover .emi-bank-chevron { transform: translateX(2px); color: var(--brand); }
+    .emi-empty { text-align: center; padding: 34px 10px; color: var(--text-3); font-size: 12.5px; }
+
+    .emi-back-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: none; border: none; color: var(--brand); cursor: pointer;
+      font-size: 12.5px; font-weight: 700; padding: 4px 0; margin-bottom: 14px;
+      font-family: inherit;
+    }
+    .emi-back-btn svg { width: 15px; height: 15px; }
+    .emi-back-btn:hover { text-decoration: underline; }
+
+    .emi-bank-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .emi-bank-header .emi-bank-icon { width: 42px; height: 42px; font-size: 9.5px; border-radius: 10px; }
+    .emi-bank-header-name { font-size: 14.5px; font-weight: 800; color: var(--text-1); }
+    .emi-bank-header-sub { font-size: 10.5px; color: var(--text-3); margin-top: 1px; }
+
+    .emi-accordion {
+      border: 1.5px solid var(--border); border-radius: var(--r-md);
+      overflow: hidden; background: var(--surface-2); margin-bottom: 4px;
+    }
+    .emi-accordion-head {
+      width: 100%; display: flex; align-items: center; gap: 10px;
+      padding: 13px 15px; background: transparent; border: none; cursor: pointer;
+      font-family: inherit; text-align: left;
+    }
+    .emi-acc-icon {
+      width: 26px; height: 26px; border-radius: 7px; flex-shrink: 0;
+      background: var(--brand-tint); color: var(--brand);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .emi-acc-icon svg { width: 14px; height: 14px; }
+    .emi-acc-title { flex: 1; font-size: 12.5px; font-weight: 700; color: var(--text-1); }
+    .emi-acc-chevron { width: 16px; height: 16px; color: var(--text-3); transition: transform .25s; flex-shrink: 0; }
+    .emi-accordion.open .emi-acc-chevron { transform: rotate(180deg); }
+    .emi-accordion-body {
+      max-height: 0; overflow: hidden; transition: max-height .3s ease;
+      border-top: 1px solid transparent; background: var(--surface);
+    }
+    .emi-accordion.open .emi-accordion-body { border-top-color: var(--border); }
+
+    .emi-plan-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 13px 15px; cursor: pointer; position: relative;
+      border-bottom: 1px solid var(--border);
+      transition: background .18s;
+    }
+    .emi-plan-row:last-child { border-bottom: none; }
+    .emi-plan-row:hover { background: var(--brand-tint); }
+    .emi-plan-row.sel { background: var(--brand-tint); }
+    .emi-plan-radio { position: absolute; opacity: 0; width: 0; height: 0; }
+    .emi-plan-dot {
+      width: 17px; height: 17px; border-radius: 50%; flex-shrink: 0;
+      border: 1.5px solid var(--border-2);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .18s, border-color .18s, box-shadow .18s;
+    }
+    .emi-plan-row.sel .emi-plan-dot { background: var(--brand); border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+    .emi-plan-row.sel .emi-plan-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+    .emi-plan-info { flex: 1; min-width: 0; }
+    .emi-plan-main { display: block; font-size: 13px; font-weight: 700; color: var(--text-1); }
+    .emi-plan-x { color: var(--text-3); font-weight: 500; margin: 0 1px; }
+    .emi-plan-rate { font-size: 11px; font-weight: 600; color: var(--text-3); margin-left: 4px; }
+    .emi-plan-sub { display: block; font-size: 10.5px; color: var(--text-3); margin-top: 2px; }
+
+    .cta-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; transform: none; }
+    .cta-btn:disabled:hover { transform: none; box-shadow: none; }
+
+    /* ─── LOAN OFFERS WIZARD ──────────────────── */
+    .p-body-loan { padding: 18px 22px 20px; }
+
+    /* stepper (replaces a plain progress bar with a navigable, checkable trail) */
+    .loan-stepper { display: flex; align-items: flex-start; margin-bottom: 16px; }
+    .loan-step-node {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      flex: 0 0 auto; cursor: default;
+    }
+    .loan-step-node.clickable { cursor: pointer; }
+    .lsn-circle {
+      width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid var(--border-2); background: var(--surface);
+      font-size: 11.5px; font-weight: 800; color: var(--text-3);
+      transition: all .25s cubic-bezier(.34,1.56,.64,1);
+    }
+    .lsn-check { width: 13px; height: 13px; display: none; }
+    .loan-step-node.done .lsn-circle { background: var(--brand); border-color: var(--brand); color: #fff; }
+    .loan-step-node.done .lsn-num { display: none; }
+    .loan-step-node.done .lsn-check { display: block; }
+    .loan-step-node.current .lsn-circle {
+      border-color: var(--brand); color: var(--brand); background: var(--brand-tint);
+      box-shadow: 0 0 0 4px var(--brand-glow); transform: scale(1.08);
+    }
+    .lsn-label { font-size: 9.5px; font-weight: 700; color: var(--text-3); letter-spacing: .2px; white-space: nowrap; }
+    .loan-step-node.current .lsn-label { color: var(--brand); }
+    .loan-step-node.done .lsn-label { color: var(--text-2); }
+    .loan-step-line { flex: 1 1 auto; height: 2px; background: var(--border); margin: 13px 2px 0; border-radius: 1px; transition: background .3s; }
+    .loan-step-line.done { background: var(--brand); }
+
+    /* live application-strength meter */
+    .loan-strength-wrap { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .loan-strength-track { flex: 1; height: 6px; border-radius: 3px; background: var(--surface-3); overflow: hidden; }
+    .loan-strength-fill {
+      height: 100%; width: 0%; border-radius: 3px;
+      background: linear-gradient(90deg, var(--brand), #34D399);
+      transition: width .4s cubic-bezier(.34,1.2,.64,1);
+    }
+    .loan-strength-label { font-size: 10px; font-weight: 700; color: var(--text-3); letter-spacing: .3px; white-space: nowrap; }
+    .loan-strength-pct { color: var(--brand); font-weight: 800; }
+
+    .loan-screen { display: none; }
+    .loan-screen.active { display: block; animation: fade-in-up .3s ease both; }
+
+    .loan-intro { text-align: center; padding: 4px 6px 22px; }
+    .loan-intro-icon {
+      width: 60px; height: 60px; margin: 0 auto 14px; border-radius: 15px;
+      background: var(--brand-tint); color: var(--brand);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .loan-intro-icon svg { width: 30px; height: 30px; }
+    .loan-intro-title { font-size: 18px; font-weight: 800; color: var(--text-1); margin-bottom: 12px; }
+    .loan-intro-bullet {
+      display: flex; align-items: flex-start; gap: 8px; text-align: left;
+      font-size: 12.5px; color: var(--text-2); line-height: 1.6;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 12px 14px;
+    }
+    .loan-intro-bullet svg { width: 15px; height: 15px; color: var(--brand); flex-shrink: 0; margin-top: 2px; }
+
+    .loan-consent-row {
+      display: flex; gap: 12px; align-items: flex-start; cursor: pointer;
+      margin: 4px 0 16px; padding: 14px 15px;
+      border: 1.5px solid var(--border-2); border-radius: var(--r-md); background: var(--surface-2);
+    }
+    .loan-consent-chk { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; accent-color: var(--brand); cursor: pointer; }
+    .loan-consent-text {
+      font-size: 11.5px; line-height: 1.65; color: var(--text-2);
+      max-height: 130px; overflow-y: auto; padding-right: 6px;
+    }
+    .loan-consent-text a { color: var(--brand); font-weight: 600; text-decoration: underline; }
+
+    .loan-optional { text-transform: none; font-weight: 500; color: var(--text-3); letter-spacing: 0; }
+    .loan-field-hint { min-height: 14px; font-size: 10.5px; margin-top: 4px; color: #DC2626; }
+    [data-theme="dark"] .loan-field-hint { color: #F87171; }
+
+    .loan-row-3 { grid-template-columns: 1fr 1fr 1fr; }
+
+    .loan-chip-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .loan-chip {
+      border: 1.5px solid var(--border-2); background: var(--surface-2); color: var(--text-2);
+      border-radius: 20px; padding: 8px 16px; font-size: 12px; font-weight: 600;
+      font-family: inherit; transition: all .18s;
+    }
+    .loan-chip:hover { border-color: var(--brand); color: var(--text-1); }
+    .loan-chip.sel { background: var(--brand); border-color: var(--brand); color: #fff; box-shadow: 0 3px 10px var(--brand-glow); }
+
+    .loan-amount-wrap { position: relative; }
+    .loan-amount-prefix {
+      position: absolute; left: 14px; top: 50%; transform: translateY(-50%);
+      font-weight: 700; color: var(--text-2); font-size: 14px; pointer-events: none;
+    }
+    .loan-amount-input { padding-left: 28px; }
+
+    .loan-preview-group {
+      border: 1.5px solid var(--border); border-radius: var(--r-md);
+      margin-bottom: 12px; overflow: hidden;
+    }
+    .loan-preview-head {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 11px 15px; background: var(--surface-2);
+      font-size: 11px; font-weight: 700; color: var(--text-1);
+      text-transform: uppercase; letter-spacing: .5px;
+    }
+    .loan-edit-btn {
+      display: flex; align-items: center; gap: 4px;
+      border: none; background: none; color: var(--brand); cursor: pointer;
+      font-size: 11.5px; font-weight: 700; font-family: inherit; text-transform: none; letter-spacing: 0;
+    }
+    .loan-edit-btn svg { width: 12px; height: 12px; }
+    .loan-edit-btn:hover { text-decoration: underline; }
+    .loan-preview-grid { display: grid; grid-template-columns: 1fr 1fr; }
+    .loan-preview-item { padding: 11px 15px; border-top: 1px solid var(--border); }
+    .loan-preview-item:nth-child(-n+2) { border-top: none; }
+    .loan-pi-label { font-size: 9.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--text-3); margin-bottom: 3px; }
+    .loan-pi-value { font-size: 12.5px; font-weight: 600; color: var(--text-1); word-break: break-word; }
+
+    .loan-offers-note { font-size: 11.5px; color: var(--text-3); line-height: 1.6; margin: -4px 0 14px; }
+
+    /* sort / rank control — user (not the lender) decides who's "first" */
+    .loan-sort-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .loan-sort-caption { font-size: 10.5px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: .5px; margin-right: 2px; }
+    .loan-sort-btn {
+      border: 1.5px solid var(--border-2); background: var(--surface-2); color: var(--text-2);
+      border-radius: 18px; padding: 6px 13px; font-size: 11.5px; font-weight: 700;
+      font-family: inherit; transition: all .18s;
+    }
+    .loan-sort-btn:hover { border-color: var(--brand); color: var(--text-1); }
+    .loan-sort-btn.active { background: var(--brand); border-color: var(--brand); color: #fff; box-shadow: 0 3px 10px var(--brand-glow); }
+
+    /* compact rows so every lender is visible without scrolling — each row
+       expands in place for the detail a shopper would only need for the
+       one or two offers they're actually comparing */
+    .lender-list { display: flex; flex-direction: column; gap: 8px; position: relative; }
+    .lender-card {
+      display: flex; border: 1.5px solid var(--border); border-radius: var(--r-md);
+      background: var(--surface-2); overflow: hidden;
+      transition: border-color .18s, background .18s, box-shadow .18s;
+      animation: fade-in-up .3s ease both;
+    }
+    .lender-card.sel { border-color: var(--brand); background: var(--brand-tint); box-shadow: 0 0 0 3px var(--brand-glow); }
+    .lender-card.rank-first { box-shadow: var(--shadow-sm); }
+    .lender-card.rank-first.sel { box-shadow: 0 0 0 3px var(--brand-glow), var(--shadow-md); }
+    .lender-accent { width: 4px; flex-shrink: 0; }
+    .lender-body { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+
+    .lender-summary { display: flex; align-items: center; gap: 10px; padding: 10px 12px; cursor: pointer; }
+    .lender-mark {
+      width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 800; color: #fff;
+    }
+    .lender-name-wrap { flex: 1 1 140px; min-width: 0; }
+    .lender-name { font-size: 12.5px; font-weight: 800; color: var(--text-1); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lender-powered { font-size: 8.5px; color: var(--text-3); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .lender-badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+    .lender-badge {
+      display: inline-flex; align-items: center; gap: 3px;
+      font-size: 8.5px; font-weight: 800; letter-spacing: .2px;
+      padding: 2px 7px; border-radius: 20px; white-space: nowrap;
+    }
+    .badge-best  { background: linear-gradient(90deg, var(--brand), var(--brand-mid)); color: #fff; }
+    .badge-emi   { background: #D1FAE5; color: #065F46; }
+    .badge-rate  { background: #DBEAFE; color: #1E40AF; }
+    .badge-fee   { background: #FEF3C7; color: #92400E; }
+    [data-theme="dark"] .badge-emi  { background: rgba(5,150,105,.2);  color: #34D399; }
+    [data-theme="dark"] .badge-rate { background: rgba(37,99,235,.22); color: #93C5FD; }
+    [data-theme="dark"] .badge-fee  { background: rgba(217,119,6,.2);  color: #FCD34D; }
+
+    .lender-row-success { flex-shrink: 0; display: flex; flex-direction: column; align-items: center; gap: 2px; width: 56px; }
+    .lender-success-chip { min-width: 42px; text-align: center; padding: 2.5px 7px; border-radius: 20px; font-size: 11px; font-weight: 800; }
+    .lender-success-chip.tier-high { background: #D1FAE5; color: #065F46; }
+    .lender-success-chip.tier-mid  { background: #FEF3C7; color: #92400E; }
+    .lender-success-chip.tier-low  { background: #FEE2E2; color: #991B1B; }
+    [data-theme="dark"] .lender-success-chip.tier-high { background: rgba(5,150,105,.2);  color: #34D399; }
+    [data-theme="dark"] .lender-success-chip.tier-mid  { background: rgba(217,119,6,.2);  color: #FCD34D; }
+    [data-theme="dark"] .lender-success-chip.tier-low  { background: rgba(220,38,38,.2);  color: #F87171; }
+    .lender-row-success-label { font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; color: var(--text-3); }
+
+    .lender-row-stat { flex-shrink: 0; text-align: right; width: 82px; }
+    .lrs-label { font-size: 7.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .3px; color: var(--text-3); margin-bottom: 2px; }
+    .lrs-value { font-size: 12px; font-weight: 800; color: var(--text-1); white-space: nowrap; }
+
+    .lender-check {
+      width: 19px; height: 19px; border-radius: 6px; flex-shrink: 0;
+      border: 1.5px solid var(--border-2); background: var(--surface);
+      display: flex; align-items: center; justify-content: center; transition: all .18s;
+    }
+    .lender-card.sel .lender-check { background: var(--brand); border-color: var(--brand); }
+    .lender-check svg { width: 11px; height: 11px; color: #fff; opacity: 0; transform: scale(.5); transition: all .18s; }
+    .lender-card.sel .lender-check svg { opacity: 1; transform: scale(1); }
+
+    .lender-compare-btn {
+      width: 25px; height: 25px; border-radius: 7px; flex-shrink: 0;
+      border: 1.5px solid var(--border-2); background: var(--surface); color: var(--text-3);
+      display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .18s;
+    }
+    .lender-compare-btn svg { width: 13px; height: 13px; }
+    .lender-compare-btn:hover { border-color: var(--brand); color: var(--brand); }
+    .lender-compare-btn.active { background: linear-gradient(135deg, var(--brand), var(--brand-mid)); border-color: transparent; color: #fff; }
+
+    .lender-row-toggle {
+      width: 25px; height: 25px; border-radius: 7px; flex-shrink: 0;
+      border: none; background: var(--surface-3); color: var(--text-3);
+      display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all .18s;
+    }
+    .lender-row-toggle:hover { background: var(--brand-tint); color: var(--brand); }
+    .lender-row-toggle svg { width: 13px; height: 13px; transition: transform .25s; }
+    .lender-row-toggle.open { background: var(--brand-tint); color: var(--brand); }
+    .lender-row-toggle.open svg { transform: rotate(180deg); }
+
+    .lender-detail-body { max-height: 0; overflow: hidden; transition: max-height .3s ease; }
+    .lender-detail-inner { padding: 2px 14px 14px; border-top: 1px solid var(--border); margin: 0 12px; }
+    .lender-detail-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      padding-top: 12px; margin-bottom: 4px;
+    }
+    .lm-label { font-size: 8.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--text-3); margin-bottom: 3px; }
+    .lm-value { font-size: 12px; font-weight: 700; color: var(--text-1); }
+    .lender-footnote { font-size: 9.5px; color: var(--text-3); margin-top: 8px; }
+    .lender-links { display: flex; align-items: center; justify-content: space-between; margin-top: 10px; font-size: 10.5px; }
+    .lender-links a { color: var(--brand); font-weight: 600; }
+    .lender-links a:hover { text-decoration: underline; }
+
+    /* per-card tenure slider — personalises the offer instead of a static published figure */
+    .lender-slider-row { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--border); }
+    .lender-slider-label { display: flex; justify-content: space-between; font-size: 10.5px; margin-bottom: 6px; }
+    .lender-slider-label span:first-child { color: var(--text-3); font-weight: 600; }
+    .lender-slider-emi { color: var(--brand); font-weight: 800; }
+    .lender-slider {
+      -webkit-appearance: none; appearance: none; width: 100%; height: 4px;
+      border-radius: 2px; background: var(--surface-3); outline: none; cursor: pointer;
+    }
+    .lender-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 15px; height: 15px; border-radius: 50%;
+      background: var(--brand); border: 2.5px solid var(--surface);
+      box-shadow: 0 0 0 1.5px var(--brand); cursor: pointer;
+    }
+    .lender-slider::-moz-range-thumb {
+      width: 15px; height: 15px; border-radius: 50%; background: var(--brand);
+      border: 2.5px solid var(--surface); box-shadow: 0 0 0 1.5px var(--brand); cursor: pointer;
+    }
+
+    /* skeleton loading state — signals a live personalised match, not a static list */
+    .lender-skel {
+      display: flex; align-items: center; gap: 10px;
+      border: 1.5px solid var(--border); border-radius: var(--r-md);
+      background: var(--surface-2); padding: 11px 13px;
+      animation: fade-in-up .3s ease both;
+    }
+    .skel-circle, .skel-line, .skel-block {
+      border-radius: 6px; background: linear-gradient(90deg, var(--surface-3) 25%, var(--border-2) 50%, var(--surface-3) 75%);
+      background-size: 200% 100%; animation: shimmer-move 1.4s linear infinite;
+    }
+    .skel-circle { width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0; }
+    .skel-lines { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    .skel-line { height: 10px; }
+    .skel-line.w60 { width: 60%; } .skel-line.w40 { width: 40%; }
+    .skel-block { width: 70px; height: 26px; flex-shrink: 0; }
+
+    /* compare tray — pick a couple of lenders, see them side by side */
+    .loan-compare-bar {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--surface-2); border: 1.5px solid var(--border-2); border-radius: var(--r-md);
+      padding: 8px 10px; margin-bottom: 12px; animation: fade-in-up .25s ease both;
+    }
+    .loan-compare-bar.limit-shake { animation: limit-shake .4s ease; }
+    @keyframes limit-shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+    .loan-compare-chips { display: flex; gap: 6px; flex: 1; flex-wrap: wrap; }
+    .loan-compare-chip {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+      padding: 3px 8px 3px 4px; font-size: 11px; font-weight: 700; color: var(--text-1);
+    }
+    .loan-compare-chip .ccm { width: 18px; height: 18px; border-radius: 5px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 7.5px; font-weight: 800; color: #fff; }
+    .loan-compare-chip button { border: none; background: none; color: var(--text-3); cursor: pointer; display: flex; padding: 0; }
+    .loan-compare-chip button svg { width: 11px; height: 11px; }
+    .loan-compare-chip button:hover { color: #DC2626; }
+    .loan-compare-clear { border: none; background: none; color: var(--text-3); font-size: 11px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap; }
+    .loan-compare-clear:hover { color: var(--text-1); text-decoration: underline; }
+    .loan-compare-btn-main {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: linear-gradient(135deg, var(--brand), var(--brand-mid)); color: #fff; border: none;
+      border-radius: 8px; padding: 8px 14px; font-size: 12px; font-weight: 800; cursor: pointer;
+      white-space: nowrap; font-family: inherit; transition: opacity .18s, transform .18s;
+    }
+    .loan-compare-btn-main svg { width: 14px; height: 14px; }
+    .loan-compare-btn-main:hover:not(:disabled) { transform: translateY(-1px); }
+    .loan-compare-btn-main:disabled { opacity: .4; cursor: not-allowed; }
+
+    .loan-compare-view { animation: fade-in-up .25s ease both; }
+    .compare-table {
+      border: 1.5px solid var(--border); border-radius: var(--r-md);
+      overflow: hidden; background: var(--surface-2);
+    }
+    .compare-row { display: grid; grid-template-columns: 92px repeat(var(--cols, 2), 1fr); border-top: 1px solid var(--border); }
+    .compare-row:first-child { border-top: none; }
+    .compare-label-cell {
+      padding: 10px 10px; font-size: 9px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .4px; color: var(--text-3); display: flex; align-items: center;
+    }
+    .compare-cell {
+      padding: 10px 10px; font-size: 12px; font-weight: 700; color: var(--text-1);
+      display: flex; align-items: center; justify-content: center; text-align: center;
+      border-left: 1px solid var(--border); background: var(--surface);
+    }
+    .compare-head-cell { flex-direction: column; gap: 6px; padding: 16px 10px 12px; position: relative; }
+    .compare-head-mark { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: #fff; }
+    .compare-head-name { font-size: 12.5px; font-weight: 800; }
+    .compare-remove {
+      position: absolute; top: 6px; right: 6px; width: 18px; height: 18px;
+      border: none; border-radius: 50%; background: var(--surface-3); color: var(--text-3);
+      display: flex; align-items: center; justify-content: center; cursor: pointer;
+    }
+    .compare-remove svg { width: 10px; height: 10px; }
+    .compare-remove:hover { background: #FEE2E2; color: #991B1B; }
+    .compare-badges-cell { flex-wrap: wrap; gap: 4px; }
+    .compare-select-row .compare-cell { padding: 12px 10px; background: var(--surface-2); }
+    .compare-select-btn {
+      width: 100%; background: var(--brand); color: #fff; border: none; border-radius: 8px;
+      padding: 8px; font-size: 11.5px; font-weight: 800; cursor: pointer; font-family: inherit;
+      transition: background .18s;
+    }
+    .compare-select-btn:hover { background: var(--brand-dark); }
+
+    /* ── post-selection flow: one live calculator, then one confirmation ──
+       No paginated wizard, no modal, no fake full-screen spinner — the old
+       flow's 5 screens become 2, and every number updates in place. */
+    .loan-offers-view { display: none; }
+    .loan-offers-view.active { display: block; animation: fade-in-up .3s ease both; }
+
+    .loan-plan-lender-row { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .loan-plan-lender-name { font-size: 13.5px; font-weight: 800; color: var(--text-1); }
+    .loan-plan-lender-sub { font-size: 10.5px; color: var(--text-3); margin-top: 1px; }
+
+    /* live split bar — turns the downpayment/financed tradeoff into something
+       you can see, not just read as two numbers */
+    .loan-calc-card {
+      border: 1.5px solid var(--border); border-radius: var(--r-md);
+      background: var(--surface-2); padding: 18px; margin-top: 14px;
+    }
+    .loan-split-bar { display: flex; height: 10px; border-radius: 6px; overflow: hidden; background: var(--surface-3); }
+    .loan-split-down { background: linear-gradient(90deg, #B45309, var(--amber)); transition: width .25s cubic-bezier(.2,.8,.2,1); }
+    .loan-split-fin { background: var(--brand); flex: 1; transition: width .25s cubic-bezier(.2,.8,.2,1); }
+    .loan-split-legend { display: flex; gap: 16px; font-size: 10.5px; color: var(--text-3); font-weight: 600; margin: 8px 0 14px; }
+    .loan-dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 5px; }
+    .loan-dot-down { background: var(--amber); }
+    .loan-dot-fin { background: var(--brand); }
+    /* fixed downpayment tiers — real lenders publish a small preset set of
+       plans, not a continuous range, so selection is discrete, not a drag */
+    .loan-tier-list { border: 1.5px solid var(--border); border-radius: var(--r-md); overflow: hidden; }
+
+    .loan-calc-stats {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--border); text-align: center;
+    }
+    .loan-calc-emi-hl { color: var(--brand); font-size: 15px; }
+
+    /* accordions reuse the exact Card-EMI accordion component for a
+       consistent app-wide interaction language */
+    .loan-accordion-inner { padding: 2px 16px 14px; }
+    .loan-breakdown-row { display: flex; justify-content: space-between; padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 12px; color: var(--text-2); }
+    .loan-breakdown-row:last-child { border-bottom: none; }
+    .loan-breakdown-row.strong { font-weight: 800; color: var(--text-1); font-size: 13px; }
+    .loan-schedule-table-head, .loan-schedule-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 12px; border-bottom: 1px solid var(--border); }
+    .loan-schedule-table-head { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: .4px; color: var(--text-3); }
+    .loan-schedule-row span:last-child { font-weight: 700; color: var(--text-1); }
+    .loan-schedule-row:last-child { border-bottom: none; }
+
+    /* confirmation — instant, transparent about what happens next,
+       no blind full-page "reserving" wait */
+    .loan-confirm { text-align: center; padding: 16px 10px 4px; }
+    .loan-confirm-check {
+      width: 58px; height: 58px; border-radius: 50%; margin: 0 auto 16px;
+      background: linear-gradient(135deg, var(--green), #34D399); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      animation: pop-in .4s cubic-bezier(.34,1.56,.64,1);
+    }
+    .loan-confirm-check svg { width: 26px; height: 26px; }
+    .loan-confirm-title { font-size: 18px; font-weight: 800; color: var(--text-1); margin-bottom: 6px; }
+    .loan-confirm-sub { font-size: 12.5px; color: var(--text-3); }
+
+    .loan-journey { display: flex; align-items: flex-start; justify-content: center; margin: 26px 0 28px; }
+    .loan-journey-step { display: flex; flex-direction: column; align-items: center; gap: 7px; width: 96px; }
+    .ljs-dot {
+      width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: var(--text-3);
+      border: 1.5px solid var(--border-2); background: var(--surface);
+    }
+    .ljs-dot svg { width: 12px; height: 12px; }
+    .loan-journey-step.done .ljs-dot { background: var(--green); border-color: transparent; color: #fff; }
+    .loan-journey-step.current .ljs-dot { border-color: var(--brand); color: var(--brand); background: var(--brand-tint); box-shadow: 0 0 0 4px var(--brand-glow); }
+    .ljs-label { font-size: 9.5px; font-weight: 700; color: var(--text-3); text-align: center; line-height: 1.3; }
+    .loan-journey-step.done .ljs-label, .loan-journey-step.current .ljs-label { color: var(--text-1); }
+    .loan-journey-line { flex: 1; height: 2px; background: var(--border); margin-top: 13px; max-width: 40px; }
+
+    .loan-confirm-back {
+      display: block; margin: 12px auto 0; background: none; border: none;
+      color: var(--text-3); font-size: 11.5px; font-weight: 600; cursor: pointer; font-family: inherit;
+    }
+    .loan-confirm-back:hover { color: var(--brand); text-decoration: underline; }
+
+    .loan-spinner {
+      width: 13px; height: 13px; border-radius: 50%; display: inline-block; margin-right: 6px; vertical-align: -2px;
+      border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; animation: spin .7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ─── PROVIDERS / BNPL ───────────────────── */
     .providers-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -571,6 +1083,7 @@
       background: var(--surface-2); cursor: pointer; transition: all .18s;
     }
     .provider-card:hover { border-color: var(--brand); background: var(--brand-tint); transform: translateY(-2px); }
+    .provider-card.sel { border-color: var(--brand); background: var(--brand-tint); box-shadow: 0 0 0 3px var(--brand-glow); }
     .prov-mark {
       width: 40px; height: 40px; border-radius: 9px; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
@@ -580,40 +1093,129 @@
     .prov-limit { font-size: 10.5px; color: var(--text-3); margin-top: 2px; }
     .prov-rate { font-size: 10.5px; font-weight: 600; color: var(--green); margin-top: 2px; }
 
-    /* ─── BNPL ───────────────────────────────── */
-    .bnpl-list { display: flex; flex-direction: column; gap: 8px; }
-    .bnpl-row {
-      display: flex; align-items: center; gap: 14px; padding: 13px 15px;
-      border: 1.5px solid var(--border); border-radius: var(--r-sm);
-      background: var(--surface-2); cursor: pointer; transition: all .18s;
-    }
-    .bnpl-row:hover { border-color: var(--brand); background: var(--brand-tint); }
-    .bnpl-mark {
-      width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 800; color: #fff;
-    }
-    .bnpl-name { font-size: 13px; font-weight: 700; color: var(--text-1); }
-    .bnpl-desc { font-size: 11px; color: var(--text-3); margin-top: 2px; }
-    .bnpl-right { margin-left: auto; text-align: right; }
-    .bnpl-amt { font-size: 14px; font-weight: 800; color: var(--text-1); }
-    .bnpl-lbl { font-size: 9.5px; color: var(--text-3); margin-top: 1px; }
-
     /* ─── WALLETS ────────────────────────────── */
-    .wallets-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
-    .wallet-row {
-      display: flex; align-items: center; gap: 11px; padding: 12px 13px;
-      border: 1.5px solid var(--border); border-radius: var(--r-sm);
-      background: var(--surface-2); cursor: pointer; transition: all .18s;
+    /* reuses the same selectable-row and accordion components already
+       established for Card EMI plans / Loan Offers tiers — one wallet
+       is either linked (shows balance) or redirect-based (shows a fee
+       you can expand for the exact breakup), never a static balance grid */
+    .wallet-note { font-size: 11.5px; color: var(--text-3); line-height: 1.6; margin: -6px 0 12px; }
+    .wallet-list { display: flex; flex-direction: column; gap: 8px; }
+    .wallet-card {
+      border: 1.5px solid var(--border); border-radius: var(--r-md);
+      background: var(--surface-2); overflow: hidden;
+      transition: border-color .18s, background .18s, box-shadow .18s;
+      animation: fade-in-up .3s ease both;
     }
-    .wallet-row:hover { border-color: var(--brand); background: var(--brand-tint); transform: translateY(-2px); }
-    .wallet-mark {
-      width: 38px; height: 38px; border-radius: 9px; flex-shrink: 0;
+    .wallet-card .emi-plan-row { border-bottom: none; }
+    .wallet-card.sel { border-color: var(--brand); box-shadow: 0 0 0 3px var(--brand-glow); }
+    .wallet-card.sel .emi-plan-row { background: var(--brand-tint); }
+    .wallet-card.sel .emi-plan-dot { background: var(--brand); border-color: var(--brand); }
+    .wallet-card.sel .emi-plan-dot::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: #fff; }
+    .wallet-card.wallet-disabled { opacity: .55; }
+    .wallet-card.wallet-disabled .emi-plan-row { cursor: not-allowed; }
+    .wallet-tag { flex-shrink: 0; font-size: 9.5px; font-weight: 800; letter-spacing: .2px; padding: 3px 9px; border-radius: 20px; white-space: nowrap; }
+    .wallet-tag.tag-ok { background: #D1FAE5; color: #065F46; }
+    .wallet-tag.tag-warn { background: #FEF3C7; color: #92400E; }
+    [data-theme="dark"] .wallet-tag.tag-ok { background: rgba(5,150,105,.2); color: #34D399; }
+    [data-theme="dark"] .wallet-tag.tag-warn { background: rgba(217,119,6,.2); color: #FCD34D; }
+
+    /* fee review modal — the one moment a modal is right: confirming the
+       exact total before a redirect-based wallet actually charges you */
+    .confirm-modal-overlay {
+      position: fixed; inset: 0; background: rgba(10,14,28,.5); z-index: 500;
+      display: flex; align-items: center; justify-content: center; padding: 20px;
+      opacity: 0; pointer-events: none; transition: opacity .2s ease;
+    }
+    .confirm-modal-overlay.open { opacity: 1; pointer-events: auto; }
+    .confirm-modal-panel {
+      background: var(--surface); border-radius: var(--r-lg); box-shadow: var(--shadow-md);
+      width: 100%; max-width: 380px; padding: 22px;
+      transform: translateY(10px) scale(.98); transition: transform .2s ease;
+    }
+    .confirm-modal-overlay.open .confirm-modal-panel { transform: translateY(0) scale(1); }
+    .confirm-modal-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+    .confirm-modal-title { font-size: 16px; font-weight: 800; color: var(--text-1); }
+    .confirm-modal-sub { font-size: 11.5px; color: var(--text-3); line-height: 1.5; margin-top: 4px; }
+    .confirm-modal-close {
+      flex-shrink: 0; border: none; background: var(--surface-3); color: var(--text-3);
+      width: 26px; height: 26px; border-radius: 7px; cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      font-size: 10px; font-weight: 800; color: #fff;
     }
-    .wallet-name { font-size: 12.5px; font-weight: 700; color: var(--text-1); }
-    .wallet-bal { font-size: 10.5px; color: var(--text-3); margin-top: 1px; }
+    .confirm-modal-close svg { width: 12px; height: 12px; }
+    .confirm-modal-close:hover { background: #FEE2E2; color: #991B1B; }
+    .confirm-modal-rows { border-top: 1px solid var(--border); margin-bottom: 18px; }
+    .confirm-modal-row { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; color: var(--text-2); }
+    .confirm-modal-row.total { font-weight: 800; color: var(--text-1); font-size: 14px; }
+
+    /* ── PAYMENT RESULT SCREENS ──
+       Framed as insurance moments, not generic transaction states: success
+       means "you're covered" (policy summary, coverage dates, network-
+       hospital reassurance), failure means "your quote is safe, nothing
+       was charged" — not just a red cross. */
+    .result-screen {
+      position: fixed; inset: 0; z-index: 1000; display: none;
+      align-items: flex-start; justify-content: center;
+      overflow-y: auto; padding: 48px 20px;
+      background: linear-gradient(180deg, var(--bg) 0%, var(--surface-2) 100%);
+    }
+    .result-screen.open { display: flex; animation: fade-in-up .35s ease both; }
+    .result-brand { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 28px; }
+    .result-brand-mark {
+      width: 28px; height: 28px; border-radius: 7px; flex-shrink: 0;
+      background: linear-gradient(145deg, #173172 0%, #1e3d8a 100%);
+      display: flex; align-items: center; justify-content: center;
+    }
+    [data-theme="dark"] .result-brand-mark { background: linear-gradient(145deg, #2a52b0 0%, #4A7AE8 100%); }
+    .result-brand-mark svg { width: 16px; height: 16px; }
+    .result-brand-name { font-size: 12px; font-weight: 800; letter-spacing: .6px; color: var(--brand); text-transform: uppercase; }
+
+    .result-wrap { width: 100%; max-width: 440px; }
+    .result-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px;
+      box-shadow: var(--shadow-md); padding: 36px 30px 28px; text-align: center;
+    }
+    .result-icon-wrap { position: relative; width: 92px; height: 92px; margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; }
+    .result-ring { position: absolute; inset: 0; border-radius: 50%; animation: result-pulse 2.4s ease-in-out infinite; }
+    .result-icon-wrap.success .result-ring { background: radial-gradient(circle, var(--brand-glow) 0%, transparent 72%); }
+    .result-icon-wrap.failure .result-ring { background: radial-gradient(circle, rgba(217,119,6,.2) 0%, transparent 72%); }
+    @keyframes result-pulse { 0%, 100% { transform: scale(1); opacity: .55; } 50% { transform: scale(1.18); opacity: 1; } }
+    .result-icon-wrap svg { width: 58px; height: 58px; position: relative; z-index: 1; animation: pop-in .5s cubic-bezier(.34,1.56,.64,1) .1s both; }
+    .result-icon-wrap.success svg { color: var(--green); }
+    .result-icon-wrap.failure svg { color: var(--amber); }
+
+    .result-badge { display: inline-flex; align-items: center; font-size: 10.5px; font-weight: 800; letter-spacing: .4px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 14px; }
+    .result-badge.success { background: #D1FAE5; color: #065F46; }
+    .result-badge.failure { background: #FEF3C7; color: #92400E; }
+    [data-theme="dark"] .result-badge.success { background: rgba(5,150,105,.2); color: #34D399; }
+    [data-theme="dark"] .result-badge.failure { background: rgba(217,119,6,.2); color: #FCD34D; }
+
+    .result-title { font-size: 23px; font-weight: 900; color: var(--text-1); letter-spacing: -.5px; margin-bottom: 9px; line-height: 1.25; }
+    .result-sub { font-size: 13px; color: var(--text-2); line-height: 1.6; margin-bottom: 24px; }
+    .result-sub strong { color: var(--text-1); }
+
+    .result-policy-card { text-align: left; border: 1.5px solid var(--border); border-radius: var(--r-md); background: var(--surface-2); padding: 2px 16px; margin-bottom: 20px; }
+    .rp-row { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 11px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
+    .rp-row:last-child { border-bottom: none; }
+    .rp-row span:first-child { color: var(--text-3); font-weight: 600; flex-shrink: 0; }
+    .rp-row span:last-child { color: var(--text-1); font-weight: 700; text-align: right; }
+
+    .result-perks { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 24px; }
+    .result-perk { display: inline-flex; align-items: center; gap: 6px; background: var(--brand-tint); color: var(--brand); border-radius: 20px; padding: 6px 12px; font-size: 10.5px; font-weight: 700; }
+    .result-perk svg { width: 13px; height: 13px; }
+
+    .result-refund-note {
+      display: flex; align-items: flex-start; gap: 9px; text-align: left;
+      background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--r-sm);
+      padding: 12px 14px; font-size: 11px; color: var(--text-2); line-height: 1.55; margin-bottom: 22px;
+    }
+    .result-refund-note svg { width: 15px; height: 15px; color: var(--amber); flex-shrink: 0; margin-top: 1px; }
+
+    .result-secondary-btn {
+      width: 100%; margin-top: 8px; background: none; border: none;
+      color: var(--text-3); font-size: 12px; font-weight: 700; cursor: pointer;
+      font-family: inherit; padding: 10px; transition: color .15s;
+    }
+    .result-secondary-btn:hover { color: var(--brand); }
 
     /* ─── CTA BUTTON ─────────────────────────── */
     .cta-btn {
@@ -985,9 +1587,8 @@
       .f-row { grid-template-columns: 1fr; }
       .apps-grid { grid-template-columns: repeat(2, 1fr); }
       .banks-grid { grid-template-columns: repeat(2, 1fr); }
-      .tenure-grid { grid-template-columns: repeat(2, 1fr); }
+      .emi-bank-list { max-height: 300px; }
       .providers-grid { grid-template-columns: 1fr; }
-      .wallets-grid { grid-template-columns: 1fr; }
       .order-inner { height: auto; padding: 10px 16px; flex-wrap: wrap; gap: 6px; }
       .o-field { padding-right: 12px; margin-right: 12px; }
       .timer-group { margin-left: 0; }
@@ -995,6 +1596,15 @@
       .f-links { display: none; }
       .qr-box-lg { width: 170px; height: 170px; }
       .card-wrap { max-width: 100%; }
+      .lender-row-stat { display: none; }
+      .lender-name-wrap { flex-basis: 100px; }
+      .lender-detail-stats { grid-template-columns: repeat(3, 1fr); gap: 6px; }
+      .loan-compare-bar { flex-wrap: wrap; }
+      .compare-table { overflow-x: auto; }
+      .compare-row { min-width: 460px; }
+      .loan-preview-grid { grid-template-columns: 1fr; }
+      .loan-preview-item:nth-child(-n+2) { border-top: 1px solid var(--border); }
+      .loan-preview-item:first-child { border-top: none; }
     }
   </style>
 </head>
@@ -1038,11 +1648,11 @@
     <div class="order-inner">
       <div class="o-field">
         <span class="o-label">Order ID</span>
-        <span class="o-value">STR-INS-2024-88471</span>
+        <span class="o-value" id="order-id-value">STR-INS-2024-88471</span>
       </div>
       <div class="o-field">
         <span class="o-label">Mobile</span>
-        <span class="o-value">+91 98765 43210</span>
+        <span class="o-value" id="order-mobile-value">+91 98765 43210</span>
       </div>
       <div class="o-field">
         <span class="o-label">Policy</span>
@@ -1115,7 +1725,7 @@
             <div class="m-name">Card EMI</div>
             <div class="m-desc">Easy installments</div>
           </div>
-          <span class="m-badge badge-green">0% Off</span>
+          <span class="m-badge badge-green">13% p.a.</span>
         </li>
 
         <li class="m-item" onclick="switchMethod('cardless-emi',this)">
@@ -1256,7 +1866,7 @@
                 <span class="otm-tag">ASBA OTM</span>
                 <span class="otm-compact-heading">One Time Mandate</span>
               </div>
-              <p class="otm-compact-desc">Authorise ₹18,499 to Star Health — amount blocked until policy issuance confirmation.</p>
+              <p class="otm-compact-desc">Authorise ₹18,499 to Star Health — amount blocked in your account until the payment is processed, or released back if it isn't.</p>
             </div>
             <button class="otm-side-btn" id="otm-btn" disabled onclick="generateOTM()">
               <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -1346,7 +1956,7 @@
                   <input class="f-input" type="password" placeholder="•••" maxlength="4" autocomplete="cc-csc">
                 </div>
               </div>
-              <button class="cta-btn">
+              <button class="cta-btn" id="cards-pay-btn" onclick="handleCardsPay(this)">
                 <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z"/>
                 </svg>
@@ -1477,68 +2087,71 @@
           </div>
           <div>
             <div class="p-title">Card EMI</div>
-            <div class="p-sub">Convert to easy monthly installments</div>
+            <div class="p-sub">Convert your purchase into easy monthly installments</div>
           </div>
         </div>
-        <div class="p-body">
-          <div class="f-group">
-            <label class="f-label">Credit Card Number</label>
-            <input class="f-input" type="text" placeholder="0000  0000  0000  0000" maxlength="19">
+        <div class="p-body p-body-emi">
+
+          <!-- STEP 1: choose card type + bank -->
+          <div class="emi-step" id="emi-step-list">
+            <div class="emi-tabs">
+              <button class="emi-tab active" id="emi-tab-credit" onclick="switchEmiTab('credit')" type="button">Credit Card EMI</button>
+              <button class="emi-tab" id="emi-tab-debit" onclick="switchEmiTab('debit')" type="button">Debit Card EMI</button>
+            </div>
+
+            <div class="emi-search-wrap">
+              <svg class="emi-search-icon" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"/>
+              </svg>
+              <input class="f-input emi-search-input" type="text" placeholder="Search your bank" oninput="filterEmiBanks(this.value)">
+            </div>
+
+            <div class="emi-bank-list" id="emi-bank-list"></div>
           </div>
-          <div class="f-row">
-            <div class="f-group">
-              <label class="f-label">Expiry</label>
-              <input class="f-input" type="text" placeholder="MM / YY" maxlength="7">
+
+          <!-- STEP 2: EMI plans for chosen bank -->
+          <div class="emi-step" id="emi-step-plans" style="display:none">
+            <button class="emi-back-btn" onclick="backToEmiBanks()" type="button">
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2.4" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/>
+              </svg>
+              Back
+            </button>
+
+            <div class="emi-bank-header" id="emi-bank-header"></div>
+
+            <div class="emi-accordion" id="emi-accordion-standard">
+              <button class="emi-accordion-head" onclick="toggleEmiAccordion(this)" type="button">
+                <span class="emi-acc-icon">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/>
+                  </svg>
+                </span>
+                <span class="emi-acc-title">Standard EMI Plans</span>
+                <svg class="emi-acc-chevron" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/>
+                </svg>
+              </button>
+              <div class="emi-accordion-body" id="emi-plan-list"></div>
             </div>
-            <div class="f-group">
-              <label class="f-label">CVV</label>
-              <input class="f-input" type="password" placeholder="•••" maxlength="4">
+
+            <div class="emi-summary-row" id="emi-summary" style="display:none">
+              <div><div class="es-label">Principal</div><div class="es-value">₹18,499</div></div>
+              <div><div class="es-label">Interest</div><div class="es-value" id="emi-p-interest" style="color:var(--green)">₹0</div></div>
+              <div><div class="es-label">Monthly EMI</div><div class="es-value" id="emi-p-monthly" style="color:var(--brand)">₹0</div></div>
+            </div>
+
+            <button class="cta-btn" id="emi-plan-cta" disabled onclick="handleCardEmiPay(this)">
+              Select a plan to continue
+            </button>
+            <div class="cta-note">
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+              </svg>
+              EMI subject to issuing bank's approval &amp; T&amp;C
             </div>
           </div>
-          <div class="sec-heading" style="margin-top:6px">Select EMI Tenure</div>
-          <div class="tenure-grid">
-            <div class="tenure-card sel" onclick="pickTenure(this,'₹6,166','₹0')">
-              <div class="t-months">3</div><div class="t-unit">Months</div>
-              <div class="t-emi">₹6,166/mo</div><div class="t-rate">0% Interest</div>
-            </div>
-            <div class="tenure-card" onclick="pickTenure(this,'₹3,110','₹76')">
-              <div class="t-months">6</div><div class="t-unit">Months</div>
-              <div class="t-emi">₹3,110/mo</div><div class="t-rate">1.5% p.a.</div>
-            </div>
-            <div class="tenure-card" onclick="pickTenure(this,'₹2,092','₹329')">
-              <div class="t-months">9</div><div class="t-unit">Months</div>
-              <div class="t-emi">₹2,092/mo</div><div class="t-rate">1.99% p.a.</div>
-            </div>
-            <div class="tenure-card" onclick="pickTenure(this,'₹1,589','₹569')">
-              <div class="t-months">12</div><div class="t-unit">Months</div>
-              <div class="t-emi">₹1,589/mo</div><div class="t-rate">2.5% p.a.</div>
-            </div>
-            <div class="tenure-card" onclick="pickTenure(this,'₹1,078','₹905')">
-              <div class="t-months">18</div><div class="t-unit">Months</div>
-              <div class="t-emi">₹1,078/mo</div><div class="t-rate">3% p.a.</div>
-            </div>
-            <div class="tenure-card" onclick="pickTenure(this,'₹824','₹1,277')">
-              <div class="t-months">24</div><div class="t-unit">Months</div>
-              <div class="t-emi">₹824/mo</div><div class="t-rate">3.5% p.a.</div>
-            </div>
-          </div>
-          <div class="emi-summary-row">
-            <div><div class="es-label">Principal</div><div class="es-value">₹18,499</div></div>
-            <div><div class="es-label">Interest</div><div class="es-value" id="emi-interest" style="color:var(--green)">₹0</div></div>
-            <div><div class="es-label">Monthly EMI</div><div class="es-value" id="emi-monthly" style="color:var(--brand)">₹6,166</div></div>
-          </div>
-          <button class="cta-btn" id="emi-cta">
-            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            Set up EMI — ₹6,166/month × 3
-          </button>
-          <div class="cta-note">
-            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
-            </svg>
-            EMI subject to issuing bank's approval &amp; T&amp;C
-          </div>
+
         </div>
       </div>
 
@@ -1557,37 +2170,37 @@
         </div>
         <div class="p-body">
           <div class="sec-heading">Choose your EMI provider</div>
-          <div class="providers-grid">
-            <div class="provider-card">
+          <div class="providers-grid" id="cardless-providers-grid">
+            <div class="provider-card" data-provider="Bajaj Finserv" onclick="selectCardlessProvider(this)">
               <div class="prov-mark" style="background:linear-gradient(135deg,#0078D4,#00ADEF)">BF</div>
               <div><div class="prov-name">Bajaj Finserv</div><div class="prov-limit">Up to ₹5 Lakh</div><div class="prov-rate">0% · 3–24 months</div></div>
             </div>
-            <div class="provider-card">
+            <div class="provider-card" data-provider="ZestMoney" onclick="selectCardlessProvider(this)">
               <div class="prov-mark" style="background:linear-gradient(135deg,#E84000,#FF6B35)">ZM</div>
               <div><div class="prov-name">ZestMoney</div><div class="prov-limit">Up to ₹2 Lakh</div><div class="prov-rate">Low EMI · 3–18 mo</div></div>
             </div>
-            <div class="provider-card">
+            <div class="provider-card" data-provider="EarlySalary" onclick="selectCardlessProvider(this)">
               <div class="prov-mark" style="background:linear-gradient(135deg,#5E35B1,#9575CD)">ES</div>
               <div><div class="prov-name">EarlySalary</div><div class="prov-limit">Up to ₹1 Lakh</div><div class="prov-rate">1.5% p.m. · 3–12 mo</div></div>
             </div>
-            <div class="provider-card">
+            <div class="provider-card" data-provider="KreditBee" onclick="selectCardlessProvider(this)">
               <div class="prov-mark" style="background:linear-gradient(135deg,#00796B,#26A69A)">KB</div>
               <div><div class="prov-name">KreditBee</div><div class="prov-limit">Up to ₹2 Lakh</div><div class="prov-rate">Instant · 3–24 mo</div></div>
             </div>
-            <div class="provider-card">
+            <div class="provider-card" data-provider="Capital Float" onclick="selectCardlessProvider(this)">
               <div class="prov-mark" style="background:linear-gradient(135deg,#BF360C,#E64A19)">CF</div>
               <div><div class="prov-name">Capital Float</div><div class="prov-limit">Up to ₹3 Lakh</div><div class="prov-rate">Flexible · 6–24 mo</div></div>
             </div>
-            <div class="provider-card">
+            <div class="provider-card" data-provider="Home Credit" onclick="selectCardlessProvider(this)">
               <div class="prov-mark" style="background:linear-gradient(135deg,#0277BD,#039BE5)">HC</div>
               <div><div class="prov-name">Home Credit</div><div class="prov-limit">Up to ₹1.5 Lakh</div><div class="prov-rate">Instant · 6–18 mo</div></div>
             </div>
           </div>
-          <button class="cta-btn" style="margin-top:20px">
+          <button class="cta-btn" id="cardless-emi-cta" style="margin-top:20px" disabled onclick="handleCardlessEmiPay(this)">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
             </svg>
-            Continue with Cardless EMI
+            Choose a provider to continue
           </button>
           <div class="cta-note">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -1607,50 +2220,372 @@
             </svg>
           </div>
           <div>
-            <div class="p-title">Loan Offers &amp; BNPL</div>
-            <div class="p-sub">Buy now, pay later — flexible credit lines</div>
+            <div class="p-title">Loan Offers</div>
+            <div class="p-sub">Instantly finance your purchase with loan EMI offers from multiple lenders</div>
           </div>
         </div>
-        <div class="p-body">
-          <div class="bnpl-list">
-            <div class="bnpl-row">
-              <div class="bnpl-mark" style="background:linear-gradient(135deg,#5E35B1,#9575CD)">Si</div>
-              <div><div class="bnpl-name">Simpl</div><div class="bnpl-desc">Pay in 3 interest-free parts</div></div>
-              <div class="bnpl-right"><div class="bnpl-amt">₹25,000</div><div class="bnpl-lbl">Credit Limit</div></div>
+        <div class="p-body p-body-loan">
+
+          <!-- navigable stepper + live application-strength meter (hidden on the consent screen) -->
+          <div id="loan-progress-wrap" style="display:none">
+            <div class="loan-stepper" id="loan-stepper">
+              <div class="loan-step-node" data-step="personal" onclick="loanStepperJump('personal')">
+                <div class="lsn-circle"><span class="lsn-num">1</span><svg class="lsn-check" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></div>
+                <div class="lsn-label">Personal</div>
+              </div>
+              <div class="loan-step-line"></div>
+              <div class="loan-step-node" data-step="financial" onclick="loanStepperJump('financial')">
+                <div class="lsn-circle"><span class="lsn-num">2</span><svg class="lsn-check" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></div>
+                <div class="lsn-label">Financial</div>
+              </div>
+              <div class="loan-step-line"></div>
+              <div class="loan-step-node" data-step="preview" onclick="loanStepperJump('preview')">
+                <div class="lsn-circle"><span class="lsn-num">3</span><svg class="lsn-check" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></div>
+                <div class="lsn-label">Preview</div>
+              </div>
+              <div class="loan-step-line"></div>
+              <div class="loan-step-node" data-step="offers" onclick="loanStepperJump('offers')">
+                <div class="lsn-circle"><span class="lsn-num">4</span><svg class="lsn-check" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></div>
+                <div class="lsn-label">Offers</div>
+              </div>
             </div>
-            <div class="bnpl-row">
-              <div class="bnpl-mark" style="background:linear-gradient(135deg,#00796B,#26A69A)">La</div>
-              <div><div class="bnpl-name">LazyPay</div><div class="bnpl-desc">Pay later in 15 days or EMI</div></div>
-              <div class="bnpl-right"><div class="bnpl-amt">₹10,000</div><div class="bnpl-lbl">Credit Limit</div></div>
-            </div>
-            <div class="bnpl-row">
-              <div class="bnpl-mark" style="background:linear-gradient(135deg,#0277BD,#039BE5)">IC</div>
-              <div><div class="bnpl-name">ICICI PayLater</div><div class="bnpl-desc">30-day pay later facility</div></div>
-              <div class="bnpl-right"><div class="bnpl-amt">₹30,000</div><div class="bnpl-lbl">Credit Limit</div></div>
-            </div>
-            <div class="bnpl-row">
-              <div class="bnpl-mark" style="background:linear-gradient(135deg,#AD1457,#E91E63)">OM</div>
-              <div><div class="bnpl-name">OlaMoney Postpaid</div><div class="bnpl-desc">Flexible monthly credit</div></div>
-              <div class="bnpl-right"><div class="bnpl-amt">₹20,000</div><div class="bnpl-lbl">Credit Limit</div></div>
-            </div>
-            <div class="bnpl-row">
-              <div class="bnpl-mark" style="background:linear-gradient(135deg,#E65100,#FF8F00)">ZP</div>
-              <div><div class="bnpl-name">ZestMoney BNPL</div><div class="bnpl-desc">EMI from ₹0 down payment</div></div>
-              <div class="bnpl-right"><div class="bnpl-amt">₹15,000</div><div class="bnpl-lbl">Credit Limit</div></div>
+            <div class="loan-strength-wrap">
+              <span class="loan-strength-label">Application Strength</span>
+              <div class="loan-strength-track"><div class="loan-strength-fill" id="loan-strength-fill"></div></div>
+              <span class="loan-strength-label loan-strength-pct" id="loan-strength-pct">0%</span>
             </div>
           </div>
-          <button class="cta-btn" style="margin-top:20px">
-            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
-            </svg>
-            Proceed with BNPL
-          </button>
-          <div class="cta-note">
-            <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
-            </svg>
-            Subject to lender eligibility &amp; approval
+
+          <!-- ── SCREEN: CONSENT ── -->
+          <div class="loan-screen active" id="loan-screen-consent">
+            <div class="loan-intro">
+              <div class="loan-intro-icon">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="1.8" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 class="loan-intro-title">Loans Made Easy</h3>
+              <p class="loan-intro-bullet">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+                </svg>
+                Instantly finance your purchase with loan EMI offers from multiple lenders.
+              </p>
+            </div>
+
+            <label class="loan-consent-row" for="loan-consent-chk">
+              <input type="checkbox" class="loan-consent-chk" id="loan-consent-chk" onchange="loanToggleConsent(this)">
+              <span class="loan-consent-text">
+                I hereby consent to the collection and use of my personal and financial information by Star Health for the purposes of conducting a pre-eligibility check and displaying loan offers from partnered lenders. I further consent to the sharing of such information with partnered lenders, identity and verification providers, and the relevant merchant, for the purpose of processing my loan application. Additionally, I consent to Star Health retaining this information to pre-fill my details for easier processing of future loan applications. I acknowledge that I have read and agreed to the
+                <a href="#" onclick="event.stopPropagation();event.preventDefault()">Terms and Conditions</a> and
+                <a href="#" onclick="event.stopPropagation();event.preventDefault()">Privacy Policy</a>.
+              </span>
+            </label>
+
+            <button class="cta-btn" id="loan-consent-next" disabled onclick="loanGoTo('personal')">
+              Next
+            </button>
           </div>
+
+          <!-- ── SCREEN: PERSONAL INFORMATION ── -->
+          <div class="loan-screen" id="loan-screen-personal">
+            <div class="sec-heading">Applicant Name</div>
+            <div class="f-row loan-row-3">
+              <div class="f-group">
+                <label class="f-label">First Name</label>
+                <input class="f-input" id="loan-fname" placeholder="First name" oninput="loanValidatePersonal()" autocomplete="given-name">
+              </div>
+              <div class="f-group">
+                <label class="f-label">Middle Name <span class="loan-optional">(optional)</span></label>
+                <input class="f-input" id="loan-mname" placeholder="Middle name" autocomplete="additional-name">
+              </div>
+              <div class="f-group">
+                <label class="f-label">Last Name</label>
+                <input class="f-input" id="loan-lname" placeholder="Last name" oninput="loanValidatePersonal()" autocomplete="family-name">
+              </div>
+            </div>
+
+            <div class="f-row">
+              <div class="f-group">
+                <label class="f-label">Applicant PAN Number</label>
+                <input class="f-input" id="loan-pan" placeholder="ABCDE1234F" maxlength="10" oninput="loanFormatPan(this)">
+                <div class="loan-field-hint" id="loan-pan-hint"></div>
+              </div>
+              <div class="f-group">
+                <label class="f-label">Pincode <span class="loan-optional">(as per Aadhar)</span></label>
+                <input class="f-input" id="loan-pincode" placeholder="560001" maxlength="6" inputmode="numeric" oninput="loanDigitsOnly(this,6);loanValidatePersonal()">
+              </div>
+            </div>
+
+            <div class="f-group">
+              <label class="f-label">Applicant Address Type</label>
+              <div class="loan-chip-grid">
+                <button type="button" class="loan-chip" onclick="loanSelectChip('addressType','rented',this)">Rented</button>
+                <button type="button" class="loan-chip" onclick="loanSelectChip('addressType','owned',this)">Owned</button>
+                <button type="button" class="loan-chip" onclick="loanSelectChip('addressType','company',this)">Company Provided</button>
+                <button type="button" class="loan-chip" onclick="loanSelectChip('addressType','parents',this)">Parents'</button>
+              </div>
+            </div>
+
+            <div class="f-group">
+              <label class="f-label">Education Qualification</label>
+              <div class="loan-chip-grid">
+                <button type="button" class="loan-chip" onclick="loanSelectChip('education','undergraduate',this)">Undergraduate</button>
+                <button type="button" class="loan-chip" onclick="loanSelectChip('education','diploma',this)">Diploma</button>
+                <button type="button" class="loan-chip" onclick="loanSelectChip('education','graduate',this)">Graduate</button>
+                <button type="button" class="loan-chip" onclick="loanSelectChip('education','professional',this)">Professional Degree</button>
+                <button type="button" class="loan-chip" onclick="loanSelectChip('education','postgraduate',this)">Post Graduate</button>
+              </div>
+            </div>
+
+            <div class="f-row">
+              <div class="f-group">
+                <label class="f-label">Applicant Email ID</label>
+                <input class="f-input" type="email" id="loan-email" placeholder="you@example.com" oninput="loanValidatePersonal()" autocomplete="email">
+              </div>
+              <div class="f-group">
+                <label class="f-label">Date of Birth</label>
+                <input class="f-input" type="date" id="loan-dob" oninput="loanValidatePersonal()">
+                <div class="loan-field-hint" id="loan-dob-hint"></div>
+              </div>
+            </div>
+
+            <button class="cta-btn" id="loan-personal-next" disabled onclick="loanGoTo('financial')">
+              Next Step
+            </button>
+          </div>
+
+          <!-- ── SCREEN: FINANCIAL & FAMILY INFORMATION (merged — one less step than a rigid field-per-screen clone) ── -->
+          <div class="loan-screen" id="loan-screen-financial">
+            <button class="emi-back-btn" type="button" onclick="loanGoTo('personal')">
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2.4" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+              Back
+            </button>
+
+            <div class="sec-heading">Financial Details</div>
+            <div class="f-group">
+              <label class="f-label">Net Monthly Income</label>
+              <div class="loan-amount-wrap">
+                <span class="loan-amount-prefix">₹</span>
+                <input class="f-input loan-amount-input" type="text" inputmode="numeric" id="loan-income" placeholder="50,000" oninput="loanFormatIncome(this)">
+              </div>
+            </div>
+
+            <div class="f-group">
+              <label class="f-label">Employment Type</label>
+              <div class="loan-chip-grid">
+                <button type="button" class="loan-chip" onclick="loanSelectChip('employment','salaried',this)">Salaried</button>
+                <button type="button" class="loan-chip" onclick="loanSelectChip('employment','self-employed',this)">Self Employed</button>
+              </div>
+            </div>
+
+            <div class="sec-heading" style="margin-top:6px">Family Details</div>
+            <div class="f-group">
+              <label class="f-label">Applicant Father's Name</label>
+              <input class="f-input" id="loan-father" placeholder="Father's full name" oninput="loanValidateFinancial()">
+            </div>
+
+            <button class="cta-btn" id="loan-financial-next" disabled onclick="loanGoTo('preview')">
+              Next Step
+            </button>
+          </div>
+
+          <!-- ── SCREEN: PREVIEW & CONFIRM ── -->
+          <div class="loan-screen" id="loan-screen-preview">
+            <button class="emi-back-btn" type="button" onclick="loanGoTo('financial')">
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2.4" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+              Back
+            </button>
+
+            <div class="loan-preview-group">
+              <div class="loan-preview-head">
+                Personal Information
+                <button class="loan-edit-btn" type="button" onclick="loanGoTo('personal')">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+                  Edit
+                </button>
+              </div>
+              <div class="loan-preview-grid" id="loan-preview-personal"></div>
+            </div>
+
+            <div class="loan-preview-group">
+              <div class="loan-preview-head">
+                Financial Information
+                <button class="loan-edit-btn" type="button" onclick="loanGoTo('financial')">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+                  Edit
+                </button>
+              </div>
+              <div class="loan-preview-grid" id="loan-preview-financial"></div>
+            </div>
+
+            <div class="loan-preview-group">
+              <div class="loan-preview-head">
+                Family Information
+                <button class="loan-edit-btn" type="button" onclick="loanGoTo('financial')">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"/></svg>
+                  Edit
+                </button>
+              </div>
+              <div class="loan-preview-grid" id="loan-preview-family"></div>
+            </div>
+
+            <button class="cta-btn" onclick="loanGoTo('offers')">
+              <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Confirm &amp; Get Offers
+            </button>
+          </div>
+
+          <!-- ── SCREEN: GET OFFERS ── -->
+          <div class="loan-screen" id="loan-screen-offers">
+
+            <!-- sub-view: browse & pick a lender -->
+            <div class="loan-offers-view active" id="loan-offers-view-list">
+              <div class="sec-heading">Get offers from these lender(s)</div>
+              <p class="loan-offers-note">Every lender below is matched and ranked purely on your numbers — no lender pays for placement. Re-sort anytime to see who wins on a different measure.</p>
+
+              <div class="loan-sort-row">
+                <span class="loan-sort-caption">Sort by</span>
+                <button type="button" class="loan-sort-btn active" onclick="loanSetSort('success',this)">Success Rate</button>
+                <button type="button" class="loan-sort-btn" onclick="loanSetSort('emi',this)">Lowest EMI</button>
+                <button type="button" class="loan-sort-btn" onclick="loanSetSort('rate',this)">Lowest Rate</button>
+                <button type="button" class="loan-sort-btn" onclick="loanSetSort('fees',this)">Lowest Fees</button>
+              </div>
+
+              <div class="loan-compare-bar" id="loan-compare-bar" style="display:none">
+                <div class="loan-compare-chips" id="loan-compare-chips"></div>
+                <button type="button" class="loan-compare-clear" onclick="loanClearCompare()">Clear</button>
+                <button type="button" class="loan-compare-btn-main" id="loan-compare-cta" onclick="loanOpenCompare()" disabled>
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h18M16.5 3L21 7.5m0 0L16.5 12M21 7.5H3"/></svg>
+                  Compare <span id="loan-compare-count"></span>
+                </button>
+              </div>
+
+              <div class="lender-list" id="lender-list"></div>
+
+              <!-- side-by-side comparison — replaces the list while open -->
+              <div class="loan-compare-view" id="loan-compare-view" style="display:none">
+                <button class="emi-back-btn" type="button" onclick="loanCloseCompare()">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="2.4" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+                  Back to list
+                </button>
+                <div class="compare-table" id="compare-table"></div>
+              </div>
+
+              <button class="cta-btn" id="loan-offer-cta" disabled style="margin-top:16px" onclick="loanStartPlan()">
+                Continue with Selected Offer
+              </button>
+              <div class="cta-note">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/>
+                </svg>
+                Subject to lender eligibility &amp; approval
+              </div>
+            </div>
+
+            <!-- sub-view: live loan calculator — one screen, everything updates instantly,
+                 no click-through wizard for what is fundamentally one decision -->
+            <div class="loan-offers-view" id="loan-offers-view-calculator">
+              <button class="emi-back-btn" type="button" onclick="loanShowOffersView('list')">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2.4" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5"/></svg>
+                Back to offers
+              </button>
+              <div class="loan-plan-lender-row" id="loan-calc-lender"></div>
+
+              <div class="loan-sort-row" id="loan-calc-tenure-tabs"></div>
+
+              <div class="sec-heading" style="margin-top:14px">Choose a downpayment plan</div>
+              <div class="loan-tier-list" id="loan-calc-tiers"></div>
+
+              <div class="loan-calc-card">
+                <div class="loan-split-bar">
+                  <div class="loan-split-down" id="loan-split-down"></div>
+                  <div class="loan-split-fin" id="loan-split-fin"></div>
+                </div>
+                <div class="loan-split-legend">
+                  <span><i class="loan-dot loan-dot-down"></i>You pay now</span>
+                  <span><i class="loan-dot loan-dot-fin"></i>Financed</span>
+                </div>
+                <div class="loan-calc-stats">
+                  <div><div class="lm-label">Downpayment</div><div class="lm-value" id="loan-calc-dp">₹0</div></div>
+                  <div><div class="lm-label">Loan Amount</div><div class="lm-value" id="loan-calc-loanamt">₹0</div></div>
+                  <div><div class="lm-label">Monthly EMI</div><div class="lm-value loan-calc-emi-hl" id="loan-calc-emi">₹0</div></div>
+                </div>
+              </div>
+
+              <div class="emi-accordion" id="loan-breakdown-accordion" style="margin-top:12px">
+                <button type="button" class="emi-accordion-head" onclick="loanToggleAccordion('breakdown')">
+                  <span class="emi-acc-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75M3.75 4.5h16.5M3.75 4.5v15a2.25 2.25 0 002.25 2.25h12a2.25 2.25 0 002.25-2.25v-15M3.75 4.5l1.5-1.5h13.5l1.5 1.5"/></svg>
+                  </span>
+                  <span class="emi-acc-title">Full Cost Breakdown</span>
+                  <svg class="emi-acc-chevron" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+                </button>
+                <div class="emi-accordion-body" id="loan-breakdown-body">
+                  <div class="loan-accordion-inner" id="loan-calc-breakdown"></div>
+                </div>
+              </div>
+
+              <div class="emi-accordion" id="loan-schedule-accordion" style="margin-top:10px">
+                <button type="button" class="emi-accordion-head" onclick="loanToggleAccordion('schedule')">
+                  <span class="emi-acc-icon">
+                    <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/></svg>
+                  </span>
+                  <span class="emi-acc-title">EMI Schedule</span>
+                  <svg class="emi-acc-chevron" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+                </button>
+                <div class="emi-accordion-body" id="loan-schedule-body">
+                  <div class="loan-accordion-inner">
+                    <div class="loan-schedule-table-head"><span>Date</span><span>EMI</span></div>
+                    <div id="loan-calc-schedule-rows"></div>
+                  </div>
+                </div>
+              </div>
+
+              <button class="cta-btn" style="margin-top:16px" onclick="loanConfirmPlan()">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                Confirm This Plan
+              </button>
+            </div>
+
+            <!-- sub-view: instant confirmation + a transparent look at what happens next
+                 (no fake full-screen spinner — the button carries its own tiny loading state) -->
+            <div class="loan-offers-view" id="loan-offers-view-confirmed">
+              <div class="loan-confirm">
+                <div class="loan-confirm-check">
+                  <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                </div>
+                <div class="loan-confirm-title">Plan Reserved</div>
+                <div class="loan-confirm-sub" id="loan-confirm-recap"></div>
+
+                <div class="loan-journey">
+                  <div class="loan-journey-step done">
+                    <span class="ljs-dot"><svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span>
+                    <span class="ljs-label">Reserved</span>
+                  </div>
+                  <div class="loan-journey-line"></div>
+                  <div class="loan-journey-step current">
+                    <span class="ljs-dot">2</span>
+                    <span class="ljs-label">Verify with lender</span>
+                  </div>
+                  <div class="loan-journey-line"></div>
+                  <div class="loan-journey-step">
+                    <span class="ljs-dot">3</span>
+                    <span class="ljs-label">Funds disbursed</span>
+                  </div>
+                </div>
+
+                <button class="cta-btn" id="loan-confirm-cta" onclick="loanContinueToLender(this)">
+                  Continue to <span id="loan-confirm-lender-name"></span>
+                </button>
+                <button type="button" class="loan-confirm-back" onclick="loanShowOffersView('list')">
+                  Choose a different offer
+                </button>
+              </div>
+            </div>
+
+          </div>
+
         </div>
       </div>
 
@@ -1664,49 +2599,20 @@
           </div>
           <div>
             <div class="p-title">Digital Wallets</div>
-            <div class="p-sub">Pay instantly with your preferred wallet</div>
+            <div class="p-sub">Pay from a linked wallet, or redirect to any other wallet app</div>
           </div>
         </div>
         <div class="p-body">
-          <div class="wallets-grid">
-            <div class="wallet-row">
-              <div class="wallet-mark" style="background:linear-gradient(135deg,#0060CC,#00ADEF)">Pt</div>
-              <div><div class="wallet-name">Paytm Wallet</div><div class="wallet-bal">Balance: ₹1,250</div></div>
-            </div>
-            <div class="wallet-row">
-              <div class="wallet-mark" style="background:linear-gradient(135deg,#5A2FC2,#8B5CF6)">PP</div>
-              <div><div class="wallet-name">PhonePe Wallet</div><div class="wallet-bal">Balance: ₹500</div></div>
-            </div>
-            <div class="wallet-row">
-              <div class="wallet-mark" style="background:linear-gradient(135deg,#CC7700,#FF9900)">Az</div>
-              <div><div class="wallet-name">Amazon Pay</div><div class="wallet-bal">Balance: ₹250</div></div>
-            </div>
-            <div class="wallet-row">
-              <div class="wallet-mark" style="background:linear-gradient(135deg,#1A73E8,#4285F4)">G</div>
-              <div><div class="wallet-name">Google Pay</div><div class="wallet-bal">Balance: ₹750</div></div>
-            </div>
-            <div class="wallet-row">
-              <div class="wallet-mark" style="background:linear-gradient(135deg,#D32F2F,#EF5350)">FC</div>
-              <div><div class="wallet-name">Freecharge</div><div class="wallet-bal">Balance: ₹100</div></div>
-            </div>
-            <div class="wallet-row">
-              <div class="wallet-mark" style="background:linear-gradient(135deg,#1565C0,#1976D2)">Jio</div>
-              <div><div class="wallet-name">JioMoney</div><div class="wallet-bal">Balance: ₹0</div></div>
-            </div>
-            <div class="wallet-row">
-              <div class="wallet-mark" style="background:linear-gradient(135deg,#5E35B1,#7E57C2)">MBK</div>
-              <div><div class="wallet-name">MobiKwik</div><div class="wallet-bal">Balance: ₹180</div></div>
-            </div>
-            <div class="wallet-row">
-              <div class="wallet-mark" style="background:linear-gradient(135deg,#00695C,#00897B)">Air</div>
-              <div><div class="wallet-name">Airtel Money</div><div class="wallet-bal">Balance: ₹320</div></div>
-            </div>
-          </div>
-          <button class="cta-btn" style="margin-top:20px">
-            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/>
-            </svg>
-            Pay ₹18,499 via Wallet
+          <div class="sec-heading">Linked Wallets</div>
+          <p class="wallet-note">Signed in and ready — pick one to pay instantly, no redirect.</p>
+          <div class="wallet-list" id="wallet-linked-list"></div>
+
+          <div class="sec-heading" style="margin-top:18px">Other Wallets</div>
+          <p class="wallet-note">Not linked yet. You'll be redirected to authorise payment, and a small non-refundable convenience fee applies.</p>
+          <div class="wallet-list" id="wallet-other-list"></div>
+
+          <button class="cta-btn" id="wallet-cta" disabled style="margin-top:20px" onclick="walletProceed()">
+            Select a wallet to continue
           </button>
           <div class="cta-note">
             <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
@@ -1719,6 +2625,145 @@
 
     </div><!-- /panel-area -->
   </main>
+
+  <!-- Fee review — the exact total, before any redirect-based wallet charges you -->
+  <div class="confirm-modal-overlay" id="wallet-review-overlay">
+    <div class="confirm-modal-panel">
+      <div class="confirm-modal-head">
+        <div>
+          <div class="confirm-modal-title">Review Amount to Be Paid</div>
+          <div class="confirm-modal-sub">Convenience fee + GST is a non-refundable amount</div>
+        </div>
+        <button type="button" class="confirm-modal-close" onclick="walletCloseFeeReview()" aria-label="Close">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.4" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="confirm-modal-rows" id="wallet-review-rows"></div>
+      <button class="cta-btn" id="wallet-review-cta" onclick="walletConfirmFeeReview(this)">
+        Confirm
+      </button>
+    </div>
+  </div>
+
+  <!-- ══ PAYMENT RESULT: SUCCESS — payment is confirmed, the POLICY is not.
+       Receipting → Underwriting → Policy Conversion still has to happen,
+       so this screen never claims cover is active or shows a policy number. ══ -->
+  <div class="result-screen" id="screen-success">
+    <div class="result-wrap">
+      <div class="result-brand">
+        <div class="result-brand-mark">
+          <svg viewBox="0 0 395 522" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M264.851 0L176.804 173.432L0 195.647L115.196 327.664L87.337 520.294L249.2 437.11L380.366 521.253L394.881 507.554L248.81 395.73L125.984 459.68L157.995 318.579L69.948 217.898L199.091 200.367L263.822 75.129L338.49 219.815L352.579 205.619L264.851 0Z"/>
+          </svg>
+        </div>
+        <span class="result-brand-name">Star Health</span>
+      </div>
+
+      <div class="result-card">
+        <div class="result-icon-wrap success">
+          <div class="result-ring"></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path stroke-linejoin="round" d="M6 4.5C6 3.67 6.67 3 7.5 3H14L18 7V19.5C18 20.33 17.33 21 16.5 21H7.5C6.67 21 6 20.33 6 19.5V4.5Z"/>
+            <path stroke-linejoin="round" d="M14 3V7H18"/>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.5 13L10.8 15.3L15.5 10.3"/>
+          </svg>
+        </div>
+        <div class="result-badge success">Payment Received</div>
+        <div class="result-title">Payment Received!</div>
+        <p class="result-sub">Your <strong>Family Floater Plan</strong> application has moved to our underwriting team for review — it isn't active just yet.</p>
+
+        <div class="result-policy-card">
+          <div class="rp-row"><span>Application Reference</span><span id="res-policy-no">—</span></div>
+          <div class="rp-row"><span>Plan Applied For</span><span>Family Floater Plan</span></div>
+          <div class="rp-row"><span>Phone Number</span><span id="res-phone">—</span></div>
+          <div class="rp-row"><span>Email ID</span><span id="res-email">—</span></div>
+          <div class="rp-row"><span>Amount Paid</span><span id="res-amount">—</span></div>
+          <div class="rp-row"><span>Payment Date</span><span id="res-period">—</span></div>
+        </div>
+
+        <div class="sec-heading" style="text-align:left">Application Journey</div>
+        <div class="loan-journey" style="margin:14px 0 20px">
+          <div class="loan-journey-step done">
+            <span class="ljs-dot"><svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></span>
+            <span class="ljs-label">Payment Received</span>
+          </div>
+          <div class="loan-journey-line"></div>
+          <div class="loan-journey-step current">
+            <span class="ljs-dot">2</span>
+            <span class="ljs-label">Receipting</span>
+          </div>
+          <div class="loan-journey-line"></div>
+          <div class="loan-journey-step">
+            <span class="ljs-dot">3</span>
+            <span class="ljs-label">Underwriting</span>
+          </div>
+          <div class="loan-journey-line"></div>
+          <div class="loan-journey-step">
+            <span class="ljs-dot">4</span>
+            <span class="ljs-label">Policy Issued</span>
+          </div>
+        </div>
+
+        <div class="result-refund-note">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
+          <span id="res-followup-note">We've received your payment and it's on its way through receipting and underwriting. Keep an eye on your inbox — we'll mail your confirmation there.</span>
+        </div>
+
+        <button class="cta-btn" onclick="downloadPaymentReceipt()">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg>
+          Download Payment Receipt
+        </button>
+        <button type="button" class="result-secondary-btn" onclick="hideResultScreens()">Back to Home</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ PAYMENT RESULT: FAILURE — reassure first, retry second, never alarming ══ -->
+  <div class="result-screen" id="screen-failure">
+    <div class="result-wrap">
+      <div class="result-brand">
+        <div class="result-brand-mark">
+          <svg viewBox="0 0 395 522" fill="white" xmlns="http://www.w3.org/2000/svg">
+            <path d="M264.851 0L176.804 173.432L0 195.647L115.196 327.664L87.337 520.294L249.2 437.11L380.366 521.253L394.881 507.554L248.81 395.73L125.984 459.68L157.995 318.579L69.948 217.898L199.091 200.367L263.822 75.129L338.49 219.815L352.579 205.619L264.851 0Z"/>
+          </svg>
+        </div>
+        <span class="result-brand-name">Star Health</span>
+      </div>
+
+      <div class="result-card">
+        <div class="result-icon-wrap failure">
+          <div class="result-ring"></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+            <path stroke-linejoin="round" d="M12 2.5L4.5 5.5V11C4.5 16.2 7.8 20.4 12 21.8C16.2 20.4 19.5 16.2 19.5 11V5.5L12 2.5Z"/>
+            <path stroke-linecap="round" stroke-width="2" d="M12 8.5V13"/>
+            <circle cx="12" cy="16.3" r="0.9" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <div class="result-badge failure">Payment Failed</div>
+        <div class="result-title">We Couldn't Complete Your Payment</div>
+        <p class="result-sub">Don't worry — your Family Floater Plan quote is safe. If any amount was debited, our support team will help you track it down.</p>
+
+        <div class="result-policy-card">
+          <div class="rp-row"><span>Reference ID</span><span id="res-fail-ref">—</span></div>
+          <div class="rp-row"><span>Attempted Amount</span><span id="res-fail-amount">—</span></div>
+          <div class="rp-row"><span>Reason</span><span id="res-fail-reason">Card declined by issuing bank</span></div>
+          <div class="rp-row"><span>Quote Valid For</span><span>Next 24 hours</span></div>
+        </div>
+
+        <div class="result-refund-note">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.25 11.25l.041-.02a.75.75 0 011.063.852l-.708 2.836a.75.75 0 001.063.853l.041-.021M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9-3.75h.008v.008H12V8.25z"/></svg>
+          <span>Any amount debited from your account will be auto-refunded within 7 working days. If it isn't, write to <strong>support@starhealth.in</strong> — download the receipt below beforehand and keep it handy to attach to your email.</span>
+        </div>
+
+        <button class="cta-btn" onclick="hideResultScreens()">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"/></svg>
+          Try Another Payment Method
+        </button>
+        <button type="button" class="result-secondary-btn" onclick="downloadFailureReceipt()">Download Receipt for Support</button>
+        <button type="button" class="result-secondary-btn" onclick="hideResultScreens()">Need help? Call 1800-425-2255</button>
+      </div>
+    </div>
+  </div>
 
   <!-- ── FOOTER (FIXED) ── -->
   <footer class="footer">
@@ -1946,14 +2991,1186 @@
       this.value = v;
     });
 
-    /* ── EMI TENURE ── */
-    function pickTenure(el, mo, interest) {
-      document.querySelectorAll('.tenure-card').forEach(c => c.classList.remove('sel'));
-      el.classList.add('sel');
-      const months = el.querySelector('.t-months').textContent;
-      document.getElementById('emi-interest').textContent = interest;
-      document.getElementById('emi-monthly').textContent  = mo;
-      document.getElementById('emi-cta').innerHTML = `<svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" style="width:17px;height:17px"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Set up EMI — ${mo}/month × ${months}`;
+    /* ── CARD EMI: BANK LIST + PLANS ── */
+    const EMI_AMOUNT  = 18499;
+    const EMI_TENURES = [3, 6, 9, 12, 18, 24];
+    const emiBanks = [
+      { id:'amex',     name:'AMEX',  full:'American Express',      bg:'linear-gradient(135deg,#006FCF,#00A8E8)', rate:15,   types:['credit'] },
+      { id:'ausfb',    name:'AU',    full:'AU Small Finance Bank', bg:'linear-gradient(135deg,#E8720C,#F4A322)', rate:16,   types:['credit'] },
+      { id:'axis',     name:'AXIS',  full:'Axis Bank',             bg:'linear-gradient(135deg,#5C1010,#8B1A1A)', rate:15,   types:['credit','debit'] },
+      { id:'bobcard',  name:'BOB',   full:'BOBCARD',                bg:'linear-gradient(135deg,#B34700,#E06010)', rate:14,   types:['credit'] },
+      { id:'canara',   name:'CNRB',  full:'Canara Bank',            bg:'linear-gradient(135deg,#7B1113,#A31F22)', rate:13,   types:['credit'] },
+      { id:'dbs',      name:'DBS',   full:'DBS Bank',               bg:'linear-gradient(135deg,#E4002B,#FF3355)', rate:16,   types:['credit'] },
+      { id:'federal',  name:'FED',   full:'Federal Bank',           bg:'linear-gradient(135deg,#003B71,#0A5CA8)', rate:15,   types:['credit'] },
+      { id:'hdfc',     name:'HDFC',  full:'HDFC Bank',              bg:'linear-gradient(135deg,#00387A,#005CB8)', rate:14,   types:['credit','debit'] },
+      { id:'icici',    name:'ICICI', full:'ICICI Bank',             bg:'linear-gradient(135deg,#9B0000,#CC0000)', rate:15,   types:['credit','debit'] },
+      { id:'idfc',     name:'IDFC',  full:'IDFC First Bank',        bg:'linear-gradient(135deg,#006070,#009BB0)', rate:16,   types:['credit','debit'] },
+      { id:'indusind', name:'IIB',   full:'IndusInd Bank',          bg:'linear-gradient(135deg,#8B1538,#B8305A)', rate:15,   types:['credit'] },
+      { id:'kotak',    name:'KTK',   full:'Kotak Mahindra Bank',    bg:'linear-gradient(135deg,#4A235A,#76448A)', rate:14,   types:['credit','debit'] },
+      { id:'rbl',      name:'RBL',   full:'RBL Bank',               bg:'linear-gradient(135deg,#8A1538,#C41E3A)', rate:18,   types:['credit'] },
+      { id:'sbi',      name:'SBI',   full:'SBI Card',               bg:'linear-gradient(135deg,#003166,#0052A5)', rate:15,   types:['credit','debit'] },
+      { id:'scb',      name:'SC',    full:'Standard Chartered',     bg:'linear-gradient(135deg,#005A2B,#009845)', rate:13,   types:['credit'] },
+      { id:'yes',      name:'YES',   full:'Yes Bank',               bg:'linear-gradient(135deg,#002D62,#0047AB)', rate:16,   types:['credit'] },
+    ];
+    let emiActiveTab = 'credit';
+
+    function fmtINR0(n) {
+      return '₹' + Math.round(n).toLocaleString('en-IN');
+    }
+    function calcEmi(principal, annualRatePct, months) {
+      const r = annualRatePct / 1200;
+      const factor = Math.pow(1 + r, months);
+      return principal * r * factor / (factor - 1);
+    }
+
+    function renderEmiBanks(filter) {
+      const list = document.getElementById('emi-bank-list');
+      const q = (filter || '').trim().toLowerCase();
+      const banks = emiBanks.filter(b => b.types.includes(emiActiveTab) &&
+        (!q || b.name.toLowerCase().includes(q) || b.full.toLowerCase().includes(q)));
+      if (!banks.length) {
+        list.innerHTML = `<div class="emi-empty">No banks found. Try a different search.</div>`;
+        return;
+      }
+      list.innerHTML = banks.map((b, i) => `
+        <div class="emi-bank-row" style="animation-delay:${Math.min(i * 0.03, 0.3)}s" onclick="openEmiBank('${b.id}')">
+          <div class="emi-bank-icon" style="background:${b.bg}">${b.name}</div>
+          <div>
+            <div class="emi-bank-name">${b.full}</div>
+            <div class="emi-bank-rate">EMI from ${b.rate.toFixed(2)}% p.a.</div>
+          </div>
+          <svg class="emi-bank-chevron" fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5"/>
+          </svg>
+        </div>
+      `).join('');
+    }
+
+    function switchEmiTab(tab) {
+      emiActiveTab = tab;
+      document.getElementById('emi-tab-credit').classList.toggle('active', tab === 'credit');
+      document.getElementById('emi-tab-debit').classList.toggle('active', tab === 'debit');
+      const search = document.querySelector('.emi-search-input');
+      if (search) search.value = '';
+      renderEmiBanks('');
+    }
+
+    function filterEmiBanks(v) { renderEmiBanks(v); }
+
+    function openEmiBank(id) {
+      const bank = emiBanks.find(b => b.id === id);
+      if (!bank) return;
+
+      document.getElementById('emi-bank-header').innerHTML = `
+        <div class="emi-bank-icon" style="background:${bank.bg}">${bank.name}</div>
+        <div>
+          <div class="emi-bank-header-name">${bank.full}</div>
+          <div class="emi-bank-header-sub">${emiActiveTab === 'credit' ? 'Credit' : 'Debit'} Card EMI</div>
+        </div>
+      `;
+
+      const planList = document.getElementById('emi-plan-list');
+      planList.innerHTML = EMI_TENURES.map(m => {
+        const emi = calcEmi(EMI_AMOUNT, bank.rate, m);
+        const totalInterest = emi * m - EMI_AMOUNT;
+        return `
+          <label class="emi-plan-row" onclick="selectEmiPlan(this, ${emi}, ${m}, ${totalInterest})">
+            <input type="radio" name="emi-plan" class="emi-plan-radio">
+            <span class="emi-plan-dot"></span>
+            <span class="emi-plan-info">
+              <span class="emi-plan-main">${fmtINR0(emi)} <span class="emi-plan-x">×</span> ${m} M <span class="emi-plan-rate">@${bank.rate.toFixed(2)}% p.a</span></span>
+              <span class="emi-plan-sub">Total ${fmtINR0(totalInterest)} interest charged</span>
+            </span>
+          </label>
+        `;
+      }).join('');
+
+      document.getElementById('emi-summary').style.display = 'none';
+      const cta = document.getElementById('emi-plan-cta');
+      cta.disabled = true;
+      cta.innerHTML = 'Select a plan to continue';
+
+      document.getElementById('emi-step-list').style.display = 'none';
+      const stepPlans = document.getElementById('emi-step-plans');
+      stepPlans.style.display = '';
+      stepPlans.style.animation = 'none';
+      void stepPlans.offsetWidth;
+      stepPlans.style.animation = '';
+
+      /* measure after the panel is visible, else scrollHeight reads 0 */
+      const acc = document.getElementById('emi-accordion-standard');
+      acc.classList.add('open');
+      const body = document.getElementById('emi-plan-list');
+      body.style.maxHeight = body.scrollHeight + 'px';
+    }
+
+    function backToEmiBanks() {
+      document.getElementById('emi-step-plans').style.display = 'none';
+      const stepList = document.getElementById('emi-step-list');
+      stepList.style.display = '';
+      stepList.style.animation = 'none';
+      void stepList.offsetWidth;
+      stepList.style.animation = '';
+    }
+
+    function toggleEmiAccordion(btn) {
+      const acc = btn.parentElement;
+      acc.classList.toggle('open');
+      const body = btn.nextElementSibling;
+      body.style.maxHeight = acc.classList.contains('open') ? body.scrollHeight + 'px' : '0px';
+    }
+
+    function selectEmiPlan(row, emi, months, interest) {
+      document.querySelectorAll('.emi-plan-row').forEach(r => r.classList.remove('sel'));
+      row.classList.add('sel');
+      row.querySelector('.emi-plan-radio').checked = true;
+
+      document.getElementById('emi-summary').style.display = 'grid';
+      document.getElementById('emi-p-interest').textContent = fmtINR0(interest);
+      document.getElementById('emi-p-monthly').textContent  = fmtINR0(emi);
+
+      const cta = document.getElementById('emi-plan-cta');
+      cta.disabled = false;
+      cta.innerHTML = `<svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" style="width:17px;height:17px"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Set up EMI — ${fmtINR0(emi)}/month × ${months}`;
+    }
+
+    renderEmiBanks('');
+
+    function handleCardEmiPay(btn) {
+      const original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loan-spinner"></span> Processing…';
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = original;
+        populateSuccessScreen();
+        showResultScreen('success');
+      }, 1300);
+    }
+
+    let cardlessProviderSelected = null;
+    function selectCardlessProvider(el) {
+      cardlessProviderSelected = el.dataset.provider;
+      document.querySelectorAll('#cardless-providers-grid .provider-card').forEach(c => c.classList.toggle('sel', c === el));
+      const cta = document.getElementById('cardless-emi-cta');
+      cta.disabled = false;
+      cta.innerHTML = `<svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg> Continue with ${cardlessProviderSelected}`;
+    }
+
+    function handleCardlessEmiPay(btn) {
+      if (!cardlessProviderSelected) return;
+      const original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loan-spinner"></span> Redirecting…';
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = original;
+        populateSuccessScreen();
+        showResultScreen('success');
+      }, 1300);
+    }
+
+    /* ── LOAN OFFERS WIZARD ── */
+    const loanData = { addressType: '', education: '', employment: '', income: '' };
+    const loanSteps = ['personal', 'financial', 'preview', 'offers'];
+    let loanMaxReached = 0;
+
+    const loanFieldLabels = {
+      addressType: { rented: 'Rented', owned: 'Owned', company: 'Company Provided', parents: "Parents'" },
+      education:   { undergraduate: 'Undergraduate', diploma: 'Diploma', graduate: 'Graduate', professional: 'Professional Degree', postgraduate: 'Post Graduate' },
+      employment:  { salaried: 'Salaried', 'self-employed': 'Self Employed' },
+    };
+
+    (function loanInitDob() {
+      const dobEl = document.getElementById('loan-dob');
+      if (dobEl) dobEl.max = new Date().toISOString().split('T')[0];
+    })();
+
+    function loanGoTo(step) {
+      document.querySelectorAll('.loan-screen').forEach(s => s.classList.remove('active'));
+      document.getElementById('loan-screen-' + step).classList.add('active');
+
+      const wrap = document.getElementById('loan-progress-wrap');
+      if (step === 'consent') {
+        wrap.style.display = 'none';
+      } else {
+        wrap.style.display = '';
+        loanStepperSync(step);
+      }
+
+      if (step === 'preview') loanRenderPreview();
+      if (step === 'offers') loanRenderOffers();
+
+      const panel = document.getElementById('panel-bnpl');
+      if (panel) panel.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+
+    function loanStepperSync(step) {
+      const idx = loanSteps.indexOf(step);
+      if (idx > loanMaxReached) loanMaxReached = idx;
+      document.querySelectorAll('.loan-step-node').forEach((node, i) => {
+        node.classList.remove('done', 'current', 'clickable');
+        if (i < idx) node.classList.add('done');
+        if (i === idx) node.classList.add('current');
+        if (i <= loanMaxReached && i !== idx) node.classList.add('clickable');
+      });
+      document.querySelectorAll('.loan-step-line').forEach((line, i) => {
+        line.classList.toggle('done', i < idx);
+      });
+    }
+
+    function loanStepperJump(step) {
+      const idx = loanSteps.indexOf(step);
+      if (idx <= loanMaxReached) loanGoTo(step);
+    }
+
+    function loanToggleConsent(chk) {
+      document.getElementById('loan-consent-next').disabled = !chk.checked;
+    }
+
+    function loanSelectChip(field, value, btn) {
+      btn.parentElement.querySelectorAll('.loan-chip').forEach(c => c.classList.remove('sel'));
+      btn.classList.add('sel');
+      loanData[field] = value;
+      if (field === 'employment') loanValidateFinancial();
+      else loanValidatePersonal();
+    }
+
+    function loanDigitsOnly(el, maxLen) {
+      el.value = el.value.replace(/\D/g, '').substring(0, maxLen);
+    }
+
+    function loanFormatPan(el) {
+      el.value = el.value.toUpperCase().replace(/[^A-Z0-9]/g, '').substring(0, 10);
+      loanValidatePersonal();
+    }
+
+    function loanFormatIncome(el) {
+      const raw = el.value.replace(/\D/g, '').substring(0, 8);
+      loanData.income = raw;
+      el.value = raw ? Number(raw).toLocaleString('en-IN') : '';
+      loanValidateFinancial();
+    }
+
+    function loanAge(dobStr) {
+      const dob = new Date(dobStr);
+      const today = new Date();
+      let age = today.getFullYear() - dob.getFullYear();
+      const m = today.getMonth() - dob.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) age--;
+      return age;
+    }
+
+    /* live "application strength" meter — small dopamine hit, and it doubles
+       as a single source of truth for how close the applicant is to done */
+    const LOAN_REQUIRED_FIELDS = 11;
+    function loanComputeStrength() {
+      let filled = 0;
+      const val = id => (document.getElementById(id) || {}).value?.trim() || '';
+      if (val('loan-fname')) filled++;
+      if (val('loan-lname')) filled++;
+      if (/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(val('loan-pan'))) filled++;
+      if (/^[0-9]{6}$/.test(val('loan-pincode'))) filled++;
+      if (loanData.addressType) filled++;
+      if (loanData.education) filled++;
+      if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('loan-email'))) filled++;
+      const dob = val('loan-dob');
+      if (dob && loanAge(dob) >= 18) filled++;
+      if (loanData.income && Number(loanData.income) >= 5000) filled++;
+      if (loanData.employment) filled++;
+      if (val('loan-father')) filled++;
+
+      const pct = Math.round((filled / LOAN_REQUIRED_FIELDS) * 100);
+      const fill = document.getElementById('loan-strength-fill');
+      const label = document.getElementById('loan-strength-pct');
+      if (fill) fill.style.width = pct + '%';
+      if (label) label.textContent = pct + '%';
+      return pct;
+    }
+
+    function loanValidatePersonal() {
+      const fn  = document.getElementById('loan-fname').value.trim();
+      const ln  = document.getElementById('loan-lname').value.trim();
+      const pan = document.getElementById('loan-pan').value.trim();
+      const pin = document.getElementById('loan-pincode').value.trim();
+      const email = document.getElementById('loan-email').value.trim();
+      const dob = document.getElementById('loan-dob').value;
+
+      const panOk = /^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan);
+      const pinOk = /^[0-9]{6}$/.test(pin);
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      const dobOk = !!dob && loanAge(dob) >= 18;
+
+      document.getElementById('loan-pan-hint').textContent = pan && !panOk ? 'Enter a valid PAN, e.g. ABCDE1234F' : '';
+      document.getElementById('loan-dob-hint').textContent = dob && !dobOk ? 'Applicant must be at least 18 years old' : '';
+
+      const ok = !!(fn && ln && panOk && pinOk && loanData.addressType && loanData.education && emailOk && dobOk);
+      document.getElementById('loan-personal-next').disabled = !ok;
+      loanComputeStrength();
+      return ok;
+    }
+
+    function loanValidateFinancial() {
+      const incomeOk = loanData.income && Number(loanData.income) >= 5000;
+      const father = document.getElementById('loan-father').value.trim();
+      const ok = !!(incomeOk && loanData.employment && father);
+      document.getElementById('loan-financial-next').disabled = !ok;
+      loanComputeStrength();
+      return ok;
+    }
+
+    function loanFmtDate(d) {
+      if (!d) return '—';
+      const dt = new Date(d);
+      return dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function loanPreviewRow(label, value) {
+      return `<div class="loan-preview-item"><div class="loan-pi-label">${label}</div><div class="loan-pi-value">${value || '—'}</div></div>`;
+    }
+
+    function loanRenderPreview() {
+      const fname = document.getElementById('loan-fname').value.trim();
+      const mname = document.getElementById('loan-mname').value.trim();
+      const lname = document.getElementById('loan-lname').value.trim();
+      const fullName = [fname, mname, lname].filter(Boolean).join(' ');
+      const pan = document.getElementById('loan-pan').value.trim();
+      const pincode = document.getElementById('loan-pincode').value.trim();
+      const email = document.getElementById('loan-email').value.trim();
+      const dob = document.getElementById('loan-dob').value;
+      const father = document.getElementById('loan-father').value.trim();
+      const income = loanData.income ? '₹' + Number(loanData.income).toLocaleString('en-IN') : '';
+
+      document.getElementById('loan-preview-personal').innerHTML =
+        loanPreviewRow('Applicant Name', fullName) +
+        loanPreviewRow('PAN Number', pan) +
+        loanPreviewRow('Pincode', pincode) +
+        loanPreviewRow('Address Type', loanFieldLabels.addressType[loanData.addressType]) +
+        loanPreviewRow('Education', loanFieldLabels.education[loanData.education]) +
+        loanPreviewRow('Email ID', email) +
+        loanPreviewRow('Date of Birth', loanFmtDate(dob));
+
+      document.getElementById('loan-preview-financial').innerHTML =
+        loanPreviewRow('Net Monthly Income', income) +
+        loanPreviewRow('Employment Type', loanFieldLabels.employment[loanData.employment]);
+
+      document.getElementById('loan-preview-family').innerHTML =
+        loanPreviewRow("Father's Name", father);
+    }
+
+    /* ── LENDER MARKETPLACE ──
+       No lender is hardcoded first. Rank is always computed live from the
+       lender's own published numbers against the applicant's own loan
+       amount, and the shopper picks the measure that matters to them.
+       "Success Rate" is the modelled approval likelihood for this profile
+       and tenure/policy combination — it's the default sort because it's
+       the number that actually predicts whether a shopper gets funded. */
+    const loanLenders = [
+      { id: 'finsall', name: 'Finsall', mark: 'FS', bg: 'linear-gradient(135deg,#1B6FD1,#3FA0F5)',
+        emi: 644.0, aprMin: 19.51, aprMax: 26.00, tenureMin: 3, tenureMax: 30, successRate: 88,
+        fee: { type: 'flat', value: 799 }, feeLabel: '₹799 +GST' },
+      { id: 'fibe', name: 'Fibe', mark: 'Fi', bg: 'linear-gradient(135deg,#FF6A00,#FF9A3D)',
+        powered: 'EarlySalary Services Private Limited (ESPL)',
+        emi: 887.32, aprMin: 19.24, aprMax: 27.01, tenureMin: 3, tenureMax: 30, successRate: 95,
+        fee: { type: 'pct', value: 1.25 }, feeLabel: '1.25% +GST',
+        footnote: 'Processing fee is calculated on the loan amount' },
+      { id: 'bimapay', name: 'Bimapay', mark: 'bp', bg: 'linear-gradient(135deg,#1565C0,#42A5F5)',
+        emi: 639.44, aprMin: 18, aprMax: 27.3, tenureMin: 2, tenureMax: 30, successRate: 91,
+        fee: { type: 'flat', value: 500 }, feeLabel: '₹500 +GST' },
+      { id: 'axio', name: 'Axio', mark: 'Ax', bg: 'linear-gradient(135deg,#2E7D32,#66BB6A)',
+        emi: 2475.36, aprMin: 25.0, aprMax: 32.74, tenureMin: 3, tenureMax: 12, successRate: 79,
+        fee: { type: 'pct', value: 2.5 }, feeLabel: '2.0% - 3.0% +GST' },
+    ];
+
+    let loanSelectedLender = null;
+    let loanSortKey = 'success';
+
+    function loanFeeRupees(l) {
+      return l.fee.type === 'flat' ? l.fee.value : Math.round(EMI_AMOUNT * l.fee.value / 100);
+    }
+
+    function loanSuccessTier(pct) {
+      return pct >= 90 ? 'tier-high' : pct >= 75 ? 'tier-mid' : 'tier-low';
+    }
+
+    function loanComputeBadges(list) {
+      const emis = list.map(l => l.emi), aprs = list.map(l => l.aprMin), fees = list.map(loanFeeRupees);
+      const minEmi = Math.min(...emis), minApr = Math.min(...aprs), minFee = Math.min(...fees);
+      const maxSuccess = Math.max(...list.map(l => l.successRate));
+
+      list.forEach(l => {
+        l._badges = [];
+        if (l.successRate === maxSuccess) l._badges.push({ label: 'Top Success Rate', cls: 'badge-best' });
+        if (l.emi === minEmi) l._badges.push({ label: 'Lowest EMI', cls: 'badge-emi' });
+        if (l.aprMin === minApr) l._badges.push({ label: 'Lowest Rate', cls: 'badge-rate' });
+        if (loanFeeRupees(l) === minFee) l._badges.push({ label: 'Lowest Fees', cls: 'badge-fee' });
+      });
+    }
+
+    const loanSortFns = {
+      success: (a, b) => b.successRate - a.successRate,
+      emi:     (a, b) => a.emi - b.emi,
+      rate:    (a, b) => a.aprMin - b.aprMin,
+      fees:    (a, b) => loanFeeRupees(a) - loanFeeRupees(b),
+    };
+
+    function loanSetSort(key, btn) {
+      loanSortKey = key;
+      document.querySelectorAll('.loan-sort-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loanPaintOffers(false);
+    }
+
+    function loanSkeletonHTML(n) {
+      return Array.from({ length: n }).map((_, i) => `
+        <div class="lender-skel" style="animation-delay:${(i * 0.06).toFixed(2)}s">
+          <div class="skel-circle"></div>
+          <div class="skel-lines"><div class="skel-line w60"></div><div class="skel-line w40"></div></div>
+          <div class="skel-block"></div>
+        </div>
+      `).join('');
+    }
+
+    /* one lender's detail panel open at a time — keeps the list scannable
+       instead of letting four expansions push everything off-screen again */
+    let loanOpenLenderId = null;
+
+    function loanCardHTML(l, idx) {
+      const selCls = loanSelectedLender === l.id ? ' sel' : '';
+      const rankCls = idx === 0 ? ' rank-first' : '';
+      const isOpen = loanOpenLenderId === l.id;
+      const midApr = (l.aprMin + l.aprMax) / 2;
+      const defaultTenure = l.tenureMax >= 12 && l.tenureMin <= 12 ? 12 : l.tenureMin;
+      const estEmi = calcEmi(EMI_AMOUNT, midApr, defaultTenure);
+      const badges = (l._badges || []).map(b => `<span class="lender-badge ${b.cls}">${b.label}</span>`).join('');
+      return `
+        <div class="lender-card${selCls}${rankCls}" data-id="${l.id}">
+          <div class="lender-accent" style="background:${l.bg}"></div>
+          <div class="lender-body">
+            <div class="lender-summary" onclick="loanSelectLender('${l.id}')">
+              <div class="lender-mark" style="background:${l.bg}">${l.mark}</div>
+              <div class="lender-name-wrap">
+                <div class="lender-name">${l.name}</div>
+                ${l.powered ? `<div class="lender-powered">Powered by ${l.powered}</div>` : ''}
+                ${badges ? `<div class="lender-badges">${badges}</div>` : ''}
+              </div>
+              <div class="lender-row-success">
+                <span class="lender-success-chip ${loanSuccessTier(l.successRate)}">${l.successRate}%</span>
+                <span class="lender-row-success-label">Success</span>
+              </div>
+              <div class="lender-row-stat">
+                <div class="lrs-label">EMI from</div>
+                <div class="lrs-value">₹${Math.round(l.emi).toLocaleString('en-IN')}/mo</div>
+              </div>
+              <button type="button" class="lender-compare-btn${loanCompareSet.has(l.id) ? ' active' : ''}" data-id="${l.id}" onclick="loanToggleCompare('${l.id}', event)" aria-pressed="${loanCompareSet.has(l.id)}" title="Add to compare">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M7.5 21L3 16.5m0 0L7.5 12M3 16.5h18M16.5 3L21 7.5m0 0L16.5 12M21 7.5H3"/></svg>
+              </button>
+              <div class="lender-check">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+              </div>
+              <button type="button" class="lender-row-toggle${isOpen ? ' open' : ''}" onclick="loanToggleLenderDetail('${l.id}', event)" aria-label="Toggle details">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2.4" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+              </button>
+            </div>
+            <div class="lender-detail-body" id="lender-detail-${l.id}" style="max-height:${isOpen ? '999px' : '0px'}">
+              <div class="lender-detail-inner">
+                <div class="lender-detail-stats">
+                  <div><div class="lm-label">APR</div><div class="lm-value">${l.aprMin}% - ${l.aprMax}%</div></div>
+                  <div><div class="lm-label">Tenure</div><div class="lm-value">${l.tenureMin}-${l.tenureMax} mo</div></div>
+                  <div><div class="lm-label">Fees</div><div class="lm-value">${l.feeLabel}</div></div>
+                </div>
+                <div class="lender-slider-row" onclick="event.stopPropagation()">
+                  <div class="lender-slider-label">
+                    <span>Try ${defaultTenure} months</span>
+                    <span class="lender-slider-emi" id="slider-emi-${l.id}">≈ ${fmtINR0(estEmi)}/mo</span>
+                  </div>
+                  <input type="range" class="lender-slider" min="${l.tenureMin}" max="${l.tenureMax}" value="${defaultTenure}" oninput="loanUpdateSliderEmi('${l.id}', this)">
+                </div>
+                ${l.footnote ? `<div class="lender-footnote">${l.footnote}</div>` : ''}
+                <div class="lender-links">
+                  <a href="#" onclick="event.stopPropagation();event.preventDefault()">Penal charges</a>
+                  <a href="#" onclick="event.stopPropagation();event.preventDefault()">View KFS</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function loanToggleLenderDetail(id, evt) {
+      if (evt) evt.stopPropagation();
+      loanOpenLenderId = loanOpenLenderId === id ? null : id;
+      document.querySelectorAll('.lender-card').forEach(card => {
+        const rid = card.dataset.id;
+        const body = document.getElementById('lender-detail-' + rid);
+        const toggle = card.querySelector('.lender-row-toggle');
+        const open = rid === loanOpenLenderId;
+        if (body) body.style.maxHeight = open ? body.scrollHeight + 'px' : '0px';
+        if (toggle) toggle.classList.toggle('open', open);
+      });
+    }
+
+    function loanUpdateSliderEmi(id, input) {
+      const l = loanLenders.find(x => x.id === id);
+      const months = Number(input.value);
+      const midApr = (l.aprMin + l.aprMax) / 2;
+      const emi = calcEmi(EMI_AMOUNT, midApr, months);
+      const emiEl = document.getElementById('slider-emi-' + id);
+      if (emiEl) emiEl.textContent = '≈ ' + fmtINR0(emi) + '/mo';
+      const label = input.closest('.lender-slider-row').querySelector('.lender-slider-label span:first-child');
+      if (label) label.textContent = `Try ${months} month${months > 1 ? 's' : ''}`;
+      const body = input.closest('.lender-detail-body');
+      if (body && body.style.maxHeight !== '0px') body.style.maxHeight = body.scrollHeight + 'px';
+    }
+
+    function loanSelectLender(id) {
+      loanSelectedLender = id;
+      document.querySelectorAll('.lender-card').forEach(c => c.classList.toggle('sel', c.dataset.id === id));
+      document.getElementById('loan-offer-cta').disabled = false;
+    }
+
+    /* ── COMPARE TRAY ── */
+    const loanCompareSet = new Set();
+    const LOAN_COMPARE_MAX = 3;
+
+    function loanToggleCompare(id, evt) {
+      if (evt) evt.stopPropagation();
+      if (loanCompareSet.has(id)) {
+        loanCompareSet.delete(id);
+      } else {
+        if (loanCompareSet.size >= LOAN_COMPARE_MAX) { loanFlashCompareLimit(); return; }
+        loanCompareSet.add(id);
+      }
+      document.querySelectorAll('.lender-compare-btn').forEach(btn => {
+        btn.classList.toggle('active', loanCompareSet.has(btn.dataset.id));
+        btn.setAttribute('aria-pressed', loanCompareSet.has(btn.dataset.id));
+      });
+      loanRenderCompareBar();
+    }
+
+    function loanFlashCompareLimit() {
+      const bar = document.getElementById('loan-compare-bar');
+      if (!bar) return;
+      bar.style.display = 'flex';
+      bar.classList.remove('limit-shake');
+      void bar.offsetWidth;
+      bar.classList.add('limit-shake');
+    }
+
+    function loanRenderCompareBar() {
+      const bar = document.getElementById('loan-compare-bar');
+      const chips = document.getElementById('loan-compare-chips');
+      const cta = document.getElementById('loan-compare-cta');
+      const count = document.getElementById('loan-compare-count');
+      if (loanCompareSet.size === 0) { bar.style.display = 'none'; return; }
+      bar.style.display = 'flex';
+      const items = [...loanCompareSet].map(id => loanLenders.find(l => l.id === id)).filter(Boolean);
+      chips.innerHTML = items.map(l => `
+        <span class="loan-compare-chip">
+          <span class="ccm" style="background:${l.bg}">${l.mark}</span>
+          ${l.name}
+          <button type="button" onclick="loanToggleCompare('${l.id}', event)" aria-label="Remove ${l.name} from compare">
+            <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+          </button>
+        </span>
+      `).join('');
+      cta.disabled = items.length < 2;
+      count.textContent = `(${items.length}/${LOAN_COMPARE_MAX})`;
+    }
+
+    function loanClearCompare() {
+      loanCompareSet.clear();
+      document.querySelectorAll('.lender-compare-btn').forEach(btn => btn.classList.remove('active'));
+      loanRenderCompareBar();
+    }
+
+    function loanOpenCompare() {
+      const items = [...loanCompareSet].map(id => loanLenders.find(l => l.id === id)).filter(Boolean);
+      if (items.length < 2) return;
+      const table = document.getElementById('compare-table');
+      table.style.setProperty('--cols', items.length);
+      table.innerHTML = loanCompareTableHTML(items);
+      document.getElementById('lender-list').style.display = 'none';
+      document.querySelector('.loan-sort-row').style.display = 'none';
+      document.getElementById('loan-compare-bar').style.display = 'none';
+      document.getElementById('loan-compare-view').style.display = 'block';
+    }
+
+    function loanCloseCompare() {
+      document.getElementById('loan-compare-view').style.display = 'none';
+      document.getElementById('lender-list').style.display = '';
+      document.querySelector('.loan-sort-row').style.display = '';
+      loanRenderCompareBar();
+    }
+
+    function loanCompareTableHTML(items) {
+      const row = (label, cellFn) => `
+        <div class="compare-row">
+          <div class="compare-label-cell">${label}</div>
+          ${items.map(cellFn).join('')}
+        </div>
+      `;
+      return `
+        <div class="compare-row">
+          <div class="compare-label-cell"></div>
+          ${items.map(l => `
+            <div class="compare-cell compare-head-cell">
+              <button type="button" class="compare-remove" onclick="loanToggleCompare('${l.id}', event); loanOpenCompare();" aria-label="Remove ${l.name}">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+              </button>
+              <div class="compare-head-mark" style="background:${l.bg}">${l.mark}</div>
+              <div class="compare-head-name">${l.name}</div>
+            </div>
+          `).join('')}
+        </div>
+        ${row('Success Rate', l => `<div class="compare-cell"><span class="lender-success-chip ${loanSuccessTier(l.successRate)}">${l.successRate}%</span></div>`)}
+        ${row('EMI From', l => `<div class="compare-cell">₹${Math.round(l.emi).toLocaleString('en-IN')}/mo</div>`)}
+        ${row('APR', l => `<div class="compare-cell">${l.aprMin}% - ${l.aprMax}%</div>`)}
+        ${row('Tenure', l => `<div class="compare-cell">${l.tenureMin}-${l.tenureMax} mo</div>`)}
+        ${row('Fees', l => `<div class="compare-cell">${l.feeLabel}</div>`)}
+        ${row('Highlights', l => `<div class="compare-cell compare-badges-cell">${(l._badges || []).map(b => `<span class="lender-badge ${b.cls}">${b.label}</span>`).join('') || '—'}</div>`)}
+        <div class="compare-row compare-select-row">
+          <div class="compare-label-cell"></div>
+          ${items.map(l => `<div class="compare-cell"><button type="button" class="compare-select-btn" onclick="loanSelectFromCompare('${l.id}')">Select</button></div>`).join('')}
+        </div>
+      `;
+    }
+
+    function loanSelectFromCompare(id) {
+      loanCloseCompare();
+      loanSelectLender(id);
+      const row = document.querySelector(`.lender-card[data-id="${id}"]`);
+      if (row) row.scrollIntoView({ block: 'center', behavior: 'smooth' });
+    }
+
+    function loanPaintOffers(firstReveal) {
+      const list = document.getElementById('lender-list');
+      const sorted = [...loanLenders].sort(loanSortFns[loanSortKey]);
+
+      if (firstReveal) {
+        list.innerHTML = sorted.map((l, i) => loanCardHTML(l, i)).join('');
+        return;
+      }
+
+      /* FLIP: capture current positions, re-render in new order, then
+         animate each card from its old spot to its new one */
+      const before = new Map([...list.querySelectorAll('.lender-card')].map(c => [c.dataset.id, c.getBoundingClientRect()]));
+      list.innerHTML = sorted.map((l, i) => loanCardHTML(l, i)).join('');
+      list.querySelectorAll('.lender-card').forEach(c => {
+        const first = before.get(c.dataset.id);
+        if (!first) return;
+        const last = c.getBoundingClientRect();
+        const dx = first.left - last.left, dy = first.top - last.top;
+        if (dx || dy) {
+          c.style.transition = 'none';
+          c.style.transform = `translate(${dx}px, ${dy}px)`;
+          requestAnimationFrame(() => {
+            c.style.transition = 'transform .45s cubic-bezier(.2,.8,.2,1)';
+            c.style.transform = '';
+          });
+        }
+      });
+    }
+
+    function loanRenderOffers() {
+      const list = document.getElementById('lender-list');
+      if (list.dataset.loaded) return;
+      list.innerHTML = loanSkeletonHTML(4);
+      setTimeout(() => {
+        list.dataset.loaded = '1';
+        loanComputeBadges(loanLenders);
+        loanPaintOffers(true);
+      }, 650);
+    }
+
+    /* ── POST-SELECTION FLOW: one live calculator, then one confirmation ──
+       All numbers fall out of the same calcEmi() used everywhere else in
+       the app. Tenure, downpayment, breakdown and schedule all live on a
+       single screen and update on every input — nothing is a separate
+       page to click through, and nothing is a hardcoded screenshot prop. */
+    function loanShowOffersView(view) {
+      document.querySelectorAll('.loan-offers-view').forEach(v => v.classList.remove('active'));
+      document.getElementById('loan-offers-view-' + view).classList.add('active');
+      const panel = document.getElementById('panel-bnpl');
+      if (panel) panel.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+
+    /* real lenders publish a small fixed set of downpayment/installment
+       plans per tenure — not a continuous range — so the picker is a
+       preset list, not a slider */
+    const LOAN_TIER_PCTS = [15, 22, 30];
+    const loanPlanState = { lenderId: null, tenure: null, tenureOptions: [], tierIndex: 0, downpaymentPct: 15, computed: null };
+    const loanAccordionOpen = { breakdown: false, schedule: false };
+
+    function loanStartPlan() {
+      if (!loanSelectedLender) return;
+      const l = loanLenders.find(x => x.id === loanSelectedLender);
+      loanPlanState.lenderId = l.id;
+      const candidates = [3, 6, 9, 12, 18, 24].filter(m => m >= l.tenureMin && m <= l.tenureMax);
+      loanPlanState.tenureOptions = candidates.length ? candidates.slice(0, 4) : [l.tenureMin];
+      loanPlanState.tenure = loanPlanState.tenureOptions[Math.min(1, loanPlanState.tenureOptions.length - 1)];
+      loanPlanState.tierIndex = 0;
+      loanRenderCalculator();
+      loanShowOffersView('calculator');
+    }
+
+    function loanRenderCalculator() {
+      const l = loanLenders.find(x => x.id === loanPlanState.lenderId);
+      document.getElementById('loan-calc-lender').innerHTML = `
+        <div class="lender-mark" style="background:${l.bg}">${l.mark}</div>
+        <div><div class="loan-plan-lender-name">${l.name}</div><div class="loan-plan-lender-sub">Choose your EMI plan</div></div>
+      `;
+      document.getElementById('loan-calc-tenure-tabs').innerHTML = loanPlanState.tenureOptions.map(m => `
+        <button type="button" class="loan-sort-btn${m === loanPlanState.tenure ? ' active' : ''}" onclick="loanSetCalcTenure(${m},this)">${m} Months</button>
+      `).join('');
+      loanRenderTiers();
+    }
+
+    function loanSetCalcTenure(months, btn) {
+      loanPlanState.tenure = months;
+      loanPlanState.tierIndex = 0;
+      btn.parentElement.querySelectorAll('.loan-sort-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      loanRenderTiers();
+    }
+
+    function loanRenderTiers() {
+      const l = loanLenders.find(x => x.id === loanPlanState.lenderId);
+      const midApr = (l.aprMin + l.aprMax) / 2;
+      const months = loanPlanState.tenure;
+      const tiers = LOAN_TIER_PCTS.map(pct => {
+        const downpayment = Math.round(EMI_AMOUNT * pct / 100);
+        const emi = calcEmi(EMI_AMOUNT - downpayment, midApr, months);
+        return { pct, downpayment, emi };
+      });
+      document.getElementById('loan-calc-tiers').innerHTML = tiers.map((t, i) => `
+        <label class="emi-plan-row${i === loanPlanState.tierIndex ? ' sel' : ''}" onclick="loanSelectTier(${i})">
+          <input type="radio" name="loan-tier" class="emi-plan-radio" ${i === loanPlanState.tierIndex ? 'checked' : ''}>
+          <span class="emi-plan-dot"></span>
+          <span class="emi-plan-info">
+            <span class="emi-plan-main">${fmtINR0(t.emi)}/mo <span class="emi-plan-x">×</span> ${months} months</span>
+            <span class="emi-plan-sub">Downpayment ${fmtINR0(t.downpayment)} now</span>
+          </span>
+        </label>
+      `).join('');
+      loanCalcApply(loanPlanState.tierIndex);
+    }
+
+    function loanSelectTier(idx) {
+      loanPlanState.tierIndex = idx;
+      document.querySelectorAll('#loan-calc-tiers .emi-plan-row').forEach((row, i) => {
+        row.classList.toggle('sel', i === idx);
+        row.querySelector('.emi-plan-radio').checked = i === idx;
+      });
+      loanCalcApply(idx);
+    }
+
+    function loanCalcApply(tierIndex) {
+      loanPlanState.downpaymentPct = LOAN_TIER_PCTS[tierIndex];
+      const l = loanLenders.find(x => x.id === loanPlanState.lenderId);
+      const midApr = (l.aprMin + l.aprMax) / 2;
+      const downpayment = Math.round(EMI_AMOUNT * loanPlanState.downpaymentPct / 100);
+      const loanAmt = EMI_AMOUNT - downpayment;
+      const months = loanPlanState.tenure;
+      const emi = calcEmi(loanAmt, midApr, months);
+      const totalRepay = emi * months;
+      const interest = totalRepay - loanAmt;
+      const fee = loanFeeRupees(l);
+      const effectiveRepay = totalRepay + fee;
+      loanPlanState.computed = { downpayment, loanAmt, months, emi, interest, fee, effectiveRepay, midApr };
+
+      document.getElementById('loan-split-down').style.width = loanPlanState.downpaymentPct + '%';
+      document.getElementById('loan-split-fin').style.width = (100 - loanPlanState.downpaymentPct) + '%';
+      document.getElementById('loan-calc-dp').textContent = fmtINR0(downpayment);
+      document.getElementById('loan-calc-loanamt').textContent = fmtINR0(loanAmt);
+      document.getElementById('loan-calc-emi').textContent = fmtINR0(emi) + '/mo';
+
+      document.getElementById('loan-calc-breakdown').innerHTML = [
+        ['Product Value', fmtINR0(EMI_AMOUNT), false],
+        ['Downpayment', '-' + fmtINR0(downpayment), false],
+        ['Loan Amount', fmtINR0(loanAmt), true],
+        ['Processing Fee', fmtINR0(fee), false],
+        ['Interest', fmtINR0(interest), false],
+        ['Effective Repayment Amount', fmtINR0(effectiveRepay), true],
+      ].map(([label, val, strong]) => `<div class="loan-breakdown-row${strong ? ' strong' : ''}"><span>${label}</span><span>${val}</span></div>`).join('');
+
+      const today = new Date();
+      const rows = [];
+      for (let i = 1; i <= months; i++) {
+        const d = new Date(today.getFullYear(), today.getMonth() + i, Math.min(today.getDate(), 28));
+        rows.push(`<div class="loan-schedule-row"><span>${d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: '2-digit' })}</span><span>${fmtINR0(emi)}</span></div>`);
+      }
+      document.getElementById('loan-calc-schedule-rows').innerHTML = rows.join('');
+
+      ['breakdown', 'schedule'].forEach(key => {
+        if (loanAccordionOpen[key]) {
+          const body = document.getElementById('loan-' + key + '-body');
+          body.style.maxHeight = body.scrollHeight + 'px';
+        }
+      });
+    }
+
+    function loanToggleAccordion(key) {
+      const acc = document.getElementById('loan-' + key + '-accordion');
+      const body = document.getElementById('loan-' + key + '-body');
+      loanAccordionOpen[key] = !loanAccordionOpen[key];
+      acc.classList.toggle('open', loanAccordionOpen[key]);
+      body.style.maxHeight = loanAccordionOpen[key] ? body.scrollHeight + 'px' : '0px';
+    }
+
+    function loanConfirmPlan() {
+      const l = loanLenders.find(x => x.id === loanPlanState.lenderId);
+      const { emi, months } = loanPlanState.computed;
+      document.getElementById('loan-confirm-recap').textContent = `${fmtINR0(emi)}/mo × ${months} months with ${l.name}`;
+      document.getElementById('loan-confirm-lender-name').textContent = l.name;
+      const cta = document.getElementById('loan-confirm-cta');
+      cta.disabled = false;
+      cta.innerHTML = `Continue to <span>${l.name}</span>`;
+      loanShowOffersView('confirmed');
+    }
+
+    function loanContinueToLender(btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loan-spinner"></span> Redirecting…';
+      setTimeout(() => {
+        populateSuccessScreen();
+        showResultScreen('success');
+      }, 1300);
+    }
+
+    /* ── WALLETS ──
+       Linked wallets pay instantly off a stored balance; everything else
+       is a redirect and carries a real, itemised convenience fee — not a
+       flat balance grid with no way to see what you're actually paying. */
+    const walletsLinked = [
+      { id: 'paytm',     name: 'Paytm Wallet',     mark: 'Pt', bg: 'linear-gradient(135deg,#0060CC,#00ADEF)', balance: 1250 },
+      { id: 'phonepe',   name: 'PhonePe Wallet',   mark: 'PP', bg: 'linear-gradient(135deg,#5A2FC2,#8B5CF6)', balance: 500 },
+      { id: 'gpay',      name: 'Google Pay',       mark: 'G',  bg: 'linear-gradient(135deg,#1A73E8,#4285F4)', balance: 750 },
+      { id: 'amazonpay', name: 'Amazon Pay Balance', mark: 'Az', bg: 'linear-gradient(135deg,#CC7700,#FF9900)', balance: 250 },
+    ];
+    const walletsOther = [
+      { id: 'airtel',     name: 'Airtel Payments Bank Wallet', mark: 'Air', bg: 'linear-gradient(135deg,#E4002B,#FF3355)', feeBase: 450, feeGstPct: 18 },
+      { id: 'mobikwik',   name: 'Mobikwik Wallet',             mark: 'MBK', bg: 'linear-gradient(135deg,#1565C0,#42A5F5)', feeBase: 450, feeGstPct: 18 },
+      { id: 'freecharge', name: 'Freecharge',                  mark: 'FC',  bg: 'linear-gradient(135deg,#D32F2F,#EF5350)', feeBase: 450, feeGstPct: 18 },
+      { id: 'jiomoney',   name: 'JioMoney',                    mark: 'Jio', bg: 'linear-gradient(135deg,#1565C0,#1976D2)', feeBase: 380, feeGstPct: 18 },
+    ];
+    let walletSelected = null;
+
+    function walletFee(w) {
+      return Math.round(w.feeBase * (1 + w.feeGstPct / 100));
+    }
+
+    function walletRenderAll() {
+      document.getElementById('wallet-linked-list').innerHTML = walletsLinked.map(w => {
+        const sufficient = w.balance >= EMI_AMOUNT;
+        return `
+          <div class="wallet-card ${sufficient ? '' : 'wallet-disabled'}" data-id="${w.id}">
+            <label class="emi-plan-row" ${sufficient ? `onclick="walletSelect('${w.id}')"` : ''}>
+              <input type="radio" name="wallet-select" class="emi-plan-radio" ${sufficient ? '' : 'disabled'}>
+              <span class="emi-plan-dot"></span>
+              <span class="emi-bank-icon" style="background:${w.bg}">${w.mark}</span>
+              <span class="emi-plan-info">
+                <span class="emi-plan-main">${w.name}</span>
+                <span class="emi-plan-sub">${sufficient ? `Balance ${fmtINR0(w.balance)}` : `Balance ${fmtINR0(w.balance)} — add ${fmtINR0(EMI_AMOUNT - w.balance)} more to pay with this wallet`}</span>
+              </span>
+              <span class="wallet-tag ${sufficient ? 'tag-ok' : 'tag-warn'}">${sufficient ? 'Sufficient' : 'Low balance'}</span>
+            </label>
+          </div>
+        `;
+      }).join('');
+
+      document.getElementById('wallet-other-list').innerHTML = walletsOther.map(w => {
+        const fee = walletFee(w);
+        return `
+          <div class="wallet-card" data-id="${w.id}">
+            <label class="emi-plan-row" onclick="walletSelect('${w.id}')">
+              <input type="radio" name="wallet-select" class="emi-plan-radio">
+              <span class="emi-plan-dot"></span>
+              <span class="emi-bank-icon" style="background:${w.bg}">${w.mark}</span>
+              <span class="emi-plan-info">
+                <span class="emi-plan-main">${w.name}</span>
+                <span class="emi-plan-sub">Non-refundable fee up to ${fmtINR0(fee)} (incl. tax) will be charged</span>
+              </span>
+              <button type="button" class="lender-row-toggle" onclick="walletToggleFee('${w.id}', event)" aria-label="Fee breakup">
+                <svg fill="none" viewBox="0 0 24 24" stroke-width="2.4" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5"/></svg>
+              </button>
+            </label>
+            <div class="emi-accordion-body" id="wallet-fee-${w.id}">
+              <div class="loan-accordion-inner">
+                <div class="loan-breakdown-row"><span>Base convenience fee</span><span>${fmtINR0(w.feeBase)}</span></div>
+                <div class="loan-breakdown-row"><span>GST (${w.feeGstPct}%)</span><span>${fmtINR0(fee - w.feeBase)}</span></div>
+                <div class="loan-breakdown-row strong"><span>Total (non-refundable)</span><span>${fmtINR0(fee)}</span></div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function walletSelect(id) {
+      walletSelected = id;
+      document.querySelectorAll('#panel-wallets .wallet-card').forEach(c => {
+        const isSel = c.dataset.id === id;
+        c.classList.toggle('sel', isSel);
+        const radio = c.querySelector('input[name="wallet-select"]');
+        if (radio) radio.checked = isSel;
+      });
+      const w = [...walletsLinked, ...walletsOther].find(x => x.id === id);
+      const cta = document.getElementById('wallet-cta');
+      cta.disabled = false;
+      cta.innerHTML = `<svg fill="none" viewBox="0 0 24 24" stroke-width="2.2" stroke="currentColor" style="width:17px;height:17px"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg> Pay ${fmtINR0(EMI_AMOUNT)} via ${w.name}`;
+    }
+
+    function walletToggleFee(id, evt) {
+      evt.stopPropagation();
+      const body = document.getElementById('wallet-fee-' + id);
+      const btn = evt.currentTarget;
+      const isOpen = body.style.maxHeight && body.style.maxHeight !== '0px';
+      body.style.maxHeight = isOpen ? '0px' : body.scrollHeight + 'px';
+      btn.classList.toggle('open', !isOpen);
+    }
+
+    /* linked wallets pay straight off their balance; redirect-based wallets
+       always get a final "here's the exact total, including fees" review
+       before anything is charged */
+    function walletProceed() {
+      if (!walletSelected) return;
+      const w = [...walletsLinked, ...walletsOther].find(x => x.id === walletSelected);
+      if (w.feeBase) {
+        walletOpenFeeReview(w);
+      } else {
+        const cta = document.getElementById('wallet-cta');
+        const original = cta.innerHTML;
+        cta.disabled = true;
+        cta.innerHTML = '<span class="loan-spinner"></span> Processing…';
+        setTimeout(() => {
+          cta.disabled = false;
+          cta.innerHTML = original;
+          populateSuccessScreen();
+          showResultScreen('success');
+        }, 1300);
+      }
+    }
+
+    function walletOpenFeeReview(w) {
+      const tax = Math.round(w.feeBase * w.feeGstPct / 100);
+      const total = EMI_AMOUNT + w.feeBase + tax;
+      document.getElementById('wallet-review-rows').innerHTML = `
+        <div class="confirm-modal-row"><span>Premium</span><span>${fmtINR0(EMI_AMOUNT)}</span></div>
+        <div class="confirm-modal-row"><span>Convenience Fee</span><span>${fmtINR0(w.feeBase)}</span></div>
+        <div class="confirm-modal-row"><span>Tax on Convenience Fee</span><span>${fmtINR0(tax)}</span></div>
+        <div class="confirm-modal-row total"><span>Total Amount</span><span>${fmtINR0(total)}</span></div>
+      `;
+      const cta = document.getElementById('wallet-review-cta');
+      cta.disabled = false;
+      cta.innerHTML = 'Confirm';
+      document.getElementById('wallet-review-overlay').classList.add('open');
+    }
+
+    function walletCloseFeeReview() {
+      document.getElementById('wallet-review-overlay').classList.remove('open');
+    }
+
+    function walletConfirmFeeReview(btn) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loan-spinner"></span> Redirecting…';
+      setTimeout(() => {
+        walletCloseFeeReview();
+        populateSuccessScreen();
+        showResultScreen('success');
+      }, 1300);
+    }
+
+    walletRenderAll();
+
+    /* ── PAYMENT RESULT SCREENS ──
+       Success reads as "your cover is active" (policy number, sum insured,
+       coverage dates) rather than a bare receipt; failure reassures first
+       ("nothing was charged, your quote is safe") before offering a retry.
+       Sandbox convention for testing, same idea as Stripe's decline test
+       cards: enter CVV 000 on the Cards panel to preview the failure state,
+       any other CVV succeeds. */
+    function showResultScreen(type) {
+      document.getElementById('screen-success').classList.remove('open');
+      document.getElementById('screen-failure').classList.remove('open');
+      document.getElementById('screen-' + type).classList.add('open');
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      document.body.style.overflow = 'hidden';
+    }
+
+    function hideResultScreens() {
+      document.getElementById('screen-success').classList.remove('open');
+      document.getElementById('screen-failure').classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    function fmtResultDate(d) {
+      return d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function populateSuccessScreen() {
+      const orderId = (document.getElementById('order-id-value') || {}).textContent || 'STR-INS-2024-88471';
+      const digits = orderId.replace(/\D/g, '').slice(-6) || '000000';
+      const today = new Date();
+      /* "APP" — an application reference, deliberately not styled like a
+         policy number, since no policy exists until underwriting clears it */
+      document.getElementById('res-policy-no').textContent = `STR/APP/2026/${digits}`;
+      document.getElementById('res-amount').textContent = fmtINR0(EMI_AMOUNT);
+      document.getElementById('res-period').textContent = fmtResultDate(today);
+
+      const mobileEl = document.getElementById('order-mobile-value');
+      document.getElementById('res-phone').textContent = mobileEl ? mobileEl.textContent : '+91 98765 43210';
+
+      const emailInput = document.getElementById('loan-email');
+      const email = (emailInput && emailInput.value.trim()) || 'rohit.sharma@gmail.com';
+      document.getElementById('res-email').textContent = email;
+
+      const nextDay = new Date(today);
+      nextDay.setDate(nextDay.getDate() + 1);
+      const noteEl = document.getElementById('res-followup-note');
+      if (noteEl) {
+        noteEl.textContent = `Your money has reached us safely. Your convenience fee receipt will land in ${email} on ${fmtResultDate(nextDay)}.`;
+      }
+    }
+
+    function populateFailureScreen(reason) {
+      const orderId = (document.getElementById('order-id-value') || {}).textContent || 'STR-INS-2024-88471';
+      document.getElementById('res-fail-ref').textContent = orderId;
+      document.getElementById('res-fail-amount').textContent = fmtINR0(EMI_AMOUNT);
+      if (reason) document.getElementById('res-fail-reason').textContent = reason;
+    }
+
+    function downloadPaymentReceipt() {
+      const ref = document.getElementById('res-policy-no').textContent;
+      const amount = document.getElementById('res-amount').textContent;
+      const date = document.getElementById('res-period').textContent;
+      const html = `<!doctype html><html><head><meta charset="utf-8"><title>${ref}</title>
+        <style>
+          @page { margin: 22mm 18mm; }
+          body { font-family: Arial, Helvetica, sans-serif; color: #0E1526; margin: 0; padding: 36px; }
+          .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 26px; }
+          .brand-mark { width: 32px; height: 32px; border-radius: 8px; background: #173172; display: flex; align-items: center; justify-content: center; }
+          .brand-mark svg { width: 18px; height: 18px; }
+          .brand-name { font-size: 14px; font-weight: 800; color: #173172; letter-spacing: .6px; }
+          .badge { display: inline-block; background: #D1FAE5; color: #065F46; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 18px; }
+          h1 { color: #173172; font-size: 19px; margin: 0 0 6px; }
+          .sub { color: #8592A8; font-size: 12px; margin: 0 0 22px; }
+          table { width: 100%; border-collapse: collapse; max-width: 500px; }
+          td { padding: 11px 0; border-bottom: 1px solid #E4E8F1; font-size: 13px; }
+          td.label { color: #8592A8; }
+          td.value { font-weight: 700; text-align: right; }
+          .note { margin-top: 26px; color: #8592A8; font-size: 11.5px; max-width: 500px; line-height: 1.6; border-top: 1px solid #E4E8F1; padding-top: 16px; }
+        </style></head><body>
+        <div class="brand">
+          <div class="brand-mark"><svg viewBox="0 0 395 522" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M264.851 0L176.804 173.432L0 195.647L115.196 327.664L87.337 520.294L249.2 437.11L380.366 521.253L394.881 507.554L248.81 395.73L125.984 459.68L157.995 318.579L69.948 217.898L199.091 200.367L263.822 75.129L338.49 219.815L352.579 205.619L264.851 0Z"/></svg></div>
+          <span class="brand-name">STAR HEALTH</span>
+        </div>
+        <div class="badge">Payment Received</div>
+        <h1>Payment Receipt</h1>
+        <p class="sub">This receipt confirms payment only — it is not a policy certificate.</p>
+        <table>
+          <tr><td class="label">Application Reference</td><td class="value">${ref}</td></tr>
+          <tr><td class="label">Plan Applied For</td><td class="value">Family Floater Plan</td></tr>
+          <tr><td class="label">Sum Insured (Proposed)</td><td class="value">₹10,00,000</td></tr>
+          <tr><td class="label">Amount Paid</td><td class="value">${amount}</td></tr>
+          <tr><td class="label">Payment Date</td><td class="value">${date}</td></tr>
+        </table>
+        <p class="note">Your application is now under receipting and underwriting review. It does not confirm policy issuance or coverage. A policy certificate will be issued separately once underwriting is complete. This is a system-generated document for demo purposes.</p>
+        </body></html>`;
+
+      /* print via a hidden iframe rather than window.open — works without
+         needing pop-up permission, and the browser's own print dialog is
+         what lets the user choose "Save as PDF" */
+      let frame = document.getElementById('receipt-print-frame');
+      if (!frame) {
+        frame = document.createElement('iframe');
+        frame.id = 'receipt-print-frame';
+        frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;';
+        document.body.appendChild(frame);
+      }
+      const doc = frame.contentWindow.document;
+      doc.open();
+      doc.write(html);
+      doc.close();
+      setTimeout(() => {
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+      }, 300);
+    }
+
+    function downloadFailureReceipt() {
+      const ref = document.getElementById('res-fail-ref').textContent;
+      const amount = document.getElementById('res-fail-amount').textContent;
+      const reason = document.getElementById('res-fail-reason').textContent;
+      const date = fmtResultDate(new Date());
+      const html = `<!doctype html><html><head><meta charset="utf-8"><title>${ref}</title>
+        <style>
+          @page { margin: 22mm 18mm; }
+          body { font-family: Arial, Helvetica, sans-serif; color: #0E1526; margin: 0; padding: 36px; }
+          .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 26px; }
+          .brand-mark { width: 32px; height: 32px; border-radius: 8px; background: #173172; display: flex; align-items: center; justify-content: center; }
+          .brand-mark svg { width: 18px; height: 18px; }
+          .brand-name { font-size: 14px; font-weight: 800; color: #173172; letter-spacing: .6px; }
+          .badge { display: inline-block; background: #FEF3C7; color: #92400E; font-size: 11px; font-weight: 700; padding: 4px 12px; border-radius: 20px; margin-bottom: 18px; }
+          h1 { color: #173172; font-size: 19px; margin: 0 0 6px; }
+          .sub { color: #8592A8; font-size: 12px; margin: 0 0 22px; }
+          table { width: 100%; border-collapse: collapse; max-width: 500px; }
+          td { padding: 11px 0; border-bottom: 1px solid #E4E8F1; font-size: 13px; }
+          td.label { color: #8592A8; }
+          td.value { font-weight: 700; text-align: right; }
+          .note { margin-top: 26px; color: #8592A8; font-size: 11.5px; max-width: 500px; line-height: 1.6; border-top: 1px solid #E4E8F1; padding-top: 16px; }
+        </style></head><body>
+        <div class="brand">
+          <div class="brand-mark"><svg viewBox="0 0 395 522" fill="white" xmlns="http://www.w3.org/2000/svg"><path d="M264.851 0L176.804 173.432L0 195.647L115.196 327.664L87.337 520.294L249.2 437.11L380.366 521.253L394.881 507.554L248.81 395.73L125.984 459.68L157.995 318.579L69.948 217.898L199.091 200.367L263.822 75.129L338.49 219.815L352.579 205.619L264.851 0Z"/></svg></div>
+          <span class="brand-name">STAR HEALTH</span>
+        </div>
+        <div class="badge">Payment Attempt Failed</div>
+        <h1>Payment Attempt Receipt</h1>
+        <p class="sub">Attach this with your email to support@starhealth.in if the debited amount isn't auto-refunded within 7 working days.</p>
+        <table>
+          <tr><td class="label">Reference ID</td><td class="value">${ref}</td></tr>
+          <tr><td class="label">Attempted Amount</td><td class="value">${amount}</td></tr>
+          <tr><td class="label">Reason</td><td class="value">${reason}</td></tr>
+          <tr><td class="label">Attempt Date</td><td class="value">${date}</td></tr>
+        </table>
+        <p class="note">This receipt confirms a failed payment attempt only. No policy or coverage is associated with this transaction. This is a system-generated document for demo purposes.</p>
+        </body></html>`;
+
+      let frame = document.getElementById('receipt-print-frame');
+      if (!frame) {
+        frame = document.createElement('iframe');
+        frame.id = 'receipt-print-frame';
+        frame.style.cssText = 'position:fixed;right:0;bottom:0;width:0;height:0;border:0;visibility:hidden;';
+        document.body.appendChild(frame);
+      }
+      const doc = frame.contentWindow.document;
+      doc.open();
+      doc.write(html);
+      doc.close();
+      setTimeout(() => {
+        frame.contentWindow.focus();
+        frame.contentWindow.print();
+      }, 300);
+    }
+
+    function handleCardsPay(btn) {
+      const cvvInput = document.querySelector('#panel-cards input[type="password"]');
+      const cvv = cvvInput ? cvvInput.value : '';
+      const original = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loan-spinner"></span> Processing…';
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = original;
+        if (cvv === '000') {
+          populateFailureScreen('Card declined by issuing bank');
+          showResultScreen('failure');
+        } else {
+          populateSuccessScreen();
+          showResultScreen('success');
+        }
+      }, 1300);
     }
   </script>
 </body>
